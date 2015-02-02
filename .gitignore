@@ -1,0 +1,18 @@
+# Build
+.gradle/
+build/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# ProB
+ProB.log.*
+prob_log.txt
+
+# Java
+META-INF/
+dist/
