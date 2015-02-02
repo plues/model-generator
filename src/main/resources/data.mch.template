@@ -1,0 +1,47 @@
+/* Machine generated: ${new Date()} */
+/* Database generated: ${generated} */
+/* hashseed:  ${seed} */
+MACHINE data
+DEFINITIONS
+ "LibraryIO.def";
+ "helper.def";
+SEES base
+SETS
+    MODULES={<%= modules.collect { it['name'] }.join(', ') %>};
+    COURSES = {<%= courses.collect { it['name'] }.join ',\n        ' %>};
+    DEPARTMENTS = {<%= departments.collect { it['name'] }.join ',\n        ' %>}
+CONSTANTS
+    sessions, units, mapping, department_names
+PROPERTIES
+    sessions = {
+        <%=
+        sessions.collect { session ->
+            "(${session['id']}, rec(slot:${session['slot']}, rhythm:${session['rhythm']}, duration:${session['duration']}))"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    units = {
+        <%=
+        units.collect { unit ->
+            "(${unit.key}, rec(title:\"${unit.value['title']}\", department:${unit.value['department']}, groups:[${unit.value['groups'].collect { group -> "rec(title:\"${group.value['title']}\", sessions:{${group.value['sessions'].join(', ')}})"}.join(', ')}]))"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    mapping = {
+        <%=
+        mapping.collect { map ->
+            "(${map['course']}, ${map['semester']}, ${map['unit_id']})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    department_names = {
+        <%=
+        departments.collect { dep ->
+            "(${dep['name']} |-> \"${dep['long_name']}\")"
+        }.join(',\n        ')
+        %>
+    }
+END

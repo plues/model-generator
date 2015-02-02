@@ -1,0 +1,89 @@
+/* Machine generated: ${new Date()} */
+/* Database generated: ${generated} */
+/* hashseed:  ${seed} */
+MACHINE wiwi_data
+/*
+ * Course/Major: Studiengang
+ * Module: A logical grouping of teaching units, might be composed of several units that make up a module. (z.B. Grundlagen der Technischen Informatik)
+ * Class: Number for a unit within a group, (z.B. Grundlagen der Technischen Informatik, Teil 1 => Info 1)
+ * Semester: Number 1..6
+ * Unit: Lehrveranstaltung, a teaching unit like a lecture or lab sessions, divided in groups (one of them needs to be chosen to complete the unit)
+ * Group: A set of related teaching sessions associated to a teaching unit, all sessions within a group are mandatory if the group is chosen
+ * Session: An actual teaching session in a room with students a teacher
+ * Slot: The day of the week and the time where a session is hel
+ * Rhythm: Sessions might be scheduled weekly, or every other week on odd or even weeks
+ * Duration: Number of SWS per session
+ */
+DEFINITIONS
+ "LibraryIO.def"
+SEES base
+SETS
+    MODULES={<%= modules.collect { it['name'] }.join(', ') %>};
+    COURSES = {<%= courses.collect { it['name'] }.join ',\n        ' %>};
+    DEPARTMENTS = {<%= departments.collect { it['name'] }.join ',\n        ' %>}
+CONSTANTS module_frequency, mapping, units, sessions, focus_areas, major_module_requirement, department_names, course_names
+PROPERTIES
+    focus_areas = {
+        <%=
+        focus_areas.collect { area ->
+            "(${area['id']} |-> \"${area['name']}\")"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    module_frequency= {
+        <%=
+        modules.collect { module ->
+            "(${module['name']} |-> \"${module['frequency']}\")"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    course_names = {
+        <%=
+        courses.collect { course ->
+            "(${course['name']} |-> \"${course['long_name']}\")"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    major_module_requirement = {
+        <%=
+        major_module_requirements.collect { requirement ->
+            "(${requirement['course']} |-> ${requirement['requirement']})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    department_names = {
+        <%=
+        departments.collect { dep ->
+            "(${dep['name']} |-> \"${dep['long_name']}\")"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    sessions = {
+        <%=
+        sessions.collect { session ->
+            "(${session['id']}, rec(slot:${session['slot']}, rhythm:${session['rhythm']}, duration:${session['duration']}))"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    units = {
+        <%=
+        units.collect { unit ->
+            "(${unit.key}, rec(title:\"${unit.value['title']}\", department:${unit.value['department']}, duration:${unit.value['duration']}, groups:[${unit.value['groups'].collect { group -> "rec(title:\"${group.value['title']}\", sessions:{${group.value['sessions'].join(', ')}})"}.join(', ')}]))"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    mapping = {
+        <%=
+        mapping.collect { map ->
+            "(${map['module']}, ${map['class']}, ${map['course']}, ${map['type']}, ${map['focus_area_id']}, ${map['semester']}, ${map['unit_id']})"
+        }.join(',\n        ')
+        %>
+    }
+END
