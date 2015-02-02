@@ -1,0 +1,66 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'application'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.7
+version = '0.0.1'
+group = "de.stups.slottool"
+
+mainClassName = "Main"
+
+repositories {
+    mavenLocal()
+    maven {
+        name "cobra"
+        url "http://cobra.cs.uni-duesseldorf.de/artifactory/repo"
+    }
+}
+
+// https://simonharrer.wordpress.com/2013/09/17/building-command-line-apps-with-gradle/
+run {
+    if(project.hasProperty('args')){
+        args project.args.split('\\s+')
+    }
+}
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.6'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
+
+task fatJar(type: Jar) {
+  manifest {
+    attributes 'Implementation-Title': 'Model generator for timetable data',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+  }
+  baseName = project.name + '-all'
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
+}
+
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            artifactId project.name
+            from components.java
+        }
+        application(MavenPublication) {
+            artifactId project.name + '-all'
+            artifact fatJar
+        }
+    }
+    repositories {
+        maven {
+            // local repository for testing purposes
+            url "$buildDir/repo"
+        }
+    }
+}
