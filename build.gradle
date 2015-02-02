@@ -58,9 +58,6 @@ publishing {
         }
     }
     repositories {
-        maven {
-            // local repository for testing purposes
-            url "$buildDir/repo"
-        }
+        mavenLocal()
     }
 }
