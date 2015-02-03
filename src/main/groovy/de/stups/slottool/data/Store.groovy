@@ -75,6 +75,19 @@ class Store {
         this.units = units
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    public updateSession(idx, session) {
+        def fields = ['updated_at=datetime(\'now\')']
+        for (attr in session) {
+            if (attr.key == 'id') {
+                continue
+            }
+            fields.add("\"${attr.key}\" = \"${attr.value}\"")
+        }
+        def query = "UPDATE sessions SET ${fields.join(", ")} WHERE id = ${idx};".toString() // sigh...
+        this.sql.executeUpdate(query)
+    }
+
     private openDataBase(String db_path) {
         Class.forName("org.sqlite.JDBC");
         db_path = db_path.replaceFirst("^~", System.getProperty("user.home"));
@@ -90,6 +103,8 @@ class Store {
         Sql.newInstance("jdbc:sqlite:"+path)
     }
 
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
     void close() {
         this.sql.close()
     }
