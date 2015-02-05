@@ -36,13 +36,13 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
 }
 
-task fatJar(type: Jar) {
+task buildStandalone(type: jar) {
   manifest {
     attributes 'Implementation-Title': 'Model generator for timetable data',
                 'Implementation-Version': version,
                 'Main-Class': mainClassName
   }
-  baseName = project.name + '-all'
+  baseName = project.name + '-standalone'
   from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
   with jar
 }
