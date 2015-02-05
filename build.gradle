@@ -36,7 +36,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
 }
 
-task buildStandalone(type: jar) {
+task buildStandaloneJar(type: Jar) {
   manifest {
     attributes 'Implementation-Title': 'Model generator for timetable data',
                 'Implementation-Version': version,
