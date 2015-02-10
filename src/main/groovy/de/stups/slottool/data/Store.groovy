@@ -1,6 +1,8 @@
 package de.stups.slottool.data
 
 import groovy.sql.Sql
+import static java.lang.Thread.currentThread
+
 /**
  * Created by David Schneider on 30.01.15.
  */
@@ -12,8 +14,19 @@ class Store {
 
     def Store(String dbpath) {
         this.sql = openDataBase(dbpath)
+        checkSchemaVersion()
         Runtime.addShutdownHook {
             sql.close()
+        }
+    }
+
+    def checkSchemaVersion() {
+        def properties = new Properties()
+        properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
+        def schema_version = this.getModelInfo('schema_version')
+        def required_version = properties.getProperty("schema_version")
+        if ( schema_version != required_version ) {
+            throw new IncompatibleSchemaError("Expected database schema version ${required_version} but was ${schema_version}")
         }
     }
 
