@@ -19,8 +19,21 @@ class Renderer {
         new SimpleTemplateEngine().createTemplate(resource.text)
     }
 
+    protected loadTemplate(String path) {
+        new SimpleTemplateEngine().createTemplate(new FileReader(path))
+    }
+
+    def renderWith(String path) {
+        def template = loadTemplate(path)
+        this.render(template)
+    }
+
     public Writable renderFor(Faculty faculty, FileType tp) {
         def template = loadTemplate(faculty, tp)
+        this.render(template)
+    }
+
+    private Writable render(def template) {
         def generated = store.getModelInfo('generated')
         def seed = store.getModelInfo('hashseed')
         def modules = store.getModules()
