@@ -34,8 +34,12 @@ class Renderer {
     }
 
     private Writable render(def template) {
+        /* DEPRECATED fields, use info map */
         def generated = store.getModelInfo('generated')
         def seed = store.getModelInfo('hashseed')
+
+        //
+        def info = store.getModelInfo()
         def modules = store.getModules()
         def courses = store.getCourses()
         def departments = store.getDepartments()
@@ -48,6 +52,7 @@ class Renderer {
         def binding = [
                 generated: generated,
                 seed: seed,
+                info: info,
                 modules: modules,
                 courses: courses,
                 departments: departments,

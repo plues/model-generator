@@ -25,7 +25,7 @@ class Main {
             System.exit(0)
         }
 
-        if( !options.template && (!options.facutly || !options.format) ) {
+        if( !options.template && (!options.faculty || !options.format) ) {
             println("Either template or faculty and format are required!!")
             cli.usage()
             System.exit(0)

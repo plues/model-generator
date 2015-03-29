@@ -39,13 +39,22 @@ class Store {
     }
 
     public String getModelInfo(String value) {
-        if( ! this.info ) {
+        loadModelInfo()
+        return this.info[value]
+    }
+
+    private loadModelInfo() {
+        if (!this.info) {
             this.info = [:]
             this.sql.eachRow("SELECT * FROM info") { row ->
                 info[row['key']] = row['value']
             }
         }
-        return this.info[value]
+    }
+
+    public Map<String, String> getModelInfo() {
+        loadModelInfo()
+        return info
     }
 
     public getModules() {
