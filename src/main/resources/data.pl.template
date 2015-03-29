@@ -1,5 +1,7 @@
 % Machine generated: ${new Date()}
-% Database generated: ${generated}
+% Database information:
+<% info.each { %>%  <%= it.key %>: <%= it.value %>
+<% } %>
 % hashseed:  ${seed}
 :- module(data, [course/1, department/1, unit/4, mapping/3, session/4]).
 

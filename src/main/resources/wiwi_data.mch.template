@@ -1,6 +1,7 @@
 /* Machine generated: ${new Date()} */
-/* Database generated: ${generated} */
-/* hashseed:  ${seed} */
+/* Database information: */
+<% info.each { %>/*  <%= it.key %>: <%= it.value %> */
+<% } %>
 MACHINE wiwi_data
 /*
  * Course/Major: Studiengang
