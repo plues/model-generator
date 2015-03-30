@@ -42,8 +42,8 @@ class Main {
             def tp = FileType.values().find { it.name == options.format }
             result = renderer.renderFor(fac, tp)
         }
-
-        result.writeTo(new FileWriter(new File(options.output)))
+        def output = options.output.replaceFirst("^~", System.getProperty("user.home"));
+        result.writeTo(new FileWriter(new File(output)))
         println("Wrote to " + options.output.toString())
     }
 
