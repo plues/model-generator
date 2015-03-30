@@ -75,7 +75,7 @@ PROPERTIES
     units = {
         <%=
         units.collect { unit ->
-            "(${unit.key}, rec(title:\"${unit.value['title']}\", department:${unit.value['department']}, duration:${unit.value['duration']}, groups:[${unit.value['groups'].collect { group -> "rec(title:\"${group.value['title']}\", sessions:{${group.value['sessions'].join(', ')}})"}.join(', ')}]))"
+            "(${unit.key}, rec(title:\"${unit.value['title']}\", department:${unit.value['department']}, duration:${unit.value['duration']},     groups:{${unit.value['groups'].collect { group -> "(${group.key}, rec(title:\"${group.value['title']}\", sessions:{${group.value['sessions'].join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
