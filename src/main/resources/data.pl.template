@@ -5,10 +5,10 @@
 :- module(data, [course/1, department/1, unit/4, mapping/3, session/4]).
 
 % <% courses.each {  %>
-course(${it['name']}).<% } %>
+course('${it['name']}').<% } %>
 
 % <% departments.each {  %>
-department(${it['name']}).<% } %>
+department('${it['name']}').<% } %>
 
 %
 :- dynamic session/4.<% sessions.each { %>
@@ -16,10 +16,10 @@ session(${it['id']}, slot(${it['slot']}), rhythm(${it['rhythm']}), duration(${it
 
 %
 <% units.each { unit -> %>
-unit(${unit.key}, department(${unit.value['department']}), title(${unit.value['title'].getBytes('ascii')}), [
+unit(${unit.key}, department('${unit.value['department']}'), title(${unit.value['title'].getBytes('ascii')}), [
             <% unit.value['groups'].eachWithIndex { group, idx -> %>group(${idx+1}, title(${group.value['title'].getBytes('ascii')}), [${group.value['sessions'].join(', ')}])<% if ( idx < unit.value['groups'].size() -1 ) {%>,
             <% } %><% } %>]).
 <% } %>
 
 % <% mapping.each { map -> %>
-mapping(${map['course']}, ${map['semester']}, ${map['unit_id']}).<% } %>
+mapping('${map['course']}', ${map['semester']}, ${map['unit_id']}).<% } %>
