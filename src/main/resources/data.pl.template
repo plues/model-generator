@@ -17,8 +17,7 @@ session(${it['id']}, slot(${it['slot']}), rhythm(${it['rhythm']}), duration(${it
 %
 <% units.each { unit -> %>
 unit(${unit.key}, department('${unit.value['department']}'), title(${unit.value['title'].getBytes('ascii')}), [
-            <% unit.value['groups'].eachWithIndex { group, idx -> %>group(${idx+1}, title(${group.value['title'].getBytes('ascii')}), [${group.value['sessions'].join(', ')}])<% if ( idx < unit.value['groups'].size() -1 ) {%>,
-            <% } %><% } %>]).
+<%= unit.value['groups'].collect { group -> "                group(${group.key}, title(${group.value['title'].getBytes('ascii')}), [${group.value['sessions'].join(', ')}])" }.join(',\n')%>]).
 <% } %>
 
 % <% mapping.each { map -> %>
