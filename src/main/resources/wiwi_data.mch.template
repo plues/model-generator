@@ -19,39 +19,56 @@ DEFINITIONS
  "LibraryIO.def"
 SEES base
 SETS
-    MODULES={<%= modules.collect { it['name'] }.join(', ') %>};
-    COURSES = {<%= courses.collect { it['name'] }.join ',\n        ' %>};
-    DEPARTMENTS = {<%= departments.collect { it['name'] }.join ',\n        ' %>}
-CONSTANTS module_frequency, mapping, units, sessions, focus_areas, major_module_requirement, department_names, course_names
+    MODULES={<%= modules.collect { it.name }.join(', ') %>};
+    COURSES = {<%= courses.collect { it.name }.join ',\n        ' %>};
+    DEPARTMENTS = {<%= departments.collect { it.name }.join ',\n        ' %>}
+CONSTANTS module_frequency, units, sessions, focus_areas, department_names, course_names, course_modules, course_modules_elective_units
 PROPERTIES
     focus_areas = {
         <%=
         focus_areas.collect { area ->
-            "(${area['id']} |-> \"${area['name']}\")"
+            "(${area.id} |-> \"${area.name}\")"
         }.join(',\n        ')
         %>
     }
     &
+    module_frequency : MODULES >-> STRING
     module_frequency= {
-        <%=
+        <% /*
         modules.collect { module ->
-            "(${module['name']} |-> \"${module['frequency']}\")"
+            "(${module.name} |-> \"${module.frequency}\")"
         }.join(',\n        ')
-        %>
+        */ %>
     }
     &
     course_names = {
         <%=
         courses.collect { course ->
-            "(${course['name']} |-> \"${course['long_name']}\")"
+            "(${course.name} |-> \"${course.long_name}\")"
         }.join(',\n        ')
         %>
     }
     &
-    major_module_requirement = {
+    course_modules = {
         <%=
-        major_module_requirements.collect { requirement ->
-            "(${requirement['course']} |-> ${requirement['requirement']})"
+        courses_modules.collect { cm ->
+            "(${cm.course.name} |-> ${cm.module.name} |-> ${cm.type})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    course_modules_elective_units = {
+        <%=
+        courses_modules.collect { cm ->
+            "(${cm.course.name} |-> ${cm.module.name} |-> ${cm.elective_units}))"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    course_module_units = {
+        <%=
+        courses_modules_units.collect { cmu ->
+            "(${cmu.course.name} |-> ${cmu.module.name} |-> ${cmu.unit.id} |-> ${cmu.type} |-> ${cmu.semester})"
         }.join(',\n        ')
         %>
     }
@@ -59,7 +76,7 @@ PROPERTIES
     department_names = {
         <%=
         departments.collect { dep ->
-            "(${dep['name']} |-> \"${dep['long_name']}\")"
+            "(${dep.name} |-> \"${dep.long_name}\")"
         }.join(',\n        ')
         %>
     }
@@ -67,7 +84,7 @@ PROPERTIES
     sessions = {
         <%=
         sessions.collect { session ->
-            "(${session['id']}, rec(slot:${session['slot']}, rhythm:${session['rhythm']}, duration:${session['duration']}))"
+            "(${session.id}, rec(slot:${session.slot}, rhythm:${session.rhythm}, duration:${session.duration}))"
         }.join(',\n        ')
         %>
     }
@@ -75,15 +92,7 @@ PROPERTIES
     units = {
         <%=
         units.collect { unit ->
-            "(${unit.key}, rec(title:\"${unit.value['title']}\", department:${unit.value['department']}, duration:${unit.value['duration']},     groups:{${unit.value['groups'].collect { group -> "(${group.key}, rec(title:\"${group.value['title']}\", sessions:{${group.value['sessions'].join(', ')}}))"}.join(', ')}}))"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    mapping = {
-        <%=
-        mapping.collect { map ->
-            "(${map['module']}, ${map['class']}, ${map['course']}, ${map['type']}, ${map['focus_area_id']}, ${map['semester']}, ${map['unit_id']})"
+            "(${unit.id}, rec(title:\"${unit.title}\", department:${unit.department.name}, duration:${unit.duration},     groups:{${unit.groups.collect { group -> "(${group.id}, rec(title:\"${group.title}\", sessions:{${group.sessions.collect { it.id }.join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
