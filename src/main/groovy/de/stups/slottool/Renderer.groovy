@@ -34,33 +34,16 @@ class Renderer {
     }
 
     private Writable render(def template) {
-        /* DEPRECATED fields, use info map */
-        def generated = store.getModelInfo('generated')
-        def seed = store.getModelInfo('hashseed')
-
-        //
-        def info = store.getModelInfo()
-        def modules = store.getModules()
-        def courses = store.getCourses()
-        def departments = store.getDepartments()
-        def sessions = store.getSessions()
-        def mapping = store.getMapping()
-        def units = store.getUnits()
-        def focus_areas = store.getFocusAreas()
-        def major_module_requirements = store.getMajorModuleRequirement()
-
         def binding = [
-                generated: generated,
-                seed: seed,
-                info: info,
-                modules: modules,
-                courses: courses,
-                departments: departments,
-                sessions: sessions,
-                mapping: mapping,
-                units: units,
-                focus_areas: focus_areas,
-                major_module_requirements: major_module_requirements,
+                info: store.infoDAO,
+                modules: store.moduleDAO,
+                courses: store.courseDAO,
+                departments: store.departmentDAO,
+                sessions: store.sessionDAO,
+                units: store.unitDAO,
+                focus_areas: store.focusAreaDAO,
+                courses_modules: store.courseModuleDAO,
+                courses_modules_units: store.courseModuleUnitDAO,
         ]
         template.make(binding)
     }
