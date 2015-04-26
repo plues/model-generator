@@ -19,11 +19,14 @@ DEFINITIONS
  "LibraryIO.def"
 SEES base
 SETS
+    TYPES={m,e};
     MODULES={<%= modules.collect { it.name }.join(', ') %>};
     COURSES = {<%= courses.collect { it.name }.join ',\n        ' %>};
     DEPARTMENTS = {<%= departments.collect { it.name }.join ',\n        ' %>}
-CONSTANTS module_frequency, units, sessions, focus_areas, department_names, course_names, course_modules, course_modules_elective_units
+CONSTANTS module_frequency, units, sessions, focus_areas, department_names, course_names, course_modules, course_modules_elective_units, course_module_units
 PROPERTIES
+    focus_areas : POW(INTEGER*STRING)
+    &
     focus_areas = {
         <%=
         focus_areas.collect { area ->
@@ -32,7 +35,8 @@ PROPERTIES
         %>
     }
     &
-    module_frequency : MODULES >-> STRING
+    module_frequency : MODULES +-> STRING
+    &
     module_frequency= {
         <% /*
         modules.collect { module ->
@@ -40,6 +44,8 @@ PROPERTIES
         }.join(',\n        ')
         */ %>
     }
+    &
+    course_names : COURSES --> STRING
     &
     course_names = {
         <%=
@@ -49,6 +55,8 @@ PROPERTIES
         %>
     }
     &
+    course_modules : POW((COURSES*MODULES)*TYPES)
+    &
     course_modules = {
         <%=
         courses_modules.collect { cm ->
@@ -57,13 +65,17 @@ PROPERTIES
         %>
     }
     &
+    course_modules_elective_units : POW((COURSES*MODULES)*INTEGER)
+    &
     course_modules_elective_units = {
         <%=
         courses_modules.collect { cm ->
-            "(${cm.course.name} |-> ${cm.module.name} |-> ${cm.elective_units}))"
+            "(${cm.course.name} |-> ${cm.module.name} |-> ${cm.elective_units})"
         }.join(',\n        ')
         %>
     }
+    &
+    course_module_units : POW((((COURSES*MODULES)*INTEGER)*TYPES)*INTEGER)
     &
     course_module_units = {
         <%=
@@ -73,6 +85,8 @@ PROPERTIES
         %>
     }
     &
+    department_names : DEPARTMENTS --> STRING
+    &
     department_names = {
         <%=
         departments.collect { dep ->
@@ -81,6 +95,8 @@ PROPERTIES
         %>
     }
     &
+    sessions : POW(INTEGER*struct(duration:INTEGER, rhythm:INTEGER, slot:SLOTS))
+    &
     sessions = {
         <%=
         sessions.collect { session ->
@@ -88,6 +104,8 @@ PROPERTIES
         }.join(',\n        ')
         %>
     }
+    &
+    units :  POW(INTEGER*struct(department:DEPARTMENTS, duration:INTEGER, groups:POW(INTEGER*struct(sessions:POW(INTEGER), title:STRING)), title:STRING))
     &
     units = {
         <%=
