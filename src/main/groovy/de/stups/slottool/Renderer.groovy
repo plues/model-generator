@@ -13,8 +13,9 @@ class Renderer {
     def Renderer(Store db) {
         this.store = db
     }
-    protected loadTemplate(Faculty faculty, FileType tp) {
-        def template = faculty.templates[tp.name]
+    protected loadTemplate(FileType tp) {
+        def template = "data.${tp.extension}.template"
+        println(template)
         def resource = this.class.getResourceAsStream("/" + template)
         new SimpleTemplateEngine().createTemplate(resource.text)
     }
@@ -28,8 +29,8 @@ class Renderer {
         this.render(template)
     }
 
-    public Writable renderFor(Faculty faculty, FileType tp) {
-        def template = loadTemplate(faculty, tp)
+    public Writable renderFor(FileType tp) {
+        def template = loadTemplate(tp)
         this.render(template)
     }
 

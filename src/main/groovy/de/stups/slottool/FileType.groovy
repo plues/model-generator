@@ -4,12 +4,14 @@ package de.stups.slottool
  * Created by david on 01.02.15.
  */
 enum FileType {
-    BMachine("b"), Prolog("prolog")
+    BMachine("b", "mch"), Prolog("prolog", "pl")
 
     public final name
+    String extension
 
-    FileType(String name) {
+    FileType(String name, String extension) {
         this.name = name
+        this.extension = extension
     }
 
     @Override

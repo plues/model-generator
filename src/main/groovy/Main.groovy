@@ -33,16 +33,15 @@ class Main {
 
         def store = new Store(options.database)
         def renderer = new Renderer(store)
+        def output = options.output.replaceFirst("^~", System.getProperty("user.home"));
         def result
 
         if (options.template) {
             result = renderer.renderWith(options.template)
         } else {
-            def fac = Faculty.values().find { it.name == options.faculty }
             def tp = FileType.values().find { it.name == options.format }
-            result = renderer.renderFor(fac, tp)
+            result = renderer.renderFor(tp)
         }
-        def output = options.output.replaceFirst("^~", System.getProperty("user.home"));
         result.writeTo(new FileWriter(new File(output)))
         println("Wrote to " + options.output.toString())
     }
