@@ -5,7 +5,7 @@ import de.stups.slottool.data.Store
 
 class Main {
     public static void main(String[] args) {
-        // for tests args = '--database=data.sqlite3 --faculty=philfak --format=b --output=data.mch'.split(' ')
+        // for tests args = '--database=data.sqlite3 --format=b --output=data.mch'.split(' ')
         println(args)
         /*
          * http://marxsoftware.blogspot.de/2010/07/explicitly-specifying-args-property.html
@@ -13,7 +13,6 @@ class Main {
         def cli = new CliBuilder(usage:'java -jar JARFILE --output=<path> --database=<path> [--format=<format> --faculty=<faculty>] or [--template=<path>]')
         cli.with {
             _(longOpt:'format', "Output format [${FileType.values().join(", ")}]", args: 1)
-            _(longOpt:'faculty', "Faculty to generate data for: [${Faculty.values().join(", ")}]", args: 1)
             t(longOpt:'template', "External template to be used for rendering", args: 1)
             o(longOpt:'output', 'Target file', args: 1, required: true)
             d(longOpt:'database', 'SQLite Database', args:1, required: true)
@@ -25,8 +24,8 @@ class Main {
             System.exit(0)
         }
 
-        if( !options.template && (!options.faculty || !options.format) ) {
-            println("Either template or faculty and format are required!!")
+        if( !options.template && !options.format) {
+            println("Either template or format are required!!")
             cli.usage()
             System.exit(0)
         }
