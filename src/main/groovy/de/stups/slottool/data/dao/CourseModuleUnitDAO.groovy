@@ -22,6 +22,11 @@ class CourseModuleUnitDAO extends AbstractDAO{
         def unit = unitDAO.getById(row['unit_id'])
         def course = courseDAO.getById(row['course_id'])
         def module = moduleDAO.getById(row['module_id'])
+
+        assert unit != null
+        assert course != null
+        assert module != null
+
         def cmu = new CourseModuleUnit(course, module, unit, row['type'], row['semester'])
         this.data.add(cmu)
     }
