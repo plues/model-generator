@@ -55,12 +55,12 @@ PROPERTIES
         %>
     }
     &
-    course_modules : POW((COURSES*MODULES)*TYPES)
+    course_modules : POW((COURSES*TYPES)*MODULES)
     &
     course_modules = {
         <%=
         courses_modules.collect { cm ->
-            "(${cm.course.name} |-> ${cm.module.name} |-> ${cm.type})"
+            "(${cm.course.name} |-> ${cm.type} |-> ${cm.module.name})"
         }.join(',\n        ')
         %>
     }
