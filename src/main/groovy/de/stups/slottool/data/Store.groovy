@@ -87,35 +87,6 @@ class Store {
         }
     }
 
-
-    public getSessions() {
-        this.sql.rows("SELECT id, slot, rhythm, duration from sessions;")
-    }
-
-    public getMapping() {
-        this.sql.rows("SELECT * from mapping;")
-    }
-
-    public getUnits() {
-        if ( this.units ) {
-            return this.units
-        }
-        def units = [:]
-        this.sql.eachRow("SELECT units.id AS unit_id, units.title AS unit_title, units.duration AS unit_duration, units.department AS unit_department, groups.id AS group_id, groups.title AS group_title, group_sessions.session_id AS session_id FROM units JOIN groups ON units.id = groups.unit_id JOIN group_sessions ON groups.id = group_sessions.group_id ORDER BY unit_id") { row ->
-            def unit = units[row['unit_id']]
-            if ( ! unit ) {
-                unit = units[row['unit_id']] = [title: row['unit_title'], department: row['unit_department'], duration: row['unit_duration'], groups: [:]]
-            }
-            def groups = unit['groups']
-            def group = groups[row['group_id']]
-            if ( ! group ) {
-                group = groups[row['group_id']] = [title: row['group_title'], sessions: []]
-            }
-            group['sessions'].add(row['session_id'])
-        }
-        this.units = units
-    }
-
     @SuppressWarnings("GroovyUnusedDeclaration")
     public updateSession(idx, session) {
         def fields = ['updated_at=datetime(\'now\')']
