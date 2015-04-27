@@ -4,9 +4,10 @@ import de.stups.slottool.Renderer
 import de.stups.slottool.data.Store
 
 class Main {
+
+    static String VERSION = "0.5.2-SNAPSHOT"
     public static void main(String[] args) {
-        // for tests args = '--database=data.sqlite3 --format=b --output=data.mch'.split(' ')
-        println(args)
+        printVersion()
         /*
          * http://marxsoftware.blogspot.de/2010/07/explicitly-specifying-args-property.html
          */
@@ -23,6 +24,7 @@ class Main {
         if (!options) {
             System.exit(0)
         }
+
 
         if( !options.template && !options.format) {
             println("Either template or format are required!!")
@@ -45,4 +47,7 @@ class Main {
         println("Wrote to " + options.output.toString())
     }
 
+    static def printVersion() {
+        println("model-generator: Version ${VERSION}")
+    }
 }
