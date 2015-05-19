@@ -23,7 +23,7 @@ SETS
     MODULES={<%= modules.collect { it.name }.join(', ') %>};
     COURSES = {<%= courses.collect { it.name }.join ',\n        ' %>};
     DEPARTMENTS = {<%= departments.collect { it.name }.join ',\n        ' %>}
-CONSTANTS module_frequency, units, sessions, focus_areas, department_names, course_names, course_modules, course_modules_elective_units, course_module_units
+CONSTANTS module_frequency, units, sessions, focus_areas, focus_area_modules, department_names, course_names, course_modules, course_elective_modules, course_modules_elective_units, course_module_units
 PROPERTIES
     focus_areas : POW(INTEGER*STRING)
     &
@@ -34,6 +34,18 @@ PROPERTIES
         }.join(',\n        ')
         %>
     }
+    &
+    focus_area_modules : POW(INTEGER*MODULES)
+    &
+    focus_area_modules = {
+        <%= modules.collect { module ->
+            module.focus_areas.collect { area ->
+                "(${area.id} |-> ${module.name})"
+            }.join(',\n        ')
+        }.join(',\n        ')
+        %>
+    }
+
     &
     module_frequency : MODULES +-> STRING
     &
@@ -61,6 +73,14 @@ PROPERTIES
         <%=
         courses_modules.collect { cm ->
             "(${cm.course.name} |-> ${cm.type} |-> ${cm.module.name})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    course_elective_modules = {
+        <%=
+        courses.collect { course ->
+            "(${course.name} |-> ${course.elective_modules})"
         }.join(',\n        ')
         %>
     }
