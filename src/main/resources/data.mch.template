@@ -42,7 +42,7 @@ PROPERTIES
             module.focus_areas.collect { area ->
                 "(${area.id} |-> ${module.name})"
             }.join(',\n        ')
-        }.join(',\n        ')
+        }.findAll { it.length() > 0 }.join(',\n        ')
         %>
     }
 
