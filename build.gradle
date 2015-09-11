@@ -11,11 +11,7 @@ group = "de.stups.slottool"
 mainClassName = "Main"
 
 repositories {
-    mavenLocal()
-    maven {
-        name "cobra"
-        url "http://cobra.cs.uni-duesseldorf.de/artifactory/repo"
-    }
+    mavenCentral()
 }
 
 // https://simonharrer.wordpress.com/2013/09/17/building-command-line-apps-with-gradle/
