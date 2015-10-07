@@ -13,8 +13,9 @@ class Renderer {
     def Renderer(Store db) {
         this.store = db
     }
-    protected loadTemplate(Faculty faculty, FileType tp) {
-        def template = faculty.templates[tp.name]
+    protected loadTemplate(FileType tp) {
+        def template = "data.${tp.extension}.template"
+        println(template)
         def resource = this.class.getResourceAsStream("/" + template)
         new SimpleTemplateEngine().createTemplate(resource.text)
     }
@@ -28,39 +29,22 @@ class Renderer {
         this.render(template)
     }
 
-    public Writable renderFor(Faculty faculty, FileType tp) {
-        def template = loadTemplate(faculty, tp)
+    public Writable renderFor(FileType tp) {
+        def template = loadTemplate(tp)
         this.render(template)
     }
 
     private Writable render(def template) {
-        /* DEPRECATED fields, use info map */
-        def generated = store.getModelInfo('generated')
-        def seed = store.getModelInfo('hashseed')
-
-        //
-        def info = store.getModelInfo()
-        def modules = store.getModules()
-        def courses = store.getCourses()
-        def departments = store.getDepartments()
-        def sessions = store.getSessions()
-        def mapping = store.getMapping()
-        def units = store.getUnits()
-        def focus_areas = store.getFocusAreas()
-        def major_module_requirements = store.getMajorModuleRequirement()
-
         def binding = [
-                generated: generated,
-                seed: seed,
-                info: info,
-                modules: modules,
-                courses: courses,
-                departments: departments,
-                sessions: sessions,
-                mapping: mapping,
-                units: units,
-                focus_areas: focus_areas,
-                major_module_requirements: major_module_requirements,
+                info: store.infoDAO,
+                modules: store.moduleDAO,
+                courses: store.courseDAO,
+                departments: store.departmentDAO,
+                sessions: store.sessionDAO,
+                units: store.unitDAO,
+                focus_areas: store.focusAreaDAO,
+                courses_modules: store.courseModuleDAO,
+                courses_modules_units: store.courseModuleUnitDAO,
         ]
         template.make(binding)
     }

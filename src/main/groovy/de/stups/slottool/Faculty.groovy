@@ -4,23 +4,17 @@ package de.stups.slottool
  * Created by David Schneider on 01.02.15.
  */
 enum Faculty {
-   WiWi("wiwi", [(FileType.BMachine.name): "wiwi_data.mch.template", (FileType.Prolog.name): "data.pl.template"]),
-   PhilFak("philfak", [(FileType.BMachine.name): "data.mch.template", (FileType.Prolog.name): "data.pl.template"]);
+   WiWi("wiwi"),
+   PhilFak("philfak")
 
    private final name
-   private final templates
 
-   Faculty(String name, templates) {
+   Faculty(String name) {
       this.name = name
-      this.templates = templates
    }
 
    def getName() {
       return name
-   }
-
-   def getTemplates() {
-      return templates
    }
 
    @Override
