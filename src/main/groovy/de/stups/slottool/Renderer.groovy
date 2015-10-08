@@ -39,12 +39,8 @@ class Renderer {
                 info: store.infoDAO,
                 modules: store.moduleDAO,
                 courses: store.courseDAO,
-                departments: store.departmentDAO,
                 sessions: store.sessionDAO,
                 units: store.unitDAO,
-                focus_areas: store.focusAreaDAO,
-                courses_modules: store.courseModuleDAO,
-                courses_modules_units: store.courseModuleUnitDAO,
         ]
         template.make(binding)
     }

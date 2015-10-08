@@ -8,20 +8,15 @@ class UnitDAO extends AbstractDAO {
     }
 
     Map<Integer, Unit> units
-    DepartmentDAO departmentDAO
 
-    UnitDAO(def sql, DepartmentDAO departmentDAO) {
+    UnitDAO(def sql) {
         super(sql)
         this.units = new HashMap<Integer, Unit>()
-        this.departmentDAO = departmentDAO
     }
     @Override
     protected loadRow(def row) {
-        def department = departmentDAO.getById(row['department_id'])
-        def unit = new Unit(row['id'], row['title'], department, row['duration'],
-                    Date.parse(DATE_FORMAT, row['created_at']), Date.parse(DATE_FORMAT, row['updated_at']))
+        def unit = new Unit(row['id'], "${row['unit_key']}", row['title'], Date.parse(DATE_FORMAT, row['created_at']), Date.parse(DATE_FORMAT, row['updated_at']))
         units.put(row['id'], unit)
-        department.units.add(unit)
     }
 
     @Override

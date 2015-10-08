@@ -18,7 +18,7 @@ class GroupDAO extends AbstractDAO {
 
     @Override
     protected loadRow(def row) {
-        def group = new Group(row['id'], unitDAO.getById(row['unit_id']), row['title'],
+        def group = new Group(row['id'], unitDAO.getById(row['unit_id']),
                 Date.parse(AbstractDAO.DATE_FORMAT, row['created_at']),
                 Date.parse(AbstractDAO.DATE_FORMAT, row['updated_at']))
         this.groups.put(row['id'], group)

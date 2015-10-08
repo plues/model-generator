@@ -1,13 +1,13 @@
 package de.stups.slottool.data
 
+import de.stups.slottool.data.dao.AbstractUnitDAO
+import de.stups.slottool.data.dao.AbstractUnitUnitSemesterDAO
 import de.stups.slottool.data.dao.CourseDAO
-import de.stups.slottool.data.dao.CourseModuleDAO
-import de.stups.slottool.data.dao.CourseModuleUnitDAO
-import de.stups.slottool.data.dao.DepartmentDAO
-import de.stups.slottool.data.dao.FocusAreaDAO
+import de.stups.slottool.data.dao.CourseLevelDAO
 import de.stups.slottool.data.dao.InfoDAO
+import de.stups.slottool.data.dao.LevelDAO
+import de.stups.slottool.data.dao.ModuleAbstractUnitSemesterDAO
 import de.stups.slottool.data.dao.ModuleDAO
-import de.stups.slottool.data.dao.ModuleFocusAreaDAO
 import de.stups.slottool.data.dao.SessionDAO
 import de.stups.slottool.data.dao.UnitDAO
 import de.stups.slottool.data.dao.GroupDAO
@@ -24,15 +24,15 @@ class Store {
     LinkedHashMap units
     CourseDAO courseDAO
     ModuleDAO moduleDAO
-    FocusAreaDAO focusAreaDAO
-    DepartmentDAO departmentDAO
     UnitDAO unitDAO
     GroupDAO groupDAO
     InfoDAO infoDAO
     SessionDAO sessionDAO
-    CourseModuleDAO courseModuleDAO
-    ModuleFocusAreaDAO moduleFocusAreaDAO
-    CourseModuleUnitDAO courseModuleUnitDAO
+    LevelDAO levelDAO
+    AbstractUnitDAO abstractUnitDAO
+    CourseLevelDAO courseLevelDAO
+    ModuleAbstractUnitSemesterDAO moduleAbstractUnitSemesterDAO
+    AbstractUnitUnitSemesterDAO abstractUnitUnitSemesterDAO
 
     def Store(String dbpath) {
         this.sql = openDataBase(dbpath)
@@ -48,41 +48,44 @@ class Store {
         this.infoDAO.load()
 
         this.courseDAO.load()
+        this.levelDAO.load()
         this.moduleDAO.load()
-        this.focusAreaDAO.load()
-        this.departmentDAO.load()
+        this.abstractUnitDAO.load()
+
         this.unitDAO.load()
         this.groupDAO.load()
         this.sessionDAO.load()
-
+//
         // join DAOs
-        this.courseModuleDAO.load()
-        this.moduleFocusAreaDAO.load()
-        this.courseModuleUnitDAO.load()
+        this.courseLevelDAO.load()
+        this.moduleAbstractUnitSemesterDAO.load()
+        this.abstractUnitUnitSemesterDAO.load()
     }
 
     def setupDAOs() {
         this.infoDAO = new InfoDAO(sql)
         this.courseDAO = new CourseDAO(sql)
-        this.moduleDAO = new ModuleDAO(sql)
-        this.focusAreaDAO = new FocusAreaDAO(sql)
-        this.departmentDAO = new DepartmentDAO(sql)
-        this.unitDAO = new UnitDAO(sql, departmentDAO)
+        this.levelDAO = new LevelDAO(sql);
+        this.moduleDAO = new ModuleDAO(sql, this.levelDAO)
+        this.abstractUnitDAO = new AbstractUnitDAO(sql)
+        this.unitDAO = new UnitDAO(sql)
         this.groupDAO = new GroupDAO(sql, unitDAO)
-
         this.sessionDAO = new SessionDAO(sql, groupDAO)
         // join DAOs
-        this.courseModuleDAO = new CourseModuleDAO(sql, courseDAO, moduleDAO)
-        this.moduleFocusAreaDAO = new ModuleFocusAreaDAO(sql, moduleDAO, focusAreaDAO)
-        this.courseModuleUnitDAO = new CourseModuleUnitDAO(sql, courseDAO, moduleDAO, unitDAO)
+        this.courseLevelDAO = new CourseLevelDAO(sql, courseDAO, levelDAO)
+        this.moduleAbstractUnitSemesterDAO = new ModuleAbstractUnitSemesterDAO(sql, moduleDAO, abstractUnitDAO)
+        this.abstractUnitUnitSemesterDAO = new  AbstractUnitUnitSemesterDAO(sql, abstractUnitDAO, unitDAO)
     }
 
     def checkSchemaVersion() {
         def properties = new Properties()
         properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
-        def schema_version = this.infoDAO.getById('schema_version')
-        def required_version = properties.getProperty("schema_version")
-        if ( schema_version != required_version ) {
+        def schema_version = this.infoDAO.getById('schema_version').split(".").collect {Integer.parseInt(it)}
+        def required_version = properties.getProperty("schema_version").split(".").collect {Integer.parseInt(it)}
+
+        // Major versions must match
+        // minor version may be higher in database
+        if ( (schema_version[0] != required_version[0]) || (schema_version[1] < required_version[1]) ) {
             throw new IncompatibleSchemaError("Expected database schema version ${required_version} but was ${schema_version}")
         }
     }

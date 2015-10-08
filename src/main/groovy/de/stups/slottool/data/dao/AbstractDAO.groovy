@@ -10,15 +10,30 @@ abstract class AbstractDAO implements Iterable{
         this.sql = sql
 
     }
+
+    protected def getOrderBy() {
+        if(orderByClause) {
+            " ORDER BY ${orderByClause}";
+        } else {
+            ""
+        }
+    }
     def load() {
-        def query = 'SELECT * from '+ tableName +';'
+        def query = 'SELECT * from '+ tableName + orderBy + ';'
         this.sql.eachRow(query) { row ->
             this.loadRow(row)
         }
+        this.done();
     }
+
     abstract protected loadRow(def row)
 
     abstract getById(Object id)
 
     abstract String getTableName()
+
+    String getOrderByClause() {
+        return ""
+    }
+    def done() {}
 }

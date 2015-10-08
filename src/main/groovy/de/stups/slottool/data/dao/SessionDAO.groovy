@@ -15,7 +15,7 @@ class SessionDAO extends AbstractDAO{
     @Override
     protected loadRow(def Object row) {
         def group = groupDAO.getById(row['group_id'])
-        def session = new Session(row['id'], group, row['slot'], row['rhythm'], row['duration'],
+        def session = new Session(row['id'], group, row['day'], row['time'], row['rhythm'], row['duration'],
                             Date.parse(DATE_FORMAT, row['created_at']), Date.parse(DATE_FORMAT, row['updated_at']))
         sessions.put(row['id'], session)
         group.sessions.add(session)

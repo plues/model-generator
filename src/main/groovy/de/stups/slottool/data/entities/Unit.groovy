@@ -1,20 +1,18 @@
 package de.stups.slottool.data.entities
 
 class Unit {
-    int id
+    Integer id
     String title
-    Department department
     Date created_at
     Date updated_at
 
     Set<Group> groups
-    int duration
+    String key
 
-    def Unit(int id, String title, Department department, int duration, Date created_at, Date updated_at) {
+    def Unit(Integer id, String key, String title, Date created_at, Date updated_at) {
         this.id = id
+        this.key = key
         this.title = title
-        this.department = department
-        this.duration = duration
         this.created_at = created_at
         this.updated_at = updated_at
         this.groups = new HashSet<Group>()
