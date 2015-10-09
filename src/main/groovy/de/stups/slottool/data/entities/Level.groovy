@@ -7,8 +7,8 @@ class Level {
     String name
     String tm
     Integer id
-    Integer max
-    Integer min
+    private Integer max
+    private Integer min
     Level parent
     Integer parent_id
 
@@ -30,5 +30,20 @@ class Level {
 
         this.modules = new HashSet<Module>();
         this.children = new HashSet<Level>();
+    }
+
+    def getMin() {
+        if(this.min == null) {
+            return -1
+        }
+        return this.min
+    }
+
+    def getMax() {
+        if(this.max == null) {
+            return -1
+        }
+        return this.max
+
     }
 }
