@@ -37,8 +37,14 @@ class Renderer {
     private Writable render(def template) {
         def binding = [
                 info: store.infoDAO,
-                modules: store.moduleDAO,
+
+                abstract_units: store.abstractUnitDAO,
+                abstract_unit_unit_semester: store.abstractUnitUnitSemesterDAO,
                 courses: store.courseDAO,
+                groups: store.groupDAO,
+                levels: store.levelDAO,
+                modules: store.moduleDAO,
+                module_abstract_unit_semester: store.moduleAbstractUnitSemesterDAO,
                 sessions: store.sessionDAO,
                 units: store.unitDAO,
         ]
