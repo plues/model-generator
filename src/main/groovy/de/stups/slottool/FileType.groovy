@@ -4,7 +4,7 @@ package de.stups.slottool
  * Created by david on 01.02.15.
  */
 enum FileType {
-    BMachine("b", "mch"), Prolog("prolog", "pl")
+    BMachine("b", "mch")
 
     public final name
     String extension
