@@ -3,135 +3,119 @@
 <% info.each { %>/*  <%= it.key %>: <%= it.value %> */
 <% } %>
 MACHINE data
-/*
- * Course/Major: Studiengang
- * Module: A logical grouping of teaching units, might be composed of several units that make up a module. (z.B. Grundlagen der Technischen Informatik)
- * Class: Number for a unit within a group, (z.B. Grundlagen der Technischen Informatik, Teil 1 => Info 1)
- * Semester: Number 1..6
- * Unit: Lehrveranstaltung, a teaching unit like a lecture or lab sessions, divided in groups (one of them needs to be chosen to complete the unit)
- * Group: A set of related teaching sessions associated to a teaching unit, all sessions within a group are mandatory if the group is chosen
- * Session: An actual teaching session in a room with students a teacher
- * Slot: The day of the week and the time where a session is hel
- * Rhythm: Sessions might be scheduled weekly, or every other week on odd or even weeks
- * Duration: Number of SWS per session
+/* TODO:
+ * Decide how to select courses for checking (major and minor pairs, major only courses and/or major and focus area)
+ *  - Build all pairs ahead of time
+ *  - Choose to options
+ *  - Provide a faculty configuration which things can be selected by the user
+ *
+ * Generate docs along with data
  */
 DEFINITIONS
- "LibraryIO.def"
-SEES base
+ "LibraryIO.def";
+ SEMESTERS==1..6;
 SETS
     TYPES={m,e};
-    MODULES={<%= modules.collect { it.name }.join(', ') %>};
-    COURSES = {<%= courses.collect { it.name }.join ',\n        ' %>};
-    DEPARTMENTS = {<%= departments.collect { it.name }.join ',\n        ' %>}
-CONSTANTS module_frequency, units, sessions, focus_areas, focus_area_modules, department_names, course_names, course_modules, course_elective_modules, course_modules_elective_units, course_module_units
-PROPERTIES
-    focus_areas : POW(INTEGER*STRING)
-    &
-    focus_areas = {
-        <%=
-        focus_areas.collect { area ->
-            "(${area.id} |-> \"${area.name}\")"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    focus_area_modules : POW(INTEGER*MODULES)
-    &
-    focus_area_modules = {
-        <%= modules.collect { module ->
-            module.focus_areas.collect { area ->
-                "(${area.id} |-> ${module.name})"
-            }.join(',\n        ')
-        }.findAll { it.length() > 0 }.join(',\n        ')
-        %>
-    }
+    // MODULES={<%= modules.collect { it.name }.join(', ') %>};
+    SLOTS = {a1,a2,a3,a4,a5,
+             b1,b2,b3,b4,b5,
+             c1,c2,c3,c4,c5,
+             d1,d2,d3,d4,d5,
+             e1,e2,e3,e4,e5,
+             f1,f2,f3,f4,f5,
+             g1,g2,g3,g4,g5,
+             unknown};
 
+    PRIORITIES={P,W,S,F};
+    DAYS = {mon, tue, wed, thu, fri, sat, sun}
+
+CONSTANTS
+    abstract_units,
+    abstract_unit_unit_semester,
+    courses,
+    levels,
+    sessions,
+    units,
+    modules,
+    module_abstract_unit_semester
+PROPERTIES
+    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, title:STRING, pordnr:NATURAL, mandatory:BOOL))
     &
-    module_frequency : MODULES +-> STRING
-    &
-    module_frequency= {
-        <% /*
+    modules = {
+        <%=
         modules.collect { module ->
-            "(${module.name} |-> \"${module.frequency}\")"
+            "(${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", title:\"${module.title}\", pordnr:${module.pordnr}, mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
         }.join(',\n        ')
-        */ %>
+        %>
     }
     &
-    course_names : COURSES --> STRING
+    courses : POW(STRING*struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, po:NATURAL1, kzfa:STRING))
     &
-    course_names = {
+    courses = {
         <%=
         courses.collect { course ->
-            "(${course.name} |-> \"${course.long_name}\")"
+            "(\"${course.name}\" |-> rec(idx: ${course.id}, name: \"${course.name}\", long_name:\"${course.fullName}\", degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
         }.join(',\n        ')
         %>
     }
     &
-    course_modules : POW((COURSES*TYPES)*MODULES)
-    &
-    course_modules = {
-        <%=
-        courses_modules.collect { cm ->
-            "(${cm.course.name} |-> ${cm.type} |-> ${cm.module.name})"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    course_elective_modules = {
-        <%=
-        courses.collect { course ->
-            "(${course.name} |-> ${course.elective_modules})"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    course_modules_elective_units : POW((COURSES*MODULES)*INTEGER)
-    &
-    course_modules_elective_units = {
-        <%=
-        courses_modules.collect { cm ->
-            "(${cm.course.name} |-> ${cm.module.name} |-> ${cm.elective_units})"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    course_module_units : POW((((COURSES*MODULES)*INTEGER)*TYPES)*INTEGER)
-    &
-    course_module_units = {
-        <%=
-        courses_modules_units.collect { cmu ->
-            "(${cmu.course.name} |-> ${cmu.module.name} |-> ${cmu.unit.id} |-> ${cmu.type} |-> ${cmu.semester})"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    department_names : DEPARTMENTS --> STRING
-    &
-    department_names = {
-        <%=
-        departments.collect { dep ->
-            "(${dep.name} |-> \"${dep.long_name}\")"
-        }.join(',\n        ')
-        %>
-    }
-    &
-    sessions : POW(INTEGER*struct(duration:INTEGER, rhythm:INTEGER, slot:SLOTS))
+    sessions : POW(NATURAL1 * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))
     &
     sessions = {
         <%=
         sessions.collect { session ->
-            "(${session.id}, rec(slot:${session.slot}, rhythm:${session.rhythm}, duration:${session.duration}))"
+            "(${session.id}, rec(dow:${session.day}, slot:${session.time}, rhythm:${session.rhythm}, duration:${session.duration}))"
         }.join(',\n        ')
         %>
     }
     &
-    units :  POW(INTEGER*struct(department:DEPARTMENTS, duration:INTEGER, groups:POW(INTEGER*struct(sessions:POW(INTEGER), title:STRING)), title:STRING))
+    abstract_units : POW(NATURAL1 * struct(idx:NATURAL, title:STRING, key:STRING, type: TYPES))
+    &
+    abstract_units = {
+        <%=
+        abstract_units.collect { au ->
+            "(${au.id}, rec(idx:${au.id}, title:\"${au.title}\", key:\"${au.key}\", type:${au.type}))"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    module_abstract_unit_semester : POW((dom(modules) * dom(abstract_units)) * SEMESTERS)
+    &
+    module_abstract_unit_semester = {
+        <%= module_abstract_unit_semester.collect { maus ->
+            "(${maus.module.id}, ${maus.abstract_unit.id}, ${maus.semester})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    units :  POW(NATURAL1 * struct(idx:NATURAL1, key:STRING, groups:POW(INTEGER*struct(sessions:POW(INTEGER))), title:STRING))
     &
     units = {
         <%=
         units.collect { unit ->
-            "(${unit.id}, rec(title:\"${unit.title}\", department:${unit.department.name}, duration:${unit.duration},     groups:{${unit.groups.collect { group -> "(${group.id}, rec(title:\"${group.title}\", sessions:{${group.sessions.collect { it.id }.join(', ')}}))"}.join(', ')}}))"
+            "(${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", groups:{${unit.groups.collect { group -> "(${group.id}, rec(sessions:{${group.sessions.collect { it.id }.join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
+    &
+    abstract_unit_unit_semester : POW((dom(abstract_units) * dom(units)) * SEMESTERS)
+    &
+    abstract_unit_unit_semester = {
+        <%=
+        abstract_unit_unit_semester.collect { auas ->
+            "(${auas.abstract_unit.id}, ${auas.unit.id}, ${auas.semester})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    levels : POW(NATURAL1 * tree(struct(idx: NATURAL1, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}, modules:POW(dom(modules)))))
+    /*&
+    levels = {
+        <% levels.each { level -> if(level.children.size() >0) { %>
+            (${level.id}, const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{}), [<%= level.children.collect { child -> "levels(${child.id})" }.join(', ') %>]))
+        <% } else { %>
+            (${level.id}, bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{<%= level.modules.collect { module -> module.id }.join(' ,') %>})))
+        <% } %><% if (level != levels.last()) { %>,<% } %>
+    <% } %>
+    } */
 END
