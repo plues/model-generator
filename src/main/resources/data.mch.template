@@ -2,13 +2,14 @@
 /* Database information: */
 <% info.each { %>/*  <%= it.key %>: <%= it.value %> */
 <% } %>
+<% // vim: set syntax=groovy : %>
 MACHINE data
 /* TODO:
  * Decide how to select courses for checking (major and minor pairs, major only courses and/or major and focus area)
  *  - Build all pairs ahead of time
  *  - Choose to options
  *  - Provide a faculty configuration which things can be selected by the user
- *
+ * Add an assertion that all levels are reachable from the roots of the levels tree
  * Generate docs along with data
  */
 DEFINITIONS
@@ -33,7 +34,7 @@ CONSTANTS
     abstract_units,
     abstract_unit_unit_semester,
     courses,
-    levels,
+    course_levels,
     sessions,
     units,
     modules,
@@ -108,7 +109,22 @@ PROPERTIES
         %>
     }
     &
-    levels : POW(NATURAL1 * tree(struct(idx: NATURAL1, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}, modules:POW(dom(modules)))))
+    course_levels : dom(courses) <-> tree(struct(idx: NATURAL1, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}, modules:POW(dom(modules))))
+    &
+    #(<%= levels.toList().collate(10).collect { it.collect { level -> "level_${level.id}" }.join(', ') }.join(',\n        ') %>).(
+    <% levels.each { level -> %>
+        level_<%= level.id %> : tree(struct(idx: NATURAL1, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}, modules:POW(dom(modules))))
+        &
+        level_<%= level.id %> = <%if(level.children.size() >0) { %>
+            const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{}), [<%= level.children.collect { child -> "level_${child.id}" }.join(', ') %>])<% } else { %>
+            bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{<%= level.modules.collect { module -> module.id }.join(' ,') %>}))
+        <% } %><% if (level != levels.last()) { %> & <% } %><% } %>
+      &
+      course_levels = {
+        <%= courses.collect { course -> course.levels.collect { level -> "(\"${course.name}\", level_${level.id})"}.join(', ') }.join(',\n        ') %>
+      }
+    )
+END
     /*&
     levels = {
         <% levels.each { level -> if(level.children.size() >0) { %>
@@ -118,4 +134,3 @@ PROPERTIES
         <% } %><% if (level != levels.last()) { %>,<% } %>
     <% } %>
     } */
-END
