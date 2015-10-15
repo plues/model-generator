@@ -9,7 +9,7 @@ MACHINE data
  *  - Build all pairs ahead of time
  *  - Choose to options
  *  - Provide a faculty configuration which things can be selected by the user
- * Add an assertion that all levels are reachable from the roots of the levels tree
+ * Add an assertion that all levels with modules are leaves
  * Generate docs along with data
  */
 DEFINITIONS
@@ -29,12 +29,14 @@ SETS
 
     PRIORITIES={P,W,S,F};
     DAYS = {mon, tue, wed, thu, fri, sat, sun}
-
 CONSTANTS
     abstract_units,
     abstract_unit_unit_semester,
     courses,
     course_levels,
+    course_tree_leaves,
+    LEVELS,
+    level_modules,
     sessions,
     units,
     modules,
@@ -109,28 +111,39 @@ PROPERTIES
         %>
     }
     &
-    course_levels : dom(courses) <-> tree(struct(idx: NATURAL1, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}, modules:POW(dom(modules))))
+    LEVELS = {<%= levels.collect { level -> level.id}.join (', ') %>}
+    &
+    course_levels : dom(courses) <-> tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
     &
     #(<%= levels.toList().collate(10).collect { it.collect { level -> "level_${level.id}" }.join(', ') }.join(',\n        ') %>).(
     <% levels.each { level -> %>
-        level_<%= level.id %> : tree(struct(idx: NATURAL1, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}, modules:POW(dom(modules))))
+        level_<%= level.id %> : tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
         &
         level_<%= level.id %> = <%if(level.children.size() >0) { %>
-            const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{}), [<%= level.children.collect { child -> "level_${child.id}" }.join(', ') %>])<% } else { %>
-            bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{<%= level.modules.collect { module -> module.id }.join(' ,') %>}))
+            const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}), [<%= level.children.collect { child -> "level_${child.id}" }.join(', ') %>])<% } else { %>
+            bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}))
         <% } %><% if (level != levels.last()) { %> & <% } %><% } %>
       &
       course_levels = {
         <%= courses.collect { course -> course.levels.collect { level -> "(\"${course.name}\", level_${level.id})"}.join(', ') }.join(',\n        ') %>
       }
     )
+    &
+    /*
+     * Maps from level ID to the set of modules associated with that level (leaf)
+     */
+    level_modules : LEVELS <-> dom(modules)
+    &
+    level_modules = {
+        <%= levels.findAll { level -> level.modules.size() > 0 }.collect { level ->
+             level.modules.collect { module -> "(${level.id} |-> ${module.id})" }.join(", ")
+        }.join(',\n        ') %>
+    }
+    &
+    course_tree_leaves : POW((dom(courses)*LEVELS)*POW(LEVELS))
+    &
+    !(cc, tt).( cc : dom(courses) & tt : course_levels[{cc}] =>
+        course_tree_leaves(cc, top(tt)'idx) = {y | #(x).(x : dom(tt) & sizet(subtree(tt, x)) = 1 & y = tt(x)'idx)}
+    )
+
 END
-    /*&
-    levels = {
-        <% levels.each { level -> if(level.children.size() >0) { %>
-            (${level.id}, const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{}), [<%= level.children.collect { child -> "levels(${child.id})" }.join(', ') %>]))
-        <% } else { %>
-            (${level.id}, bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}, modules:{<%= level.modules.collect { module -> module.id }.join(' ,') %>})))
-        <% } %><% if (level != levels.last()) { %>,<% } %>
-    <% } %>
-    } */
