@@ -34,6 +34,7 @@ CONSTANTS
     abstract_unit_unit_semester,
     courses,
     course_levels,
+    course_modules,
     course_tree_leaves,
     LEVELS,
     level_modules,
@@ -145,5 +146,12 @@ PROPERTIES
     !(cc, tt).( cc : dom(courses) & tt : course_levels[{cc}] =>
         course_tree_leaves(cc, top(tt)'idx) = {y | #(x).(x : dom(tt) & sizet(subtree(tt, x)) = 1 & y = tt(x)'idx)}
     )
+    &
+    course_modules : dom(courses) --> POW(dom(modules))
+    &
+    course_modules = {
+        <% courses.each { course -> %>
+        ("<%= course.name %>", {<%= course.modules.collect { it.id }.join(" ,") %>})<% if(course != courses.last()) { %>,<% } %><% } %>
+    }
 
 END

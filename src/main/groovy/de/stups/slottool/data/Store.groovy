@@ -4,6 +4,7 @@ import de.stups.slottool.data.dao.AbstractUnitDAO
 import de.stups.slottool.data.dao.AbstractUnitUnitSemesterDAO
 import de.stups.slottool.data.dao.CourseDAO
 import de.stups.slottool.data.dao.CourseLevelDAO
+import de.stups.slottool.data.dao.CourseModulelDAO
 import de.stups.slottool.data.dao.InfoDAO
 import de.stups.slottool.data.dao.LevelDAO
 import de.stups.slottool.data.dao.ModuleAbstractUnitSemesterDAO
@@ -33,6 +34,7 @@ class Store {
     CourseLevelDAO courseLevelDAO
     ModuleAbstractUnitSemesterDAO moduleAbstractUnitSemesterDAO
     AbstractUnitUnitSemesterDAO abstractUnitUnitSemesterDAO
+    CourseModulelDAO courseModuleDAO
 
     def Store(String dbpath) {
         this.sql = openDataBase(dbpath)
@@ -58,6 +60,7 @@ class Store {
 //
         // join DAOs
         this.courseLevelDAO.load()
+        this.courseModuleDAO.load()
         this.moduleAbstractUnitSemesterDAO.load()
         this.abstractUnitUnitSemesterDAO.load()
     }
@@ -72,6 +75,7 @@ class Store {
         this.groupDAO = new GroupDAO(sql, unitDAO)
         this.sessionDAO = new SessionDAO(sql, groupDAO)
         // join DAOs
+        this.courseModuleDAO = new CourseModulelDAO(sql, courseDAO, moduleDAO)
         this.courseLevelDAO = new CourseLevelDAO(sql, courseDAO, levelDAO)
         this.moduleAbstractUnitSemesterDAO = new ModuleAbstractUnitSemesterDAO(sql, moduleDAO, abstractUnitDAO)
         this.abstractUnitUnitSemesterDAO = new  AbstractUnitUnitSemesterDAO(sql, abstractUnitDAO, unitDAO)

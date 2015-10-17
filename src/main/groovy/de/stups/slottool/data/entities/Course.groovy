@@ -10,6 +10,7 @@ class Course {
     Date updated_at
     Set<Level> levels
     String kzfa
+    Set<Module> modules
 
     def Course(int id, String long_name, String short_name, String degree, String kzfa, int po, Date created_at, Date updated_at) {
         this.id = id
@@ -21,10 +22,11 @@ class Course {
         this.created_at = created_at
         this.updated_at = updated_at
         this.levels = new HashSet<>()
+        this.modules = new HashSet<>()
     }
 
     def getName() {
-        return "${this.short_name}-${this.degree}-${this.kzfa}-${this.po}"
+        return "${this.degree}-${this.short_name}-${this.kzfa}-${this.po}"
     }
     def getFullName() {
         return "${this.long_name} (${this.degree} ${this.kzfa}) PO:${this.po}"
