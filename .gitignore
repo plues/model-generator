@@ -16,3 +16,4 @@ prob_log.txt
 # Java
 META-INF/
 dist/
+gradle/*
