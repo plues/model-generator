@@ -135,6 +135,12 @@ PROPERTIES
       }
     )
     &
+    course_tree_leaves : POW((dom(courses)*LEVELS)*POW(seq(INTEGER)))
+    &
+    !(cc, tt).( cc : dom(courses) & tt : course_levels[{cc}] =>
+        course_tree_leaves(cc, top(tt)'idx) = {xx | xx : dom(tt) & sizet(subtree(tt, xx)) = 1}
+    )
+    &
     /*
      * Maps from level ID to the set of modules associated with that level (leaf)
      */
@@ -145,12 +151,6 @@ PROPERTIES
              level.modules.collect { module -> "(${level.id} |-> ${module.id})" }.join(", ")
         }.join(',\n        ') %>
     }
-    &
-    course_tree_leaves : POW((dom(courses)*LEVELS)*POW(LEVELS))
-    &
-    !(cc, tt).( cc : dom(courses) & tt : course_levels[{cc}] =>
-        course_tree_leaves(cc, top(tt)'idx) = {y | #(x).(x : dom(tt) & sizet(subtree(tt, x)) = 1 & y = tt(x)'idx)}
-    )
     &
     course_modules : dom(courses) --> POW(dom(modules))
     &
