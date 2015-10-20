@@ -33,6 +33,7 @@ CONSTANTS
     abstract_units,
     abstract_unit_unit_semester,
     courses,
+    course_names,
     course_levels,
     course_modules,
     course_tree_leaves,
@@ -62,6 +63,10 @@ PROPERTIES
         }.join(',\n        ')
         %>
     }
+    &
+    course_names : POW(STRING)
+    &
+    course_names = dom(courses)
     &
     sessions : POW(NATURAL1 * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))
     &
