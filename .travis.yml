@@ -8,6 +8,11 @@ branches:
   - develop
   - master
   - feature/schema-3.0
+before_install:
+  - rvm install 2.0.0
+  - gem install travis-custom-deploy
+after_success:
+  - travis-custom-deploy sftp build/libs/
 env:
   global:
   - secure: Ql0ainiotdnVRChl7PgZFDsfTbtMPq9ez9vkIpqRsrihsmOT/i+lAyYxtDN7t7Tv3vgtShYwkZRmQllrXRrlZTmYECWBWjpX55pYkBDs1dLvGd/LYwc80uCY4WXmlUFBMnOR4o0MD8Th2zYi9vycuGPmzzw9/CPwp4ibjf96O7Qlw41JQGnQ5lQpj5xK1UYDqcLGC6Q8qiqTnC8EEyQxmTZlQ0VB9M+6sl50rQn6rSKQDJIDHnaHvVW3GRYrxC0HwBw8HAI3dcActr02yCoj7IZZmwGR1ZI3U9cZgOzEe9DnhgcbDpWJhDBLEkYU9/cUviU6j16q8Jzi77aRjp3KNL07DKXfNuZpUywtqHyV8Mub01pRkR6B/MZOLTzaval0RAy9x1/nBzsAXACa+yRFjDiQc/yYoQbJyBPVdXnwN1VSIPq5XjYvis1yPCMcSWGbl/TRksp4aFybv6VMVRBFmZ18dbOXCWkgZxNo38hzhQTiwYTuYWds6S4b+O/KezxCpeOQm2tgzkMPfbcOeCcwSHZ2TzUVg4Vp32TB+3NDMzBCymd2dZslZ+Ap3gVSmEUnM8RCl2XiJQKnjryPLCSSDXuDCV2KYwv6xijkFQFaGHnIqsIQwMgZaiQd2GCcN1zv6yeZcpe9cyMwOjcXqVjDxw0xn6nTX63PVdX5WqvxVIc=
