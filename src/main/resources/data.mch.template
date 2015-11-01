@@ -44,12 +44,12 @@ CONSTANTS
     modules,
     module_abstract_unit_semester
 PROPERTIES
-    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, title:STRING, pordnr:NATURAL, mandatory:BOOL))
+    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
     &
     modules = {
         <%=
         modules.collect { module ->
-            "(${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", title:\"${module.title}\", pordnr:${module.pordnr}, mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
+            "(${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
         }.join(',\n        ')
         %>
     }
