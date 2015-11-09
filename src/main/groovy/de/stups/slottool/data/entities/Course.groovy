@@ -11,9 +11,11 @@ class Course {
     Set<Level> levels
     String kzfa
     Set<Module> modules
+    String key
 
-    def Course(int id, String long_name, String short_name, String degree, String kzfa, int po, Date created_at, Date updated_at) {
+    def Course(int id, String key, String long_name, String short_name, String degree, String kzfa, int po, Date created_at, Date updated_at) {
         this.id = id
+        this.key = key
         this.short_name = short_name
         this.long_name = long_name
         this.degree = degree

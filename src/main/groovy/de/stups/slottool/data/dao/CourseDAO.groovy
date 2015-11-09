@@ -16,7 +16,7 @@ class CourseDAO extends AbstractDAO {
     @Override
     def protected loadRow(def row) {
         this.courses.put(row['id'], new Course(
-                row['id'], row['name'], row['short_name'], row['degree'], row['kzfa'], row['po'],
+                row['id'], row['key'], row['name'], row['short_name'], row['degree'], row['kzfa'], row['po'],
                 Date.parse(DATE_FORMAT, row['created_at']), Date.parse(DATE_FORMAT, row['updated_at'])))
     }
 
