@@ -33,22 +33,22 @@ CONSTANTS
     modules,
     module_abstract_unit_semester
 PROPERTIES
-    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
+    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL1 \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
     &
     modules = {
         <%=
         modules.collect { module ->
-            "(${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
+            "(${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", credit_points:${module.credit_points}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
         }.join(',\n        ')
         %>
     }
     &
-    courses : POW(STRING*struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, po:NATURAL1, kzfa:STRING))
+    courses : POW(STRING*struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, credit_points:NATURAL1 \\/ {-1}, po:NATURAL1, kzfa:STRING))
     &
     courses = {
         <%=
         courses.collect { course ->
-            "(\"${course.name}\" |-> rec(idx: ${course.id}, name: \"${course.name}\", long_name:\"${course.fullName}\", degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
+            "(\"${course.name}\" |-> rec(idx: ${course.id}, name: \"${course.name}\", long_name:\"${course.fullName}\", credit_points:${course.credit_points}, degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
         }.join(',\n        ')
         %>
     }
@@ -108,15 +108,15 @@ PROPERTIES
     &
     LEVELS = {<%= levels.collect { level -> level.id}.join (', ') %>}
     &
-    course_levels : dom(courses) <-> tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
+    course_levels : dom(courses) <-> tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, min_credit_points: NATURAL \\/ {-1}, max_credit_points: NATURAL \\/ {-1}, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
     &
     #(<%= levels.toList().collate(10).collect { it.collect { level -> "level_${level.id}" }.join(', ') }.join(',\n        ') %>).(
     <% levels.each { level -> %>
-        level_<%= level.id %> : tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
+        level_<%= level.id %> : tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, min_credit_points: NATURAL \\/ {-1}, max_credit_points: NATURAL \\/ {-1},  from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
         &
         level_<%= level.id %> = <%if(level.children.size() >0) { %>
-            const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}), [<%= level.children.collect { child -> "level_${child.id}" }.join(', ') %>])<% } else { %>
-            bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", from:${level.min}, to:${level.max}))
+            const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", min_credit_points:${level.min_credit_points}, max_credit_points:${level.max_credit_points}, from:${level.min}, to:${level.max}), [<%= level.children.collect { child -> "level_${child.id}" }.join(', ') %>])<% } else { %>
+            bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", min_credit_points:${level.min_credit_points}, max_credit_points:${level.max_credit_points}, from:${level.min}, to:${level.max}))
         <% } %><% if (level != levels.last()) { %> & <% } %><% } %>
       &
       course_levels = {

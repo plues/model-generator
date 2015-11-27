@@ -16,7 +16,7 @@ class ModuleDAO extends AbstractDAO {
     @Override
     def protected loadRow(def row) {
         Level level = this.levelDAO.getById(row['level_id'])
-        def module = new Module(row['id'], level, row['name'], row['title'], row['pordnr'],
+        def module = new Module(row['id'], level, row['name'], row['title'], row['pordnr'], row['credit_points'],
                         row['elective_units'], row['mandatory'] as Boolean,
                         Date.parse(DATE_FORMAT, row['created_at']), Date.parse(DATE_FORMAT, row['updated_at']))
         this.modules.put(row['id'], module)

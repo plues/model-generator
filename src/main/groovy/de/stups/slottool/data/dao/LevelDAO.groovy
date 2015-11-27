@@ -14,7 +14,8 @@ class LevelDAO extends AbstractDAO {
 
     @Override
     protected loadRow(def Object row) {
-        def level = new Level(row['id'], row['name'], row['tm'], row['art'], row['min'], row['max'],
+        def level = new Level(row['id'], row['name'], row['tm'], row['art'],
+                                row['min'], row['max'], row['min_credit_points'], row['max_credit_points'],
                                 row['parent_id'], Date.parse(DATE_FORMAT, row['created_at']), Date.parse(DATE_FORMAT, row['updated_at']))
 
         levels.put(level.id, level);

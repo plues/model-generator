@@ -9,6 +9,8 @@ class Level {
     Integer id
     private Integer max
     private Integer min
+    private Integer min_credit_points
+    private Integer max_credit_points
     Level parent
     Integer parent_id
 
@@ -17,13 +19,17 @@ class Level {
 
     Course course // belongs to one course
 
-    def Level(Integer id, String name, String tm, String art, Integer min, Integer max, Integer parent_id, Date created_at, Date updated_at) {
+    def Level(Integer id, String name, String tm, String art, Integer min, Integer max,
+              Integer min_credit_points, Integer max_credit_points, Integer parent_id,
+              Date created_at, Date updated_at) {
         this.id = id
         this.name = name
         this.tm = tm
         this.art = art
         this.min = min
         this.max = max
+        this.min_credit_points = min_credit_points
+        this.max_credit_points = max_credit_points
         this.parent_id = parent_id
         this.created_at = created_at
         this.updated_at = updated_at
@@ -45,5 +51,19 @@ class Level {
         }
         return this.max
 
+    }
+
+    def getMax_credit_points() {
+        if(this.max_credit_points == null) {
+            return -1
+        }
+        return this.max_credit_points
+    }
+
+    def getMin_credit_points() {
+        if(this.min_credit_points == null) {
+            return -1
+        }
+        return this.min_credit_points
     }
 }

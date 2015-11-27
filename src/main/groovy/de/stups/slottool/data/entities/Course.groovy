@@ -12,8 +12,9 @@ class Course {
     String kzfa
     Set<Module> modules
     String key
+    Integer credit_points
 
-    def Course(int id, String key, String long_name, String short_name, String degree, String kzfa, int po, Date created_at, Date updated_at) {
+    def Course(int id, String key, String long_name, String short_name, String degree, String kzfa, int po, Integer credit_points, Date created_at, Date updated_at) {
         this.id = id
         this.key = key
         this.short_name = short_name
@@ -21,6 +22,7 @@ class Course {
         this.degree = degree
         this.kzfa = kzfa
         this.po = po
+        this.credit_points = credit_points
         this.created_at = created_at
         this.updated_at = updated_at
         this.levels = new HashSet<>()
@@ -32,5 +34,11 @@ class Course {
     }
     def getFullName() {
         return "${this.long_name} (${this.degree} ${this.kzfa}) PO:${this.po}"
+    }
+    def getCredit_points() {
+        if(credit_points == null) {
+            return -1
+        }
+        return credit_points
     }
 }
