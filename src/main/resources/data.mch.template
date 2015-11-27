@@ -33,7 +33,7 @@ CONSTANTS
     modules,
     module_abstract_unit_semester
 PROPERTIES
-    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL1 \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
+    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
     &
     modules = {
         <%=
@@ -43,7 +43,7 @@ PROPERTIES
         %>
     }
     &
-    courses : POW(STRING*struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, credit_points:NATURAL1 \\/ {-1}, po:NATURAL1, kzfa:STRING))
+    courses : POW(STRING*struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, credit_points:NATURAL \\/ {-1}, po:NATURAL1, kzfa:STRING))
     &
     courses = {
         <%=
