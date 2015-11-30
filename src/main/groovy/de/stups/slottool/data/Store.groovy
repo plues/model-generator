@@ -12,7 +12,12 @@ import de.stups.slottool.data.dao.SessionDAO
 import de.stups.slottool.data.dao.UnitDAO
 import de.stups.slottool.data.dao.GroupDAO
 import groovy.sql.Sql
+
+import java.nio.file.Files
+import java.nio.file.Paths
+
 import static java.lang.Thread.currentThread
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
 /**
  * Created by David Schneider on 30.01.15.
@@ -33,8 +38,10 @@ class Store {
     CourseModuleDAO courseModuleDAO
     ModuleFocusAreaDAO moduleFocusAreaDAO
     CourseModuleUnitDAO courseModuleUnitDAO
+    String dbpath
 
     def Store(String dbpath) {
+        this.dbpath = dbpath
         this.sql = openDataBase(dbpath)
         this.setupDAOs()
         this.loadData()
@@ -88,7 +95,7 @@ class Store {
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    public updateSession(idx, session) {
+    private updateSession(idx, session, sql) {
         def fields = ['updated_at=datetime(\'now\')']
         for (attr in session) {
             if (attr.key == 'id') {
@@ -97,7 +104,7 @@ class Store {
             fields.add("\"${attr.key}\" = \"${attr.value}\"")
         }
         def query = "UPDATE sessions SET ${fields.join(", ")} WHERE id = ${idx};".toString() // sigh...
-        this.sql.executeUpdate(query)
+        sql.executeUpdate(query)
     }
 
     private openDataBase(String db_path) {
@@ -116,8 +123,33 @@ class Store {
     }
 
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    void close() {
-        this.sql.close()
+    void close(sql) {
+        sql.close()
+    }
+
+    def persist(Map changes) {
+        persist(this.sql, changes)
+    }
+
+    def persist(Map changes, File file) {
+        copyDBTo(file.absolutePath)
+
+        Sql sql = openDataBase(file.absolutePath)
+        persist(sql, changes)
+        this.close(sql)
+    }
+
+    def persist(sql, changes) {
+        def idx, slot
+        // apply changes
+        changes.each {
+            idx = it.key
+            slot = it.value
+            updateSession(idx, ['slot': slot], sql)
+        }
+    }
+
+    def copyDBTo(String target) {
+        Files.copy(Paths.get(dbpath), Paths.get(target), REPLACE_EXISTING)
     }
 }
