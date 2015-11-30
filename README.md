@@ -2,13 +2,13 @@
 
 [![Build Status](https://travis-ci.org/plues/model-generator.svg?branch=develop)](https://travis-ci.org/plues/model-generator)
 
-This is tool is used to generate text representations of timetable data to be
+This tool is used to generate text representations of timetable data to be
 used by different tools. `model-generator` is part of the `PlüS` project.
 
 It takes a SQLite database using schema version 2 as input plus an optional
 format or template use to generate the text represetation.
 
-Current version is `1.0.1-SNAPSHOT`.
+Current version is `1.0.2-SNAPSHOT`.
 
 ## Usage
 
