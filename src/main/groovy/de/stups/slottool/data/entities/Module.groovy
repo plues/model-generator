@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class Module {
+class Module extends Entity {
     Date updated_at
     int id
     String name

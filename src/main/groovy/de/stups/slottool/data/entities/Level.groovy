@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class Level {
+class Level extends Entity {
     Date updated_at
     Date created_at
     String art

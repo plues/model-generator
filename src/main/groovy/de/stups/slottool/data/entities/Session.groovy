@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class Session {
+class Session extends Entity {
     int id
     String day
     Integer time

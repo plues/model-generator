@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class Unit {
+class Unit extends Entity {
     Integer id
     String title
     Date created_at

@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class ModuleAbstractUnitSemester {
+class ModuleAbstractUnitSemester  extends Entity{
     Module module
     AbstractUnit abstract_unit
     Integer semester

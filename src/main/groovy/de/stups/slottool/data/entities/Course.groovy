@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class Course {
+class Course extends Entity{
     int id
     String short_name
     String long_name

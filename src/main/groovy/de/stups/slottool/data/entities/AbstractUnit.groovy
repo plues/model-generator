@@ -1,6 +1,6 @@
 package de.stups.slottool.data.entities
 
-class AbstractUnit {
+class AbstractUnit extends Entity {
     Integer id
     String key
     String title
