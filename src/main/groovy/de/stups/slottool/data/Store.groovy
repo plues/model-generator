@@ -1,17 +1,6 @@
 package de.stups.slottool.data
 
-import de.stups.slottool.data.dao.AbstractUnitDAO
-import de.stups.slottool.data.dao.AbstractUnitUnitSemesterDAO
-import de.stups.slottool.data.dao.CourseDAO
-import de.stups.slottool.data.dao.CourseLevelDAO
-import de.stups.slottool.data.dao.CourseModulelDAO
-import de.stups.slottool.data.dao.InfoDAO
-import de.stups.slottool.data.dao.LevelDAO
-import de.stups.slottool.data.dao.ModuleAbstractUnitSemesterDAO
-import de.stups.slottool.data.dao.ModuleDAO
-import de.stups.slottool.data.dao.SessionDAO
-import de.stups.slottool.data.dao.UnitDAO
-import de.stups.slottool.data.dao.GroupDAO
+import de.stups.slottool.data.dao.*
 import groovy.sql.Sql
 
 import java.nio.file.Files
@@ -102,18 +91,7 @@ class Store {
         }
     }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    private updateSession(idx, session, sql) {
-        def fields = ['updated_at=datetime(\'now\')']
-        for (attr in session) {
-            if (attr.key == 'id') {
-                continue
-            }
-            fields.add("\"${attr.key}\" = \"${attr.value}\"")
-        }
-        def query = "UPDATE sessions SET ${fields.join(", ")} WHERE id = ${idx};".toString() // sigh...
-        sql.executeUpdate(query)
-    }
+
 
     private openDataBase(String db_path) {
         Class.forName("org.sqlite.JDBC");
@@ -135,25 +113,29 @@ class Store {
         sql.close()
     }
 
-    def persist(Map changes) {
-        persist(this.sql, changes)
+    def persist(boolean clear) {
+        persist(this.sql, clear)
     }
 
-    def persist(Map changes, File file) {
+    def persist(boolean clear, File file) {
         copyDBTo(file.absolutePath)
 
         Sql sql = openDataBase(file.absolutePath)
-        persist(sql, changes)
+        persist(sql, clear)
         this.close(sql)
     }
 
-    def persist(sql, changes) {
-        def idx, slot
+    def persist(Sql sql, clear_dirty_flag) {
         // apply changes
-        changes.each {
-            idx = it.key
-            slot = it.value
-            updateSession(idx, ['slot': slot], sql)
+        for(session in sessionDAO) {
+            if(!session.dirty) {
+               continue
+            }
+            sessionDAO.update(session, sql)
+            // XXX move to DAO (?)
+            if(clear_dirty_flag) {
+                session.dirty = false
+            }
         }
     }
 

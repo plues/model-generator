@@ -1,6 +1,7 @@
 package de.stups.slottool.data.dao
 
 import de.stups.slottool.data.entities.Session
+import groovy.sql.Sql
 
 class SessionDAO extends AbstractDAO{
     Map<Integer, Session> sessions;
@@ -35,5 +36,16 @@ class SessionDAO extends AbstractDAO{
     @Override
     Iterator iterator() {
         return sessions.values().iterator()
+    }
+
+    // XXX Add to AbstractDAO
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    def update(Session session) {
+        this.update(session, this.sql);
+    }
+
+    def update(Session session, Sql sql) {
+        def fields = [day: session.day, time: session.time]
+        super.update(sql, session.id, fields)
     }
 }

@@ -6,6 +6,7 @@ abstract class AbstractDAO implements Iterable{
     static DATE_FORMAT = 'yyyy-M-d H:m:s'
     Sql sql
 
+
     AbstractDAO(Sql sql) {
         this.sql = sql
 
@@ -35,5 +36,18 @@ abstract class AbstractDAO implements Iterable{
     String getOrderByClause() {
         return ""
     }
+
     def done() {}
+
+    def update(Sql sql, Integer idx, Map fields) {
+        def values = []
+        def names = []
+        fields.each {
+            values << it.value
+            names << "${it.key} = ?"
+        }
+        def query = "UPDATE ${tableName} SET ${names.join(', ')}, " +
+                "updated_at = datetime('now') WHERE id = ${idx}"
+        sql.executeUpdate(query, values)
+    }
 }
