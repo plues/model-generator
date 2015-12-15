@@ -5,6 +5,7 @@ class Unit extends Entity {
     String title
     Date created_at
     Date updated_at
+    Set<AbstractUnit> abstract_units
 
     Set<Group> groups
     String key
@@ -16,5 +17,6 @@ class Unit extends Entity {
         this.created_at = created_at
         this.updated_at = updated_at
         this.groups = new HashSet<Group>()
+        this.abstract_units = new HashSet<AbstractUnit>()
     }
 }

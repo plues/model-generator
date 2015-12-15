@@ -10,6 +10,7 @@ class Module extends Entity {
     Boolean mandatory
     Course course
     Integer elective_units
+    Set<AbstractUnit> abstract_units
     private Integer credit_points
 
 
@@ -23,6 +24,7 @@ class Module extends Entity {
         this.mandatory = mandatory
         this.created_at = created_at
         this.updated_at = updated_at
+        this.abstract_units = new HashSet<AbstractUnit>()
     }
 
     def getCredit_points() {

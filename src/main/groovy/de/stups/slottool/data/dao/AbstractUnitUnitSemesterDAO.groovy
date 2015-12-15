@@ -24,6 +24,7 @@ class AbstractUnitUnitSemesterDAO extends AbstractDAO {
         def au = abstractUnitDAO.getById(row['abstract_unit_id'])
         def item = new AbstractUnitUnitSemester(au, unit, row['semester'])
         this.data.add(item)
+        unit.abstract_units.add(au)
     }
 
     @Override
