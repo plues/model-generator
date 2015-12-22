@@ -29,4 +29,12 @@ class CourseDAO extends AbstractDAO {
     Iterator iterator() {
         return this.courses.values().iterator()
     }
+
+    def getMajors() {
+        this.findAll { c -> c.isMajor() }
+    }
+
+    def getMinors() {
+        this.findAll { c -> c.isMinor() }
+    }
 }
