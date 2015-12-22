@@ -41,4 +41,16 @@ class Course extends Entity{
         }
         return credit_points
     }
+
+    def isMajor() {
+        this.kzfa == "H"
+    }
+
+    def isMinor() {
+        this.kzfa == "N"
+    }
+
+    def isCombinable() {
+        this.degree == "bk" // bk is combinable ba is not
+    }
 }
