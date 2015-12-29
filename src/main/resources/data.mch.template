@@ -25,6 +25,7 @@ CONSTANTS
     course_names,
     course_levels,
     course_modules,
+    course_module_combinations,
     course_tree_leaves,
     LEVELS,
     level_modules,
@@ -56,6 +57,16 @@ PROPERTIES
     course_names : POW(STRING)
     &
     course_names = dom(courses)
+    &
+    course_module_combinations = {
+        <%=
+        course_modules_combinations.combinations.collect { course, combs ->
+           "(\"${course.name}\" |-> {\n
+            ${combs.collect { idx, modules -> "{${modules.collect { m -> m.id }.join(', ')}} /* ${idx} */" }.join(',\n            ')}
+           })"
+        }.join(',\n        ')
+        %>
+    }
     &
     sessions : POW(NATURAL1 * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))
     &

@@ -41,6 +41,7 @@ class Renderer {
                 abstract_units: store.abstractUnitDAO,
                 abstract_unit_unit_semester: store.abstractUnitUnitSemesterDAO,
                 courses: store.courseDAO,
+                course_modules_combinations: store.courseModulesCombinationsDAO,
                 groups: store.groupDAO,
                 levels: store.levelDAO,
                 modules: store.moduleDAO,

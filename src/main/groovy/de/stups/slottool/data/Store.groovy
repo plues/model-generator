@@ -31,6 +31,8 @@ class Store {
     CourseModulelDAO courseModuleDAO
     String dbpath
 
+    CourseModuleCombinationsDAO courseModulesCombinationsDAO
+
 
     def Store(String dbpath) {
         this.dbpath = dbpath
@@ -60,6 +62,8 @@ class Store {
         this.courseModuleDAO.load()
         this.moduleAbstractUnitSemesterDAO.load()
         this.abstractUnitUnitSemesterDAO.load()
+
+        this.courseModulesCombinationsDAO.load()
     }
 
     def setupDAOs() {
@@ -76,6 +80,8 @@ class Store {
         this.courseLevelDAO = new CourseLevelDAO(sql, courseDAO, levelDAO)
         this.moduleAbstractUnitSemesterDAO = new ModuleAbstractUnitSemesterDAO(sql, moduleDAO, abstractUnitDAO)
         this.abstractUnitUnitSemesterDAO = new  AbstractUnitUnitSemesterDAO(sql, abstractUnitDAO, unitDAO)
+
+        this.courseModulesCombinationsDAO = new CourseModuleCombinationsDAO(sql, courseDAO, moduleDAO)
     }
 
     def checkSchemaVersion() {
