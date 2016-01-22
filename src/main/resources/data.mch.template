@@ -49,7 +49,7 @@ PROPERTIES
     courses = {
         <%=
         courses.collect { course ->
-            "(\"${course.name}\" |-> rec(idx: ${course.id}, name: \"${course.name}\", long_name:\"${course.fullName}\", credit_points:${course.credit_points}, degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
+            "(\"${course.key}\" |-> rec(idx: ${course.id}, name: \"${course.key}\", long_name:\"${course.fullName}\", credit_points:${course.credit_points}, degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
         }.join(',\n        ')
         %>
     }
@@ -61,7 +61,7 @@ PROPERTIES
     course_module_combinations = {
         <%=
         course_modules_combinations.combinations.collect { course, combs ->
-           "(\"${course.name}\" |-> {\n
+           "(\"${course.key}\" |-> {\n
             ${combs.collect { idx, modules -> "{${modules.collect { m -> m.id }.join(', ')}} /* ${idx} */" }.join(',\n            ')}
            })"
         }.join(',\n        ')
@@ -131,7 +131,7 @@ PROPERTIES
         <% } %><% if (level != levels.last()) { %> & <% } %><% } %>
       &
       course_levels = {
-        <%= courses.collect { course -> course.levels.collect { level -> "(\"${course.name}\", level_${level.id})"}.join(', ') }.join(',\n        ') %>
+        <%= courses.collect { course -> course.levels.collect { level -> "(\"${course.key}\", level_${level.id})"}.join(', ') }.join(',\n        ') %>
       }
     )
     &
@@ -156,7 +156,7 @@ PROPERTIES
     &
     course_modules = {
         <% courses.each { course -> %>
-        ("<%= course.name %>", {<%= course.modules.collect { it.id }.join(" ,") %>})<% if(course != courses.last()) { %>,<% } %><% } %>
+        ("<%= course.key %>", {<%= course.modules.collect { it.id }.join(" ,") %>})<% if(course != courses.last()) { %>,<% } %><% } %>
     }
 
 END
