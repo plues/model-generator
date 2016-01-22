@@ -30,8 +30,9 @@ class Course extends Entity{
     }
 
     def getName() {
-        return "${this.degree}-${this.short_name}-${this.kzfa}-${this.po}"
+        return this.key
     }
+
     def getFullName() {
         return "${this.long_name} (${this.degree} ${this.kzfa}) PO:${this.po}"
     }
