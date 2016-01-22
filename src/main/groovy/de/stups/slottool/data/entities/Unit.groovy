@@ -9,11 +9,13 @@ class Unit extends Entity {
 
     Set<Group> groups
     String key
+    int half_semester
 
-    def Unit(Integer id, String key, String title, Date created_at, Date updated_at) {
+    def Unit(Integer id, String key, String title, Integer half_semester, Date created_at, Date updated_at) {
         this.id = id
         this.key = key
         this.title = title
+        this.half_semester = half_semester
         this.created_at = created_at
         this.updated_at = updated_at
         this.groups = new HashSet<Group>()
