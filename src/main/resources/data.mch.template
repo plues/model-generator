@@ -97,12 +97,12 @@ PROPERTIES
         %>
     }
     &
-    units :  POW(NATURAL1 * struct(idx:NATURAL1, key:STRING, groups:POW(INTEGER*struct(sessions:POW(INTEGER))), title:STRING))
+    units :  POW(NATURAL1 * struct(idx:NATURAL1, key:STRING, half_semester:0..2, groups:POW(INTEGER*struct(sessions:POW(INTEGER))), title:STRING))
     &
     units = {
         <%=
         units.collect { unit ->
-            "(${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", groups:{${unit.groups.collect { group -> "(${group.id}, rec(sessions:{${group.sessions.collect { it.id }.join(', ')}}))"}.join(', ')}}))"
+            "(${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", half_semester:${unit.half_semester}, groups:{${unit.groups.collect { group -> "(${group.id}, rec(sessions:{${group.sessions.collect { it.id }.join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
