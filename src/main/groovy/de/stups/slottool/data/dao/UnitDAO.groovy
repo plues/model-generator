@@ -15,9 +15,8 @@ class UnitDAO extends AbstractDAO {
     }
     @Override
     protected loadRow(def row) {
-        def unit = new Unit(row['id'], "${row['unit_key']}", row['title'], row['half_semester'],
-                                                                            Date.parse(DATE_FORMAT, row['created_at']),
-                                                                            Date.parse(DATE_FORMAT, row['updated_at']))
+        def unit = new Unit(row['id'], "${row['unit_key']}", row['title'], Date.parse(DATE_FORMAT, row['created_at']),
+                                                                           Date.parse(DATE_FORMAT, row['updated_at']))
         units.put(row['id'], unit)
     }
 
