@@ -16,10 +16,14 @@ class Renderer {
     protected loadTemplate(FileType tp) {
         def template = "data.${tp.extension}.template"
         println(template)
-        def resource = this.class.getResourceAsStream("/" + template)
-        new SimpleTemplateEngine().createTemplate(resource.text)
+        this.loadTemplateFromResource("/" + template)
     }
 
+    protected loadTemplateFromResource(String path) {
+        def resource = this.class.getResourceAsStream(path)
+        new SimpleTemplateEngine().createTemplate(resource.text)
+
+    }
     protected loadTemplate(String path) {
         new SimpleTemplateEngine().createTemplate(new FileReader(path))
     }
@@ -34,7 +38,7 @@ class Renderer {
         this.render(template)
     }
 
-    private Writable render(def template) {
+    protected Writable render(def template) {
         def binding = [
                 info: store.infoDAO,
 
