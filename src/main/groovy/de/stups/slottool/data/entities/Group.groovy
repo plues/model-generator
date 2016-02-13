@@ -18,4 +18,8 @@ class Group extends Entity{
 
         this.sessions = new HashSet<Group>()
     }
+
+    def half_semester_word() {
+        ( half_semester == 1 ) ? "first" : "second"
+    }
 }
