@@ -59,6 +59,6 @@ class XMLExporter extends Renderer {
     }
 
     private def exportFile(String path) {
-        this.render(this.loadTemplateFromResource(path))
+        this.render(this.loadTemplateFromResource(path), XMLHelper)
     }
 }
