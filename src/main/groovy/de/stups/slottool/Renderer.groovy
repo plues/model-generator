@@ -38,7 +38,7 @@ class Renderer {
         this.render(template)
     }
 
-    protected Writable render(def template) {
+    protected Writable render(def template, def helper=null) {
         def binding = [
                 info: store.infoDAO,
 
@@ -52,6 +52,7 @@ class Renderer {
                 module_abstract_unit_semester: store.moduleAbstractUnitSemesterDAO,
                 sessions: store.sessionDAO,
                 units: store.unitDAO,
+                helper: helper,
         ]
         template.make(binding)
     }
