@@ -29,13 +29,17 @@ class Course extends Entity{
         this.modules = new HashSet<>()
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getName() {
         return this.key
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getFullName() {
         return "${this.long_name} (${this.degree} ${this.kzfa}) PO:${this.po}"
     }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getCredit_points() {
         if(credit_points == null) {
             return -1
@@ -43,14 +47,17 @@ class Course extends Entity{
         return credit_points
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def isMajor() {
         this.kzfa == "H"
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def isMinor() {
         this.kzfa == "N"
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def isCombinable() {
         this.degree == "bk" // bk is combinable ba is not
     }

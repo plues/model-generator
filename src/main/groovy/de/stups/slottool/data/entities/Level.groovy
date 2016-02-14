@@ -34,10 +34,11 @@ class Level extends Entity {
         this.created_at = created_at
         this.updated_at = updated_at
 
-        this.modules = new HashSet<Module>();
-        this.children = new HashSet<Level>();
+        this.modules = new HashSet<Module>()
+        this.children = new HashSet<Level>()
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getMin() {
         if(this.min == null) {
             return -1
@@ -45,6 +46,7 @@ class Level extends Entity {
         return this.min
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getMax() {
         if(this.max == null) {
             return -1
@@ -53,6 +55,7 @@ class Level extends Entity {
 
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getMax_credit_points() {
         if(this.max_credit_points == null) {
             return -1
@@ -60,6 +63,7 @@ class Level extends Entity {
         return this.max_credit_points
     }
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getMin_credit_points() {
         if(this.min_credit_points == null) {
             return -1
