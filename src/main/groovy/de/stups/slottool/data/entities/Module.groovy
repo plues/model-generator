@@ -3,6 +3,7 @@ package de.stups.slottool.data.entities
 class Module extends Entity {
     Date updated_at
     int id
+    String key
     String name
     Date created_at
     String title
@@ -14,8 +15,9 @@ class Module extends Entity {
     private Integer credit_points
 
 
-    Module(Integer id, Level level, String name, String title, Integer pordnr, Integer credit_points, Integer elective_units, Boolean mandatory, Date created_at, Date updated_at) {
+    Module(Integer id, Level level, String key, String name, String title, Integer pordnr, Integer credit_points, Integer elective_units, Boolean mandatory, Date created_at, Date updated_at) {
         this.id = id
+        this.key = key
         this.name = name
         this.title = title
         this.pordnr = pordnr
