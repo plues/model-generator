@@ -9,7 +9,7 @@ class Module extends Entity {
     String title
     Integer pordnr
     Boolean mandatory
-    Course course
+    Set<Course> courses
     Integer elective_units
     Set<AbstractUnit> abstract_units
     private Integer credit_points
@@ -27,6 +27,7 @@ class Module extends Entity {
         this.created_at = created_at
         this.updated_at = updated_at
         this.abstract_units = new HashSet<AbstractUnit>()
+        this.courses = new HashMap<Course>()
     }
 
     def getCredit_points() {

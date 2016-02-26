@@ -19,8 +19,8 @@ class CourseModulelDAO extends AbstractDAO {
     protected loadRow(def Object row) {
         Course course = courseDAO.getById(row['course_id'])
         Module module= moduleDAO.getById(row['module_id'])
+        module.courses.add(course)
         course.modules.add(module)
-        module.course = course
     }
 
     @Override
