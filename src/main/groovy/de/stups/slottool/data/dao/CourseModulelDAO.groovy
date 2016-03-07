@@ -1,7 +1,6 @@
 package de.stups.slottool.data.dao
 
 import de.stups.slottool.data.entities.Course
-import de.stups.slottool.data.entities.Level
 import de.stups.slottool.data.entities.Module
 import groovy.sql.Sql
 

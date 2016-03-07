@@ -15,7 +15,7 @@ class Module extends Entity {
     private Integer credit_points
 
 
-    Module(Integer id, Level level, String key, String name, String title, Integer pordnr, Integer credit_points, Integer elective_units, Boolean mandatory, Date created_at, Date updated_at) {
+    Module(Integer id, String key, String name, String title, Integer pordnr, Integer credit_points, Integer elective_units, Boolean mandatory, Date created_at, Date updated_at) {
         this.id = id
         this.key = key
         this.name = name
