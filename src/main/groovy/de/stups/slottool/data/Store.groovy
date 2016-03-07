@@ -32,6 +32,7 @@ class Store {
     String dbpath
 
     CourseModuleCombinationsDAO courseModulesCombinationsDAO
+    ModuleLevelDAO moduleLevelsDAO
 
 
     def Store(String dbpath) {
@@ -61,6 +62,7 @@ class Store {
         this.courseLevelDAO.load()
         this.courseModuleDAO.load()
         this.moduleAbstractUnitSemesterDAO.load()
+        this.moduleLevelsDAO.load()
         this.abstractUnitUnitSemesterDAO.load()
 
         this.courseModulesCombinationsDAO.load()
@@ -79,6 +81,7 @@ class Store {
         this.courseModuleDAO = new CourseModulelDAO(sql, courseDAO, moduleDAO)
         this.courseLevelDAO = new CourseLevelDAO(sql, courseDAO, levelDAO)
         this.moduleAbstractUnitSemesterDAO = new ModuleAbstractUnitSemesterDAO(sql, moduleDAO, abstractUnitDAO)
+        this.moduleLevelsDAO = new ModuleLevelDAO(sql, moduleDAO, levelDAO)
         this.abstractUnitUnitSemesterDAO = new  AbstractUnitUnitSemesterDAO(sql, abstractUnitDAO, unitDAO)
 
         this.courseModulesCombinationsDAO = new CourseModuleCombinationsDAO(sql, courseDAO, moduleDAO)
