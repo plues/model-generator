@@ -6,10 +6,12 @@ import groovy.sql.Sql
 class LogDAO extends AbstractDAO {
 
     Map<Integer, Log> log
+    Date lastSaved
 
     LogDAO(def sql) {
         super(sql)
         this.log= new HashMap<Integer, Log>()
+        this.lastSaved = new Date()
     }
 
     @Override
@@ -49,9 +51,13 @@ class LogDAO extends AbstractDAO {
 
     def persist(Sql sql) {
         for (Log l in log) {
+            if (l.created_at.compareTo(lastSaved) < 0) {
+                continue
+            }
             String query = "INSERT INTO log (session_id, src_day, src_time, target_day, target_time, created_at)" +
                     "VALUES (${l.created_at}, '${l.src_day}', ${l.src_time}, '${l.target_day}', ${l.target_time}, ${l.created_at})"
             sql.executeUpdate(query)
         }
+        lastSaved = new Date()
     }
 }
