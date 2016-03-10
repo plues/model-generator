@@ -22,6 +22,7 @@ class Store {
     UnitDAO unitDAO
     GroupDAO groupDAO
     InfoDAO infoDAO
+    LogDAO logDAO
     SessionDAO sessionDAO
     LevelDAO levelDAO
     AbstractUnitDAO abstractUnitDAO
@@ -48,6 +49,7 @@ class Store {
 
     def loadData() {
         this.infoDAO.load()
+        this.logDAO.load()
 
         this.courseDAO.load()
         this.levelDAO.load()
@@ -70,6 +72,7 @@ class Store {
 
     def setupDAOs() {
         this.infoDAO = new InfoDAO(sql)
+        this.logDAO = new LogDAO(sql)
         this.courseDAO = new CourseDAO(sql)
         this.levelDAO = new LevelDAO(sql);
         this.moduleDAO = new ModuleDAO(sql, this.levelDAO)
