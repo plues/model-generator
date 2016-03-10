@@ -3,15 +3,17 @@ package de.stups.slottool.data.dao
 import de.stups.slottool.data.entities.Log
 import groovy.sql.Sql
 
+import java.sql.SQLException
+
 class LogDAO extends AbstractDAO {
 
     Map<Integer, Log> log
-    Date lastSaved
+    Map<Integer, Log> tempLog
 
     LogDAO(def sql) {
         super(sql)
-        this.log= new HashMap<Integer, Log>()
-        this.lastSaved = new Date()
+        this.log = new HashMap<Integer, Log>()
+        this.tempLog = new LinkedHashMap<Integer, Log>()
     }
 
     @Override
@@ -22,7 +24,7 @@ class LogDAO extends AbstractDAO {
 
     @Override
     def getById(def id) {
-        throw new UnsupportedOperationException()
+        return log.get(id)
     }
 
     @Override
@@ -32,32 +34,33 @@ class LogDAO extends AbstractDAO {
 
     @Override
     Iterator iterator() {
-        throw new UnsupportedOperationException()
+        return log.values().iterator()
     }
 
     def addEntry(int session_id, String src_day, int src_time, String target_day, int target_time) {
-        if (log[session_id]) {
+        if (tempLog[session_id]) {
             updateLog(session_id, target_day, target_time)
         } else {
-            log.put(session_id, new Log(session_id, src_day, src_time, target_day, target_time, new Date()))
+            tempLog.put(session_id, new Log(session_id, src_day, src_time, target_day, target_time, new Date()))
         }
     }
 
     def updateLog(int session_id, String target_day, int target_time) {
-        log[session_id].target_day = target_day
-        log[session_id].target_time = target_time
-        log[session_id].created_at = new Date()
+        tempLog[session_id].target_day = target_day
+        tempLog[session_id].target_time = target_time
+        tempLog[session_id].created_at = new Date()
     }
 
     def persist(Sql sql) {
-        for (Log l in log) {
-            if (l.created_at.compareTo(lastSaved) < 0) {
-                continue
+        try {
+            for (Log l in tempLog) {
+                String query = "INSERT INTO log (session_id, src_day, src_time, target_day, target_time, created_at)" +
+                        "VALUES (${l.session_id}, '${l.src_day}', ${l.src_time}, '${l.target_day}', ${l.target_time}, ${l.created_at})"
+                sql.executeUpdate(query)
+                log.put(l.session_id, l)
             }
-            String query = "INSERT INTO log (session_id, src_day, src_time, target_day, target_time, created_at)" +
-                    "VALUES (${l.created_at}, '${l.src_day}', ${l.src_time}, '${l.target_day}', ${l.target_time}, ${l.created_at})"
-            sql.executeUpdate(query)
+        } catch (SQLException e) {
+            print(e.stackTrace)
         }
-        lastSaved = new Date()
     }
 }
