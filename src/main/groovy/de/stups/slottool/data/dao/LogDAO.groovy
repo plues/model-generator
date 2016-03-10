@@ -5,16 +5,16 @@ import groovy.sql.Sql
 
 class LogDAO extends AbstractDAO {
 
-    Set<String> log
+    Map<Integer, Log> log
 
     LogDAO(def sql) {
         super(sql)
-        this.log= new HashSet<Log>()
+        this.log= new HashMap<Integer, Log>()
     }
 
     @Override
     protected loadRow(def row) {
-        log.add(new Log(row['session_id'] as int, row['src_day'], row['src_time'] as int,
+        log.put(row['session_id'], new Log(row['session_id'] as int, row['src_day'], row['src_time'] as int,
                 row['target_day'], row['target_time'] as int, Date.parse(DATE_FORMAT, row['created_at'])))
     }
 
@@ -33,8 +33,18 @@ class LogDAO extends AbstractDAO {
         throw new UnsupportedOperationException()
     }
 
-    def addEntry(String session_id, String src_day, String src_time, String target_day, String target_time) {
-        log.add(new Log(session_id as int, src_day, src_time as int, target_day, target_time as int, new Date()))
+    def addEntry(int session_id, String src_day, int src_time, String target_day, int target_time) {
+        if (log[session_id]) {
+            updateLog(session_id, target_day, target_time)
+        } else {
+            log.put(session_id, new Log(session_id, src_day, src_time, target_day, target_time, new Date()))
+        }
+    }
+
+    def updateLog(int session_id, String target_day, int target_time) {
+        log[session_id].target_day = target_day
+        log[session_id].target_time = target_time
+        log[session_id].created_at = new Date()
     }
 
     def persist(Sql sql) {
