@@ -75,7 +75,7 @@ class Store {
         this.logDAO = new LogDAO(sql)
         this.courseDAO = new CourseDAO(sql)
         this.levelDAO = new LevelDAO(sql);
-        this.moduleDAO = new ModuleDAO(sql, this.levelDAO)
+        this.moduleDAO = new ModuleDAO(sql)
         this.abstractUnitDAO = new AbstractUnitDAO(sql)
         this.unitDAO = new UnitDAO(sql)
         this.groupDAO = new GroupDAO(sql, unitDAO)

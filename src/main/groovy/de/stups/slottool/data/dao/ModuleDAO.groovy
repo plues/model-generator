@@ -4,11 +4,9 @@ import de.stups.slottool.data.entities.Module
 
 class ModuleDAO extends AbstractDAO {
     HashMap<Integer, Module> modules
-    LevelDAO levelDAO
 
-    def ModuleDAO(def sql, def levelDAO) {
+    def ModuleDAO(def sql) {
         super(sql)
-        this.levelDAO = levelDAO
         this.modules = new HashMap<Integer, Module>()
     }
 
