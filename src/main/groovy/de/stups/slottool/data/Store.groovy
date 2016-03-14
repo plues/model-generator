@@ -139,6 +139,7 @@ class Store {
 
     def persist(Sql sql, clear_dirty_flag) {
         // apply changes
+        logDAO.persist(sql)
         for(session in sessionDAO) {
             if(!session.dirty) {
                continue
