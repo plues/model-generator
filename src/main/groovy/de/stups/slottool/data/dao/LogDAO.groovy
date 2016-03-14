@@ -18,7 +18,7 @@ class LogDAO extends AbstractDAO {
 
     @Override
     protected loadRow(def row) {
-        log.put(row['session_id'], new Log(row['session_id'] as int, row['src'], row['target'], new java.sql.Date(row['created_at'])))
+        log.put(row['session_id'] as int, new Log(row['session_id'] as int, row['src'], row['target'], Date.parse(DATE_FORMAT, row['created_at'])))
     }
 
     @Override
@@ -40,7 +40,7 @@ class LogDAO extends AbstractDAO {
         if (tempLog[session_id]) {
             updateLog(session_id, target)
         } else {
-            tempLog.put(session_id, new Log(session_id, src, target, new java.sql.Date(new Date().getTime())))
+            tempLog.put(session_id, new Log(session_id, src, target, new Date()))
         }
     }
 
@@ -54,7 +54,7 @@ class LogDAO extends AbstractDAO {
             for (entry in tempLog) {
                 Log l = entry.value
                 String query = "INSERT INTO log (session_id, src, target, created_at)" +
-                        "VALUES (${l.session_id}, '${l.src}', '${l.target}', ${l.created_at})"
+                        "VALUES (${l.session_id}, '${l.src}', '${l.target}', '${l.created_at.toTimestamp()}')"
                 sql.executeUpdate(query)
                 log.put(l.session_id, l)
             }
