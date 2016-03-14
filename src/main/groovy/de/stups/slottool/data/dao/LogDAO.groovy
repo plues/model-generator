@@ -18,8 +18,7 @@ class LogDAO extends AbstractDAO {
 
     @Override
     protected loadRow(def row) {
-        log.put(row['session_id'], new Log(row['session_id'] as int, row['src_day'], row['src_time'] as int,
-                row['target_day'], row['target_time'] as int, Date.parse(DATE_FORMAT, row['created_at'])))
+        log.put(row['session_id'], new Log(row['session_id'] as int, row['src'], row['target'], new java.sql.Date(row['created_at'])))
     }
 
     @Override
@@ -37,25 +36,25 @@ class LogDAO extends AbstractDAO {
         return log.values().iterator()
     }
 
-    def addEntry(int session_id, String src_day, int src_time, String target_day, int target_time) {
+    def addEntry(int session_id, String src, String target) {
         if (tempLog[session_id]) {
-            updateLog(session_id, target_day, target_time)
+            updateLog(session_id, target)
         } else {
-            tempLog.put(session_id, new Log(session_id, src_day, src_time, target_day, target_time, new Date()))
+            tempLog.put(session_id, new Log(session_id, src, target, new java.sql.Date(new Date().getTime())))
         }
     }
 
-    def updateLog(int session_id, String target_day, int target_time) {
-        tempLog[session_id].target_day = target_day
-        tempLog[session_id].target_time = target_time
+    def updateLog(int session_id, String target) {
+        tempLog[session_id].target = target
         tempLog[session_id].created_at = new Date()
     }
 
     def persist(Sql sql) {
         try {
-            for (Log l in tempLog) {
-                String query = "INSERT INTO log (session_id, src_day, src_time, target_day, target_time, created_at)" +
-                        "VALUES (${l.session_id}, '${l.src_day}', ${l.src_time}, '${l.target_day}', ${l.target_time}, ${l.created_at})"
+            for (entry in tempLog) {
+                Log l = entry.value
+                String query = "INSERT INTO log (session_id, src, target, created_at)" +
+                        "VALUES (${l.session_id}, '${l.src}', '${l.target}', ${l.created_at})"
                 sql.executeUpdate(query)
                 log.put(l.session_id, l)
             }
