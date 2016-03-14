@@ -59,6 +59,7 @@ class LogDAO extends AbstractDAO {
                 sql.executeUpdate(query)
                 log.put(l.session_id, l)
             }
+            tempLog.clear()
         } catch (SQLException e) {
             print(e.stackTrace)
         }
