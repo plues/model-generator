@@ -5,7 +5,7 @@ import de.stups.slottool.data.Store
 
 class Main {
 
-    static String VERSION = "1.0.2"
+    static String VERSION = "1.1.0-SNAPSHOT"
     public static void main(String[] args) {
         printVersion()
         /*
