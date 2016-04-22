@@ -16,7 +16,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
  * Created by David Schneider on 30.01.15.
  */
 class Store {
-    Sql sql
+    Session session
 
     def info
     LinkedHashMap units
@@ -41,10 +41,10 @@ class Store {
 
     def Store(String dbpath) {
         this.dbpath = dbpath
-        this.sql = openDataBase(dbpath)
+        this.session = openDataBase(dbpath)
         checkSchemaVersion()
         Runtime.addShutdownHook {
-            sql.close()
+            session.close()
         }
     }
 
@@ -60,8 +60,6 @@ class Store {
             throw new IncompatibleSchemaError("Expected database schema version ${required_version} but was ${schema_version}")
         }
     }
-
-
 
     private openDataBase(String db_path) {
         Class.forName("org.sqlite.JDBC");
@@ -82,18 +80,17 @@ class Store {
         conf.setProperty("hibernate.connection.url", url)
         SessionFactory sf = conf.buildSessionFactory()
         Session session = sf.openSession()
-        def q = session.createQuery("from AbstractUnit")
-        println(session)
-        session.close()
+        return session
     }
 
 
     void close(sql) {
+        session.close()
         sql.close()
     }
 
     def persist(boolean clear) {
-        persist(this.sql, clear)
+        persist(this.session, clear)
     }
 
     def persist(boolean clear, File file) {
