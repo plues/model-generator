@@ -30,6 +30,7 @@
         <mapping class="de.stups.slottool.data.entities.Log"/>
         <mapping class="de.stups.slottool.data.entities.Module"/>
         <mapping class="de.stups.slottool.data.entities.ModuleAbstractUnitSemester"/>
+        <mapping class="de.stups.slottool.data.entities.ModuleCombination"/>
         <mapping class="de.stups.slottool.data.entities.Session"/>
         <mapping class="de.stups.slottool.data.entities.Unit"/>
 

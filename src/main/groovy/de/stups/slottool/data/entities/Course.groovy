@@ -47,6 +47,9 @@ class Course {
             inverseJoinColumns=@JoinColumn(name="level_id", referencedColumnName="id"))
     Set<Level> levels
 
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<ModuleCombination> module_combinations
+
     def Course() {}
 
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -81,4 +84,17 @@ class Course {
     def isCombinable() {
         this.degree == "bk" // bk is combinable ba is not
     }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    def getModuleCombinations() {
+        def combinations = [:]
+        module_combinations.each { mc ->
+            if(!combinations.containsKey(mc.combination_id)) {
+                combinations[mc.combination_id] = []
+            }
+            combinations[mc.combination_id] << mc.module_id
+        }
+        return combinations.values()
+    }
+
 }
