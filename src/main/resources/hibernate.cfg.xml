@@ -25,6 +25,7 @@
         <mapping class="de.stups.slottool.data.entities.AbstractUnitUnitSemester"/>
         <mapping class="de.stups.slottool.data.entities.Course"/>
         <mapping class="de.stups.slottool.data.entities.Group"/>
+        <mapping class="de.stups.slottool.data.entities.Info"/>
         <mapping class="de.stups.slottool.data.entities.Level"/>
         <mapping class="de.stups.slottool.data.entities.Log"/>
         <mapping class="de.stups.slottool.data.entities.Module"/>
