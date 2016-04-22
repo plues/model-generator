@@ -51,12 +51,14 @@ class Store {
     def checkSchemaVersion() {
         def properties = new Properties()
         properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
-        def schema_version = this.infoDAO.getById('schema_version').split(".").collect {Integer.parseInt(it)}
-        def required_version = properties.getProperty("schema_version").split(".").collect {Integer.parseInt(it)}
+        def version_str =session.createQuery("from Info where key = 'schema_version'").uniqueResult().value
+        def schema_version = version_str.split("\\.")
+        def required_version = properties.getProperty("schema_version").split("\\.")
 
         // Major versions must match
         // minor version may be higher in database
-        if ( (schema_version[0] != required_version[0]) || (schema_version[1] < required_version[1]) ) {
+        if ( (schema_version[0] != required_version[0])
+                || (Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
             throw new IncompatibleSchemaError("Expected database schema version ${required_version} but was ${schema_version}")
         }
     }
