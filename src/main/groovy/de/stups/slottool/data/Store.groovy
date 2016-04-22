@@ -20,24 +20,7 @@ class Store {
 
     def info
     LinkedHashMap units
-    CourseDAO courseDAO
-    ModuleDAO moduleDAO
-    UnitDAO unitDAO
-    GroupDAO groupDAO
-    InfoDAO infoDAO
-    LogDAO logDAO
-    SessionDAO sessionDAO
-    LevelDAO levelDAO
-    AbstractUnitDAO abstractUnitDAO
-    CourseLevelDAO courseLevelDAO
-    ModuleAbstractUnitSemesterDAO moduleAbstractUnitSemesterDAO
-    AbstractUnitUnitSemesterDAO abstractUnitUnitSemesterDAO
-    CourseModulelDAO courseModuleDAO
     String dbpath
-
-    CourseModuleCombinationsDAO courseModulesCombinationsDAO
-    ModuleLevelDAO moduleLevelsDAO
-
 
     def Store(String dbpath) {
         this.dbpath = dbpath
