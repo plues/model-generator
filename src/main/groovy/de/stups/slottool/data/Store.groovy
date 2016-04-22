@@ -42,55 +42,10 @@ class Store {
     def Store(String dbpath) {
         this.dbpath = dbpath
         this.sql = openDataBase(dbpath)
-        this.setupDAOs()
-        this.loadData()
         checkSchemaVersion()
         Runtime.addShutdownHook {
             sql.close()
         }
-    }
-
-    def loadData() {
-        this.infoDAO.load()
-        this.logDAO.load()
-
-        this.courseDAO.load()
-        this.levelDAO.load()
-        this.moduleDAO.load()
-        this.abstractUnitDAO.load()
-
-        this.unitDAO.load()
-        this.groupDAO.load()
-        this.sessionDAO.load()
-//
-        // join DAOs
-        this.courseLevelDAO.load()
-        this.courseModuleDAO.load()
-        this.moduleAbstractUnitSemesterDAO.load()
-        this.moduleLevelsDAO.load()
-        this.abstractUnitUnitSemesterDAO.load()
-
-        this.courseModulesCombinationsDAO.load()
-    }
-
-    def setupDAOs() {
-        this.infoDAO = new InfoDAO(sql)
-        this.logDAO = new LogDAO(sql)
-        this.courseDAO = new CourseDAO(sql)
-        this.levelDAO = new LevelDAO(sql);
-        this.moduleDAO = new ModuleDAO(sql)
-        this.abstractUnitDAO = new AbstractUnitDAO(sql)
-        this.unitDAO = new UnitDAO(sql)
-        this.groupDAO = new GroupDAO(sql, unitDAO)
-        this.sessionDAO = new SessionDAO(sql, groupDAO)
-        // join DAOs
-        this.courseModuleDAO = new CourseModulelDAO(sql, courseDAO, moduleDAO)
-        this.courseLevelDAO = new CourseLevelDAO(sql, courseDAO, levelDAO)
-        this.moduleAbstractUnitSemesterDAO = new ModuleAbstractUnitSemesterDAO(sql, moduleDAO, abstractUnitDAO)
-        this.moduleLevelsDAO = new ModuleLevelDAO(sql, moduleDAO, levelDAO)
-        this.abstractUnitUnitSemesterDAO = new  AbstractUnitUnitSemesterDAO(sql, abstractUnitDAO, unitDAO)
-
-        this.courseModulesCombinationsDAO = new CourseModuleCombinationsDAO(sql, courseDAO, moduleDAO)
     }
 
     def checkSchemaVersion() {
