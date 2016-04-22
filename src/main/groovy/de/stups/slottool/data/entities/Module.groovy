@@ -1,34 +1,45 @@
 package de.stups.slottool.data.entities
 
-class Module extends Entity {
-    Date updated_at
+import org.hibernate.annotations.NaturalId
+
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
+import javax.persistence.Entity
+
+@Entity
+@Table(name="modules")
+class Module {
+    @Id
+    @GeneratedValue
     int id
-    String key
-    String name
-    Date created_at
-    String title
-    Integer pordnr
-    Boolean mandatory
-    Set<Course> courses
-    Integer elective_units
-    Set<AbstractUnit> abstract_units
+    @NaturalId
+    private String key
+
+    private String name
+    private String title
+    private Integer pordnr
+    private Boolean mandatory
+    private Integer elective_units
     private Integer credit_points
+    Date updated_at
+    Date created_at
 
+    @ManyToMany(mappedBy = "modules")
+    Set<Course> courses
 
-    Module(Integer id, String key, String name, String title, Integer pordnr, Integer credit_points, Integer elective_units, Boolean mandatory, Date created_at, Date updated_at) {
-        this.id = id
-        this.key = key
-        this.name = name
-        this.title = title
-        this.pordnr = pordnr
-        this.credit_points = credit_points
-        this.elective_units = elective_units
-        this.mandatory = mandatory
-        this.created_at = created_at
-        this.updated_at = updated_at
-        this.abstract_units = new HashSet<AbstractUnit>()
-        this.courses = new HashSet<Course>()
-    }
+    @ManyToMany(mappedBy="modules")
+    Set<AbstractUnit> abstract_units
+
+    @OneToMany(mappedBy="module", fetch=FetchType.LAZY)
+    Set<ModuleAbstractUnitSemester> module_abstract_units_semester
+
+    def Module() {}
 
     def getCredit_points() {
         if(credit_points == null ) {

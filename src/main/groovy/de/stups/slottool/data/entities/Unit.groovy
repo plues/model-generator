@@ -1,22 +1,42 @@
 package de.stups.slottool.data.entities
 
-class Unit extends Entity {
-    Integer id
+import org.hibernate.annotations.NaturalId
+
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.Table
+
+@Entity
+@Table(name = "units")
+class Unit {
+
+    @Id
+    @GeneratedValue
+    int id
+
+    @NaturalId
+    @Column(name = "unit_key")
+    String key
+
     String title
     Date created_at
     Date updated_at
-    Set<AbstractUnit> abstract_units
 
+    @OneToMany(mappedBy = "unit", fetch=FetchType.LAZY)
+    Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
+
+    @OneToMany(mappedBy = "unit", fetch=FetchType.LAZY)
     Set<Group> groups
-    String key
 
-    def Unit(Integer id, String key, String title, Date created_at, Date updated_at) {
-        this.id = id
-        this.key = key
-        this.title = title
-        this.created_at = created_at
-        this.updated_at = updated_at
-        this.groups = new HashSet<Group>()
-        this.abstract_units = new HashSet<AbstractUnit>()
+    def Unit() {}
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    def getAbstractUnits() {
+        // cache result
+        new HashSet<>(abstract_unit_unit_semester.collect { it.abstract_unit })
     }
 }

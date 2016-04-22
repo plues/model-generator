@@ -1,23 +1,29 @@
 package de.stups.slottool.data.entities
 
-class Group extends Entity{
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
+
+@Entity
+@Table(name="groups")
+class Group {
+    @Id
+    @GeneratedValue
     int id
-    Unit unit
     int half_semester
     Date created_at
-    Date update_at
+    Date updated_at
 
+    @OneToMany(mappedBy = "group")
     Set<Session> sessions
 
-    def Group(int id, Unit unit, int half_semester, Date created_at, Date updated_at) {
-        this.id = id
-        this.unit = unit
-        this.half_semester = half_semester
-        this.created_at = created_at
-        this.update_at = updated_at
+    @ManyToOne
+    Unit unit
 
-        this.sessions = new HashSet<Group>()
-    }
+    def Group() {}
 
     def half_semester_word() {
         ( half_semester == 1 ) ? "first" : "second"

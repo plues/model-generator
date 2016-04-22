@@ -1,33 +1,53 @@
 package de.stups.slottool.data.entities
 
-class Course extends Entity{
+import org.hibernate.annotations.NaturalId
+
+import javax.persistence.Column
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
+import javax.persistence.Table
+
+@javax.persistence.Entity
+@Table(name="courses")
+class Course {
+    @Id
+    @GeneratedValue
     int id
-    String short_name
-    String long_name
-    String degree
-    int po
-    Date created_at
-    Date updated_at
-    Set<Level> levels
-    String kzfa
-    Set<Module> modules
+    @NaturalId
     String key
+
+    Integer po
     Integer credit_points
 
-    def Course(int id, String key, String long_name, String short_name, String degree, String kzfa, int po, Integer credit_points, Date created_at, Date updated_at) {
-        this.id = id
-        this.key = key
-        this.short_name = short_name
-        this.long_name = long_name
-        this.degree = degree
-        this.kzfa = kzfa
-        this.po = po
-        this.credit_points = credit_points
-        this.created_at = created_at
-        this.updated_at = updated_at
-        this.levels = new HashSet<>()
-        this.modules = new HashSet<>()
-    }
+    String short_name
+    @Column(name = "name")
+    String long_name
+    String degree
+    String kzfa
+
+    Date created_at
+    Date updated_at
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="course_modules",
+            joinColumns=@JoinColumn(name="course_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName="id"))
+    Set<Module> modules
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="course_levels",
+            joinColumns=@JoinColumn(name="course_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="level_id", referencedColumnName="id"))
+    Set<Level> levels
+
+    def Course() {}
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     def getName() {

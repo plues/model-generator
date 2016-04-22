@@ -2,6 +2,9 @@ package de.stups.slottool.data
 
 import de.stups.slottool.data.dao.*
 import groovy.sql.Sql
+import org.hibernate.Session
+import org.hibernate.SessionFactory
+import org.hibernate.cfg.Configuration
 
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -117,7 +120,16 @@ class Store {
         }
 
         println("trying to open " + path)
-        Sql.newInstance("jdbc:sqlite:"+path)
+        def url = "jdbc:sqlite:"+path
+
+        Configuration conf = new Configuration()
+        conf.configure()
+        conf.setProperty("hibernate.connection.url", url)
+        SessionFactory sf = conf.buildSessionFactory()
+        Session session = sf.openSession()
+        def q = session.createQuery("from AbstractUnit")
+        println(session)
+        session.close()
     }
 
 

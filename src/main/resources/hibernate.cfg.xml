@@ -20,6 +20,18 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
 
+        <!-- Names the annotated entity class -->
+        <mapping class="de.stups.slottool.data.entities.AbstractUnit"/>
+        <mapping class="de.stups.slottool.data.entities.AbstractUnitUnitSemester"/>
+        <mapping class="de.stups.slottool.data.entities.Course"/>
+        <mapping class="de.stups.slottool.data.entities.Group"/>
+        <mapping class="de.stups.slottool.data.entities.Level"/>
+        <mapping class="de.stups.slottool.data.entities.Log"/>
+        <mapping class="de.stups.slottool.data.entities.Module"/>
+        <mapping class="de.stups.slottool.data.entities.ModuleAbstractUnitSemester"/>
+        <mapping class="de.stups.slottool.data.entities.Session"/>
+        <mapping class="de.stups.slottool.data.entities.Unit"/>
+
     </session-factory>
 
 </hibernate-configuration>

@@ -1,42 +1,53 @@
 package de.stups.slottool.data.entities
 
-class Level extends Entity {
-    Date updated_at
-    Date created_at
+import javax.persistence.FetchType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
+
+
+@javax.persistence.Entity
+@Table(name="levels")
+class Level {
+    @Id
+    Integer id
     String art
     String name
     String tm
-    Integer id
     private Integer max
     private Integer min
     private Integer min_credit_points
     private Integer max_credit_points
-    Level parent
-    Integer parent_id
 
+    Date updated_at
+    Date created_at
+
+
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="modules_levels",
+            joinColumns=@JoinColumn(name="level_id", referencedColumnName = "id"),
+            inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName = "id"))
     Set<Module> modules // has many
-    Set<Level> children // has many both are exclusive
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="parent_id")
+    Level parent
+
+    @OneToMany(mappedBy="parent")
+    private Set<Level> children // has many both are exclusive
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinTable(
+            name="course_levels",
+            inverseJoinColumns=@JoinColumn(name="course_id", referencedColumnName="id"),
+            joinColumns=@JoinColumn(name="level_id", referencedColumnName="id"))
     Course course // belongs to one course
 
-    def Level(Integer id, String name, String tm, String art, Integer min, Integer max,
-              Integer min_credit_points, Integer max_credit_points, Integer parent_id,
-              Date created_at, Date updated_at) {
-        this.id = id
-        this.name = name
-        this.tm = tm
-        this.art = art
-        this.min = min
-        this.max = max
-        this.min_credit_points = min_credit_points
-        this.max_credit_points = max_credit_points
-        this.parent_id = parent_id
-        this.created_at = created_at
-        this.updated_at = updated_at
-
-        this.modules = new HashSet<Module>()
-        this.children = new HashSet<Level>()
-    }
+    def Level() {}
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     def getMin() {
