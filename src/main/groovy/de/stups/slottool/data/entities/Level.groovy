@@ -28,7 +28,7 @@ class Level {
 
 
     @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="modules_levels",
+    @JoinTable(name="module_levels",
             joinColumns=@JoinColumn(name="level_id", referencedColumnName = "id"),
             inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName = "id"))
     Set<Module> modules // has many
