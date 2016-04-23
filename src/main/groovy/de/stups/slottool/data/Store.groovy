@@ -18,7 +18,6 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 class Store {
     Session session
 
-    def info
     LinkedHashMap units
     String dbpath
 
@@ -29,6 +28,46 @@ class Store {
         Runtime.addShutdownHook {
             session.close()
         }
+    }
+
+    def getInfo() {
+        session.createQuery("from Info").setCacheable(true).list()
+    }
+
+    def getAbstractUnits() {
+        session.createQuery("from AbstractUnit").setCacheable(false).list()
+    }
+
+    def getAbstractUnitUnitSemester() {
+        session.createQuery("from AbstractUnitUnitSemester").setCacheable(false).list()
+    }
+
+    def getCourses() {
+        session.createQuery("from Course").setCacheable(false).list()
+    }
+
+    def getGroups() {
+        session.createQuery("from Group").setCacheable(false).list()
+    }
+
+    def getLevels() {
+        session.createQuery("from Level").setCacheable(false).list()
+    }
+
+    def getModules() {
+        session.createQuery("from Module").setCacheable(false).list()
+    }
+
+    def getModuleAbstractUnitSemester() {
+        session.createQuery("from ModuleAbstractUnitSemester").setCacheable(false).list()
+    }
+
+    def getSessions() {
+        session.createQuery("from Session").setCacheable(false).list()
+    }
+
+    def getUnits() {
+        session.createQuery("from Unit").setCacheable(false).list()
     }
 
     def checkSchemaVersion() {
