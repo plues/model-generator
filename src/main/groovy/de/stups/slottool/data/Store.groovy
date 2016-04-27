@@ -164,4 +164,10 @@ class Store {
     def copyDBTo(String target) {
         Files.copy(Paths.get(dbpath), Paths.get(target), REPLACE_EXISTING)
     }
+
+    def clear() {
+        session.flush()
+        session.clear()
+        System.gc();
+    }
 }
