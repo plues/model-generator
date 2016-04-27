@@ -4,12 +4,10 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-
     <session-factory>
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.sqlite.JDBC</property>
-        <!-- <property name="connection.url">jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE</property> -->
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.SQLiteDialect</property>
@@ -33,7 +31,5 @@
         <mapping class="de.stups.slottool.data.entities.ModuleCombination"/>
         <mapping class="de.stups.slottool.data.entities.Session"/>
         <mapping class="de.stups.slottool.data.entities.Unit"/>
-
     </session-factory>
-
 </hibernate-configuration>
