@@ -21,12 +21,12 @@ class Module {
     @NaturalId
     private String key
 
-    private String name
-    private String title
-    private Integer pordnr
-    private Boolean mandatory
-    private Integer elective_units
-    private Integer credit_points
+    String name
+    String title
+    Integer pordnr
+    Boolean mandatory
+    Integer elective_units
+    Integer credit_points
     Date updated_at
     Date created_at
 
