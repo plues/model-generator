@@ -15,6 +15,7 @@ class AbstractUnitUnitSemester implements Serializable {
     @ManyToOne
     Unit unit
 
+    @Id
     Integer semester
 
     def AbstractUnitUnitSemester() {}
