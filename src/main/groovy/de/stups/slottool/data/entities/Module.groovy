@@ -36,7 +36,7 @@ class Module {
     @ManyToMany(mappedBy="modules")
     Set<AbstractUnit> abstract_units
 
-    @OneToMany(mappedBy="module", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="module")
     Set<ModuleAbstractUnitSemester> module_abstract_units_semester
 
     def Module() {}

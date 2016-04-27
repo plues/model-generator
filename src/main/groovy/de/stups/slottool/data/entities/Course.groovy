@@ -33,7 +33,7 @@ class Course {
     Date created_at
     Date updated_at
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany()
     @JoinTable(
             name="course_modules",
             joinColumns=@JoinColumn(name="course_id", referencedColumnName="id"),
@@ -51,6 +51,7 @@ class Course {
     private Set<ModuleCombination> module_combinations
 
     def Course() {}
+
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     def getName() {

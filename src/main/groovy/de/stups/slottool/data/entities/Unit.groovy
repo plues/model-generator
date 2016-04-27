@@ -26,10 +26,10 @@ class Unit {
     Date created_at
     Date updated_at
 
-    @OneToMany(mappedBy = "unit", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "unit")
     Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
 
-    @OneToMany(mappedBy = "unit", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "unit")
     Set<Group> groups
 
     def Unit() {}

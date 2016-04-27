@@ -25,13 +25,13 @@ class AbstractUnit {
     Date created_at
     Date updated_at
 
-    @OneToMany(mappedBy="abstract_unit", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="abstract_unit")
     Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
 
-    @OneToMany(mappedBy="abstract_unit", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="abstract_unit")
     Set<ModuleAbstractUnitSemester> module_abstract_unit_semester
 
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany()
     @JoinTable(name="modules_abstract_units_semesters",
         joinColumns=@JoinColumn(name="abstract_unit_id", referencedColumnName="id"),
         inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName="id"))
