@@ -24,15 +24,14 @@ class ModuleCombination implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this.is(o)) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         def that = o as ModuleCombination
         return (combination_id == that.combination_id
-                && Objects.equals(course, that.course)
                 && module_id == that.module_id);
 
     }

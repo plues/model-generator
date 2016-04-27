@@ -21,7 +21,7 @@ class AbstractUnitUnitSemester implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this.is(o)) {
             return true;
         }
         if ( o == null || getClass() != o.getClass() ) {
