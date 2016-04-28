@@ -1,6 +1,5 @@
 package de.stups.slottool.data
 
-import de.stups.slottool.data.dao.*
 import de.stups.slottool.data.entities.AbstractUnit
 import de.stups.slottool.data.entities.AbstractUnitUnitSemester
 import de.stups.slottool.data.entities.Course
