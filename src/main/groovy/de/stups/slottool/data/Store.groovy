@@ -25,7 +25,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 /**
  * Created by David Schneider on 30.01.15.
  */
-class Store {
+class Store extends AbstractStore {
     Session session
 
     LinkedHashMap units
