@@ -93,6 +93,9 @@ class Store extends AbstractStore {
         session.createQuery("from Unit").setCacheable(false).list()
     }
 
+    def getLogEntries() {
+        session.createQuery("from Log").setCacheable(true).list()
+    }
     def checkSchemaVersion() {
         def properties = new Properties()
         properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
