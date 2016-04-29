@@ -154,39 +154,6 @@ class Store extends AbstractStore {
         this.session = sessionFactory.openSession()
     }
 
-
-    def persist(boolean clear) {
-        persist(this.session, clear)
-    }
-
-    def persist(boolean clear, File file) {
-        copyDBTo(file.absolutePath)
-
-        Sql sql = openDataBase(file.absolutePath)
-        persist(sql, clear)
-        this.close(sql)
-    }
-
-    def persist(Sql sql, clear_dirty_flag) {
-        // apply changes
-        logDAO.persist(sql)
-        for(session in sessionDAO) {
-            if(!session.dirty) {
-               continue
-            }
-            sessionDAO.update(session, sql)
-            // XXX move to DAO (?)
-            if(clear_dirty_flag) {
-                session.dirty = false
-            }
-        }
-    }
-
-    def copyDBTo(String target) {
-        Files.copy(Paths.get(dbpath), Paths.get(target), REPLACE_EXISTING)
-    }
-
-
     def clear() {
         session.flush()
         session.clear()
