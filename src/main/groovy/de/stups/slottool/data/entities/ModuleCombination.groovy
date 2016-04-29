@@ -1,7 +1,5 @@
 package de.stups.slottool.data.entities
 
-import org.hibernate.mapping.PrimaryKey
-
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id

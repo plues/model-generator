@@ -6,7 +6,6 @@ import org.hibernate.annotations.Type
 import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.Table
-import java.sql.Timestamp
 
 @javax.persistence.Entity
 @Table(name="log")
