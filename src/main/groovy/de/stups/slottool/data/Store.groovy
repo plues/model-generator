@@ -6,11 +6,14 @@ import de.stups.slottool.data.entities.Course
 import de.stups.slottool.data.entities.Group
 import de.stups.slottool.data.entities.Info
 import de.stups.slottool.data.entities.Level
+import de.stups.slottool.data.entities.Log
 import de.stups.slottool.data.entities.Module
 import de.stups.slottool.data.entities.ModuleAbstractUnitSemester
 import de.stups.slottool.data.entities.Unit
 import groovy.sql.Sql
+import org.hibernate.HibernateException
 import org.hibernate.SessionFactory
+import org.hibernate.Transaction
 import org.hibernate.cfg.Configuration
 import org.hibernate.criterion.Restrictions
 
@@ -99,6 +102,35 @@ class Store extends AbstractStore {
     def getLogEntries() {
         session.createQuery("from Log").setCacheable(true).list()
     }
+
+    def moveSession(de.stups.slottool.data.entities.Session session, String target_day, String target_time) {
+        String src_day = session.getDay()
+        String src_time = session.getTime()
+        session.day = target_day
+        session.time = target_time.toInteger()
+
+        Log log = new Log();
+        // TODO day and time should each be a field in the log table
+        log.setSrc(src_day+src_time);
+        log.setTarget(target_day+target_time)
+        log.setSession(session);
+
+        Transaction tx;
+        def s = this.session
+
+        try{
+            tx = s.beginTransaction();
+            s.persist(session);
+            s.persist(log);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+           s.flush()
+        }
+    }
+
     def checkSchemaVersion() {
         def properties = new Properties()
         properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
