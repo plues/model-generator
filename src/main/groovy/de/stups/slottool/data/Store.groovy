@@ -25,14 +25,15 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
  * Created by David Schneider on 30.01.15.
  */
 class Store extends AbstractStore {
-    Session session
 
     LinkedHashMap units
     String dbpath
+    SessionFactory sessionFactory
+    org.hibernate.Session session
 
     def Store(String dbpath) {
         this.dbpath = dbpath
-        this.session = openDataBase(dbpath)
+        openDataBase(dbpath)
         checkSchemaVersion()
         Runtime.addShutdownHook {
             session.close()
@@ -122,9 +123,8 @@ class Store extends AbstractStore {
         Configuration conf = new Configuration()
         conf.configure()
         conf.setProperty("hibernate.connection.url", url)
-        SessionFactory sf = conf.buildSessionFactory()
-        Session session = sf.openSession()
-        return session
+        this.sessionFactory = conf.buildSessionFactory()
+        this.session = sessionFactory.openSession()
     }
 
 
