@@ -10,7 +10,6 @@ import de.stups.slottool.data.entities.Module
 import de.stups.slottool.data.entities.ModuleAbstractUnitSemester
 import de.stups.slottool.data.entities.Unit
 import groovy.sql.Sql
-import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.hibernate.cfg.Configuration
 import org.hibernate.criterion.Restrictions
@@ -21,9 +20,6 @@ import java.nio.file.Paths
 import static java.lang.Thread.currentThread
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
-/**
- * Created by David Schneider on 30.01.15.
- */
 class Store extends AbstractStore {
 
     LinkedHashMap units
