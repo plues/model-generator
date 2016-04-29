@@ -1,6 +1,9 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.NaturalId
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
 
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
@@ -27,7 +30,11 @@ class Module {
     Boolean mandatory
     Integer elective_units
     Integer credit_points
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
 
     @ManyToMany(mappedBy = "modules")

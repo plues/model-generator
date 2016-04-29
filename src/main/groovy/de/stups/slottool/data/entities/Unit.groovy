@@ -1,6 +1,9 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.NaturalId
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
 
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -23,7 +26,11 @@ class Unit {
     String key
 
     String title
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
 
     @OneToMany(mappedBy = "unit")

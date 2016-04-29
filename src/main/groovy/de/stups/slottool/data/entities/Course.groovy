@@ -1,6 +1,10 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.NaturalId
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.sql.Update
 
 import javax.persistence.Column
 import javax.persistence.FetchType
@@ -30,7 +34,12 @@ class Course {
     String degree
     String kzfa
 
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
+    @CreationTimestamp
     Date created_at
+
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
+    @UpdateTimestamp
     Date updated_at
 
     @ManyToMany()

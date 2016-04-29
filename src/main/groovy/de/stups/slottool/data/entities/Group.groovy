@@ -1,5 +1,9 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
+
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -14,7 +18,11 @@ class Group {
     @GeneratedValue
     int id
     int half_semester
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
 
     @OneToMany(mappedBy = "group")

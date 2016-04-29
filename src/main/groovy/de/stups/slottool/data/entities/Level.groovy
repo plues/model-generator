@@ -1,5 +1,9 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
+
 import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
@@ -23,7 +27,11 @@ class Level {
     private Integer min_credit_points
     private Integer max_credit_points
 
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
 
 
