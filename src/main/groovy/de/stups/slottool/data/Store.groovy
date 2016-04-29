@@ -134,7 +134,9 @@ class Store extends AbstractStore {
     def checkSchemaVersion() {
         def properties = new Properties()
         properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
+
         def version_str =session.createQuery("from Info where key = 'schema_version'").uniqueResult().value
+
         def schema_version = version_str.split("\\.")
         def required_version = properties.getProperty("schema_version").split("\\.")
 
@@ -199,9 +201,11 @@ class Store extends AbstractStore {
         Files.copy(Paths.get(dbpath), Paths.get(target), REPLACE_EXISTING)
     }
 
+
     def clear() {
         session.flush()
         session.clear()
         System.gc();
     }
+
 }
