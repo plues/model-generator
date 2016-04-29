@@ -1,27 +1,12 @@
 package de.stups.slottool.data
-
-import de.stups.slottool.data.entities.AbstractUnit
-import de.stups.slottool.data.entities.AbstractUnitUnitSemester
-import de.stups.slottool.data.entities.Course
-import de.stups.slottool.data.entities.Group
-import de.stups.slottool.data.entities.Info
-import de.stups.slottool.data.entities.Level
-import de.stups.slottool.data.entities.Log
-import de.stups.slottool.data.entities.Module
-import de.stups.slottool.data.entities.ModuleAbstractUnitSemester
-import de.stups.slottool.data.entities.Unit
-import groovy.sql.Sql
+import de.stups.slottool.data.entities.*
 import org.hibernate.HibernateException
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
 import org.hibernate.cfg.Configuration
 import org.hibernate.criterion.Restrictions
 
-import java.nio.file.Files
-import java.nio.file.Paths
-
 import static java.lang.Thread.currentThread
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
 class Store extends AbstractStore {
 
