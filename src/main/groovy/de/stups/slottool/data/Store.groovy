@@ -85,6 +85,9 @@ class Store extends AbstractStore {
     def List<Session> getSessions() {
         session.createQuery("from Session").setCacheable(false).list()
     }
+    def de.stups.slottool.data.entities.Session getSessionByID(int id) {
+        session.createCriteria(de.stups.slottool.data.entities.Session.class).add(Restrictions.eq("id", id)).setCacheable(false).uniqueResult() as de.stups.slottool.data.entities.Session
+    }
 
     def List<Unit> getUnits() {
         session.createQuery("from Unit").setCacheable(false).list()
