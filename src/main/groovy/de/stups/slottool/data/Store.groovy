@@ -42,7 +42,7 @@ class Store extends AbstractStore {
     }
 
     def getAbstractUnitUnitSemesterByUnitID(def unit_id) {
-        this.session.createCriteria(AbstractUnitUnitSemester.class).add(Restrictions.eq("unit.id", unit_id)).list()
+        session.createCriteria(AbstractUnitUnitSemester.class).add(Restrictions.eq("unit.id", unit_id)).list()
     }
 
     def List<AbstractUnitUnitSemester> getAbstractUnitUnitSemester() {
@@ -54,7 +54,9 @@ class Store extends AbstractStore {
     }
 
     Course getCourseByKey(String key) {
-        this.session.createCriteria(Course.class).add(Restrictions.eq("key", key)).setCacheable(false).uniqueResult() as Course
+        session.createCriteria(Course.class).add(Restrictions.eq("key", key)).setCacheable(false).uniqueResult() as Course
+    }
+
     def List<Course> getMinors() {
         session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MINOR)).setCacheable(false).list()
     }
@@ -66,8 +68,9 @@ class Store extends AbstractStore {
     def List<Group> getGroups() {
         session.createQuery("from Group").setCacheable(false).list()
     }
+
     def List<Group> getGroupsByIDs(Collection<Integer> entries) {
-        this.session.createCriteria(Group.class).add(Restrictions.in("id", entries)).setCacheable(false).list();
+        session.createCriteria(Group.class).add(Restrictions.in("id", entries)).setCacheable(false).list();
     }
 
     def List<Level> getLevels() {
