@@ -35,9 +35,6 @@ class Store extends AbstractStore {
         this.dbpath = dbpath
         openDataBase(dbpath)
         checkSchemaVersion()
-        Runtime.addShutdownHook {
-            session.close()
-        }
     }
 
     def List<Info> getInfo() {
@@ -127,11 +124,6 @@ class Store extends AbstractStore {
         this.session = sessionFactory.openSession()
     }
 
-
-    void close(sql) {
-        session.close()
-        sql.close()
-    }
 
     def persist(boolean clear) {
         persist(this.session, clear)
