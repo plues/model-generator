@@ -106,4 +106,8 @@ class Course {
         return combinations.values()
     }
 
+    static enum KZFA {
+        static def MINOR = "N"
+        static def MAJOR = "H"
+    }
 }

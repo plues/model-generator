@@ -59,6 +59,12 @@ class Store extends AbstractStore {
 
     Course getCourseByKey(String key) {
         this.session.createCriteria(Course.class).add(Restrictions.eq("key", key)).setCacheable(false).uniqueResult() as Course
+    def List<Course> getMinors() {
+        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MINOR)).setCacheable(false).list()
+    }
+
+    def List<Course> getMajors() {
+        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MAJOR)).setCacheable(false).list()
     }
 
     def List<Group> getGroups() {
