@@ -82,7 +82,7 @@ class Store extends AbstractStore {
         session.createQuery("from ModuleAbstractUnitSemester").setCacheable(false).list()
     }
 
-    def List<Session> getSessions() {
+    def List<de.stups.slottool.data.entities.Session> getSessions() {
         session.createQuery("from Session").setCacheable(false).list()
     }
     def de.stups.slottool.data.entities.Session getSessionByID(int id) {
