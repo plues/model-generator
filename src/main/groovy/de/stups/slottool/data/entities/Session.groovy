@@ -17,7 +17,7 @@ class Session {
     @GeneratedValue
     int id
     String day
-    String time
+    Integer time
     Integer rhythm
     Integer duration
     @CreationTimestamp
