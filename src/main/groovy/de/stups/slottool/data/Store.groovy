@@ -154,6 +154,11 @@ class Store extends AbstractStore {
         this.session = sessionFactory.openSession()
     }
 
+    def close() {
+        this.clear()
+        session.close()
+        sessionFactory.close()
+    }
     def clear() {
         session.flush()
         session.clear()

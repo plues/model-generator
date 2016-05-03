@@ -42,6 +42,7 @@ class Main {
         fw.flush()
 
         println("Wrote to " + options.output.toString())
+        store.close()
     }
 
     static def printVersion() {
