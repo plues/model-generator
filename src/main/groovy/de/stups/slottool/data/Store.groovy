@@ -159,10 +159,11 @@ class Store extends AbstractStore {
         session.close()
         sessionFactory.close()
     }
+
     def clear() {
+        sessionFactory.cache.evictAllRegions()
         session.flush()
         session.clear()
         System.gc();
     }
-
 }
