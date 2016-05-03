@@ -26,7 +26,7 @@ class Store extends AbstractStore {
     }
 
     def List<AbstractUnit> getAbstractUnits() {
-        session.createQuery("from AbstractUnit").setCacheable(false).list()
+        session.createQuery("from AbstractUnit").setCacheable(true).list()
     }
 
     def getAbstractUnitUnitSemesterByUnitID(def unit_id) {
@@ -34,54 +34,54 @@ class Store extends AbstractStore {
     }
 
     def List<AbstractUnitUnitSemester> getAbstractUnitUnitSemester() {
-        session.createQuery("from AbstractUnitUnitSemester").setCacheable(false).list()
+        session.createQuery("from AbstractUnitUnitSemester").setCacheable(true).list()
     }
 
     def List<Course> getCourses() {
-        session.createQuery("from Course").setCacheable(false).list()
+        session.createQuery("from Course").setCacheable(true).list()
     }
 
     Course getCourseByKey(String key) {
-        session.createCriteria(Course.class).add(Restrictions.eq("key", key)).setCacheable(false).uniqueResult() as Course
+        session.createCriteria(Course.class).add(Restrictions.eq("key", key)).setCacheable(true).uniqueResult() as Course
     }
 
     def List<Course> getMinors() {
-        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MINOR)).setCacheable(false).list()
+        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MINOR)).setCacheable(true).list()
     }
 
     def List<Course> getMajors() {
-        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MAJOR)).setCacheable(false).list()
+        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MAJOR)).setCacheable(true).list()
     }
 
     def List<Group> getGroups() {
-        session.createQuery("from Group").setCacheable(false).list()
+        session.createQuery("from Group").setCacheable(true).list()
     }
 
     def List<Group> getGroupsByIDs(Collection<Integer> entries) {
-        session.createCriteria(Group.class).add(Restrictions.in("id", entries)).setCacheable(false).list();
+        session.createCriteria(Group.class).add(Restrictions.in("id", entries)).setCacheable(true).list();
     }
 
     def List<Level> getLevels() {
-        session.createQuery("from Level").setCacheable(false).list()
+        session.createQuery("from Level").setCacheable(true).list()
     }
 
     def List<Module> getModules() {
-        session.createQuery("from Module").setCacheable(false).list()
+        session.createQuery("from Module").setCacheable(true).list()
     }
 
     def List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
-        session.createQuery("from ModuleAbstractUnitSemester").setCacheable(false).list()
+        session.createQuery("from ModuleAbstractUnitSemester").setCacheable(true).list()
     }
 
     def List<de.stups.slottool.data.entities.Session> getSessions() {
-        session.createQuery("from Session").setCacheable(false).list()
+        session.createQuery("from Session").setCacheable(true).list()
     }
     def de.stups.slottool.data.entities.Session getSessionByID(int id) {
-        session.createCriteria(de.stups.slottool.data.entities.Session.class).add(Restrictions.eq("id", id)).setCacheable(false).uniqueResult() as de.stups.slottool.data.entities.Session
+        session.get(de.stups.slottool.data.entities.Session, id)
     }
 
     def List<Unit> getUnits() {
-        session.createQuery("from Unit").setCacheable(false).list()
+        session.createQuery("from Unit").setCacheable(true).list()
     }
 
     def getLogEntries() {
