@@ -21,7 +21,7 @@ import javax.persistence.Table
 @Table(name="courses")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="courses")
-class Course {
+class Course implements Serializable {
     @Id
     @GeneratedValue
     int id

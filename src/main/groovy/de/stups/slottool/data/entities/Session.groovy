@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name="sessions")
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE,
         region="session")
-class Session {
+class Session implements Serializable {
     @Id
     @GeneratedValue
     int id

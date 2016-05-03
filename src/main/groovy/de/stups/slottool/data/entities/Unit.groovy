@@ -18,7 +18,7 @@ import javax.persistence.Table
 @Table(name = "units")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="units")
-class Unit {
+class Unit implements Serializable {
 
     @Id
     @GeneratedValue

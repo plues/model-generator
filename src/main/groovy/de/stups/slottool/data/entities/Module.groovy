@@ -19,7 +19,7 @@ import javax.persistence.Entity
 @Table(name="modules")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="modules")
-class Module {
+class Module implements Serializable {
     @Id
     @GeneratedValue
     int id

@@ -20,7 +20,7 @@ import javax.persistence.Table
 @Table(name="levels")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="leves")
-class Level {
+class Level implements Serializable{
     @Id
     Integer id
     String art

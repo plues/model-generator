@@ -19,7 +19,7 @@ import javax.persistence.Table
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="groups")
 
-class Group {
+class Group implements Serializable{
     @Id
     @GeneratedValue
     int id

@@ -19,7 +19,7 @@ import javax.persistence.Table
 @Table(name="abstract_units")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="abstract_units")
-class AbstractUnit {
+class AbstractUnit implements Serializable{
     @Id
     @GeneratedValue
     Integer id
@@ -44,6 +44,7 @@ class AbstractUnit {
     @JoinTable(name="modules_abstract_units_semesters",
         joinColumns=@JoinColumn(name="abstract_unit_id", referencedColumnName="id"),
         inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName="id"))
+    @Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
     Set<Module> modules
 
     def AbstractUnit() {}

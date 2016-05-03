@@ -8,7 +8,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name="info")
-class Info {
+class Info implements Serializable {
     @Id
     @NaturalId
     private String key
