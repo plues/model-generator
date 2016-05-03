@@ -1,5 +1,7 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.NaturalId
 import org.hibernate.annotations.Type
@@ -17,6 +19,8 @@ import javax.persistence.Table
 
 @javax.persistence.Entity
 @Table(name="courses")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
+        region="courses")
 class Course {
     @Id
     @GeneratedValue

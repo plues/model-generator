@@ -1,18 +1,24 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
+
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
 @Table(name="unit_abstract_unit_semester")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
+        region="unit_abstract_unit_semester")
 class AbstractUnitUnitSemester implements Serializable {
     @Id
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     AbstractUnit abstract_unit
     @Id
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     Unit unit
 
     @Id

@@ -1,5 +1,7 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
@@ -16,6 +18,8 @@ import javax.persistence.Table
 
 @javax.persistence.Entity
 @Table(name="levels")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
+        region="leves")
 class Level {
     @Id
     Integer id
@@ -35,7 +39,7 @@ class Level {
     Date created_at
 
 
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="module_levels",
             joinColumns=@JoinColumn(name="level_id", referencedColumnName = "id"),
             inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName = "id"))
@@ -45,7 +49,7 @@ class Level {
     @JoinColumn(name="parent_id")
     Level parent
 
-    @OneToMany(mappedBy="parent")
+    @OneToMany(mappedBy="parent", fetch=FetchType.EAGER)
     private Set<Level> children // has many both are exclusive
 
     @ManyToOne(fetch=FetchType.LAZY)

@@ -1,5 +1,7 @@
 package de.stups.slottool.data.entities
 
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
@@ -14,6 +16,9 @@ import javax.persistence.Table
 
 @Entity
 @Table(name="groups")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
+        region="groups")
+
 class Group {
     @Id
     @GeneratedValue
@@ -29,7 +34,7 @@ class Group {
     @OneToMany(mappedBy = "group")
     Set<Session> sessions
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     Unit unit
 
     def Group() {}
