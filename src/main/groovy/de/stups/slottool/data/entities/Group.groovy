@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
 
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToOne
@@ -28,7 +29,7 @@ class Group {
     @OneToMany(mappedBy = "group")
     Set<Session> sessions
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     Unit unit
 
     def Group() {}
