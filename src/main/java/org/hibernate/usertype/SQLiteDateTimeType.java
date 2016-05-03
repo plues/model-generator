@@ -75,7 +75,7 @@ public class SQLiteDateTimeType implements UserType {
 
     @Override
     public Serializable disassemble(Object value) throws HibernateException {
-        throw new HibernateException("Currently not supported");
+        return ((Date) value).getTime();
     }
 
     @Override
