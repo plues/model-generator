@@ -37,8 +37,12 @@ class Main {
             def tp = FileType.BMachine
             result = renderer.renderFor(tp)
         }
-        result.writeTo(new FileWriter(new File(output)))
+        def fw = new FileWriter(new File(output))
+        result.writeTo(fw)
+        fw.flush()
+
         println("Wrote to " + options.output.toString())
+        store.close()
     }
 
     static def printVersion() {

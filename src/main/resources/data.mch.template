@@ -59,13 +59,7 @@ PROPERTIES
     course_names = dom(courses)
     &
     course_module_combinations = {
-        <%=
-        course_modules_combinations.combinations.collect { course, combs ->
-           "(\"${course.key}\" |-> {\n
-            ${combs.collect { idx, modules -> "{${modules.collect { m -> m.id }.join(', ')}} /* ${idx} */" }.join(',\n            ')}
-           })"
-        }.join(',\n        ')
-        %>
+        <%= courses.collect { course -> "(\"${course.key}\" |-> {\n                ${course.moduleCombinations.collect { comb -> "{${comb.join(', ')}}"}.join(',\n                ') }})" }.join(',\n        ') %>
     }
     &
     sessions : POW(NATURAL1 * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))

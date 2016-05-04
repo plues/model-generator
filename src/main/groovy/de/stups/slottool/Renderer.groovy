@@ -40,18 +40,17 @@ class Renderer {
 
     protected Writable render(def template, def helper=null) {
         def binding = [
-                info: store.infoDAO,
+                info: store.info,
 
-                abstract_units: store.abstractUnitDAO,
-                abstract_unit_unit_semester: store.abstractUnitUnitSemesterDAO,
-                courses: store.courseDAO,
-                course_modules_combinations: store.courseModulesCombinationsDAO,
-                groups: store.groupDAO,
-                levels: store.levelDAO,
-                modules: store.moduleDAO,
-                module_abstract_unit_semester: store.moduleAbstractUnitSemesterDAO,
-                sessions: store.sessionDAO,
-                units: store.unitDAO,
+                abstract_units: store.abstractUnits,
+                abstract_unit_unit_semester: store.abstractUnitUnitSemester,
+                courses: store.courses,
+                groups: store.groups,
+                levels: store.levels,
+                modules: store.modules,
+                module_abstract_unit_semester: store.moduleAbstractUnitSemester,
+                sessions: store.sessions,
+                units: store.units,
                 helper: helper,
         ]
         template.make(binding)

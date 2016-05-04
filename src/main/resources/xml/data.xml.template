@@ -2,11 +2,11 @@
 <data>
     <modules><% modules.each { module -> %>
         <module id="<%= module.key %>" title="<%= module.title %>" pordnr="<%= module.pordnr %>" elective-units="<%= module.elective_units %>"><% module.abstract_units.each { au -> %>
-            <abstract-unit id="<%= au.key %>" title="<%= au.title %>" type="<%= au.type %>" semester="<%= module_abstract_unit_semester.findAll { mau -> mau.abstract_unit == au && mau.module == module /* XXX we need a better way to filter than this */ }.collect { it.semester }.join(',') %>" /><% } %>
+            <abstract-unit id="<%= au.key %>" title="<%= au.title %>" type="<%= au.type %>" semester="<%= module_abstract_unit_semester.findAll { mau -> mau.abstract_unit == au && mau.module == module /* TODO: we need a better way to filter than this */ }.collect { it.semester }.join(',') %>" /><% } %>
         </module><% } %>
     </modules>
     <units><% units.each { unit -> %>
-        <unit id="<%= unit.key %>" title="<%= unit.title %>" semester="<%= abstract_unit_unit_semester.findAll { aus -> aus.unit == unit /* XXX we need a better way to filter than this */ }.collect { it.semester }.join(',') %>"> <!-- <%= unit.id %> --><% unit.groups.each { group -> %>
+        <unit id="<%= unit.key %>" title="<%= unit.title %>" semester="<%= abstract_unit_unit_semester.findAll { aus -> aus.unit == unit /* TODO: we need a better way to filter than this */ }.collect { it.semester }.join(',') %>"> <!-- <%= unit.id %> --><% unit.groups.each { group -> %>
             <group <% if(group.half_semester > 0) { %>half-semester="<%= group.half_semester_word() %>"<% } %>><% group.sessions.each { session -> %>
                 <session day="<%= session.day %>" time="<%= session.time %>" duration="<%= session.duration %>" rhythm="<%= session.rhythm %>" /><% } %>
             </group><% } %>

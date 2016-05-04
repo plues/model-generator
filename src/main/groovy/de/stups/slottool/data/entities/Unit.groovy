@@ -1,22 +1,52 @@
 package de.stups.slottool.data.entities
 
-class Unit extends Entity {
-    Integer id
-    String title
-    Date created_at
-    Date updated_at
-    Set<AbstractUnit> abstract_units
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.NaturalId
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
 
-    Set<Group> groups
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.Table
+
+@Entity
+@Table(name = "units")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
+        region="units")
+class Unit implements Serializable {
+
+    @Id
+    @GeneratedValue
+    int id
+
+    @NaturalId
+    @Column(name = "unit_key")
     String key
 
-    def Unit(Integer id, String key, String title, Date created_at, Date updated_at) {
-        this.id = id
-        this.key = key
-        this.title = title
-        this.created_at = created_at
-        this.updated_at = updated_at
-        this.groups = new HashSet<Group>()
-        this.abstract_units = new HashSet<AbstractUnit>()
+    String title
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
+    Date created_at
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
+    Date updated_at
+
+    @OneToMany(mappedBy = "unit")
+    Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
+
+    @OneToMany(mappedBy = "unit")
+    Set<Group> groups
+
+    def Unit() {}
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    def getAbstractUnits() {
+        // cache result
+        new HashSet<>(abstract_unit_unit_semester.collect { it.abstract_unit })
     }
 }

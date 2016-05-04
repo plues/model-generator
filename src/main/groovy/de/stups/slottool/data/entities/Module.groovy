@@ -1,34 +1,54 @@
 package de.stups.slottool.data.entities
 
-class Module extends Entity {
-    Date updated_at
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.NaturalId
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
+
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
+import javax.persistence.Table
+import javax.persistence.Entity
+
+@Entity
+@Table(name="modules")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
+        region="modules")
+class Module implements Serializable {
+    @Id
+    @GeneratedValue
     int id
-    String key
+    @NaturalId
+    private String key
+
     String name
-    Date created_at
     String title
     Integer pordnr
     Boolean mandatory
-    Set<Course> courses
     Integer elective_units
+    Integer credit_points
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
+    Date updated_at
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
+    Date created_at
+
+    @ManyToMany(mappedBy = "modules", fetch=FetchType.LAZY)
+    Set<Course> courses
+
+    @ManyToMany(mappedBy="modules", fetch=FetchType.LAZY)
     Set<AbstractUnit> abstract_units
-    private Integer credit_points
 
+    @OneToMany(mappedBy="module")
+    Set<ModuleAbstractUnitSemester> module_abstract_units_semester
 
-    Module(Integer id, String key, String name, String title, Integer pordnr, Integer credit_points, Integer elective_units, Boolean mandatory, Date created_at, Date updated_at) {
-        this.id = id
-        this.key = key
-        this.name = name
-        this.title = title
-        this.pordnr = pordnr
-        this.credit_points = credit_points
-        this.elective_units = elective_units
-        this.mandatory = mandatory
-        this.created_at = created_at
-        this.updated_at = updated_at
-        this.abstract_units = new HashSet<AbstractUnit>()
-        this.courses = new HashSet<Course>()
-    }
+    def Module() {}
 
     def getCredit_points() {
         if(credit_points == null ) {

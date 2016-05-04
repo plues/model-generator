@@ -1,23 +1,39 @@
 package de.stups.slottool.data.entities
 
-class Session extends Entity {
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.UpdateTimestamp
+
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id
+import javax.persistence.ManyToOne
+import javax.persistence.Table;
+
+@Entity
+@Table(name="sessions")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE,
+        region="session")
+class Session implements Serializable {
+    @Id
+    @GeneratedValue
     int id
-    def day
-    def time
+    String day
+    Integer time
     Integer rhythm
     Integer duration
+    @CreationTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
+    @UpdateTimestamp
+    @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
+
+    @ManyToOne(fetch=FetchType.EAGER)
     Group group
 
-    def Session(int id, Group group, String day, Integer time, Integer rhythm, Integer duration, Date created_at, Date updated_at) {
-        this.id = id
-        this.day = day
-        this.time = time
-        this.rhythm = rhythm
-        this.duration = duration
-        this.created_at = created_at
-        this.updated_at = updated_at
-        this.group = group
-    }
+    def Session() {}
 }
