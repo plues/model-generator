@@ -29,6 +29,18 @@ class Store extends AbstractStore {
         session.createQuery("from AbstractUnit").setCacheable(true).list()
     }
 
+    def AbstractUnit getAbstractUnitByID(Integer key) {
+        session.createCriteria(AbstractUnit.class).add(Restrictions.eq("id", key)).setCacheable(true).uniqueResult() as AbstractUnit
+    }
+
+    def Group getGroupByID(Integer gid) {
+        session.createCriteria(Group.class).add(Restrictions.eq("id", gid)).setCacheable(true).uniqueResult() as Group
+    }
+
+    Module getModuleByID(Integer mid) {
+        session.createCriteria(Module.class).add(Restrictions.eq("id", mid)).setCacheable(true).uniqueResult() as Module
+    }
+
     def getAbstractUnitUnitSemesterByUnitID(def unit_id) {
         session.createCriteria(AbstractUnitUnitSemester.class).add(Restrictions.eq("unit.id", unit_id)).list()
     }
@@ -57,10 +69,6 @@ class Store extends AbstractStore {
         session.createQuery("from Group").setCacheable(true).list()
     }
 
-    def List<Group> getGroupsByIDs(Collection<Integer> entries) {
-        session.createCriteria(Group.class).add(Restrictions.in("id", entries)).setCacheable(true).list();
-    }
-
     def List<Level> getLevels() {
         session.createQuery("from Level").setCacheable(true).list()
     }
@@ -83,6 +91,7 @@ class Store extends AbstractStore {
     def List<Unit> getUnits() {
         session.createQuery("from Unit").setCacheable(true).list()
     }
+
 
     def getLogEntries() {
         session.createQuery("from Log").setCacheable(true).list()

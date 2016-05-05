@@ -19,10 +19,13 @@ abstract class AbstractStore {
     abstract def List<Course> getCourses();
     abstract def Course getCourseByKey(String key);
     abstract def List<Group> getGroups();
-    abstract def List<Group> getGroupsByIDs(Collection<Integer> entries);
     abstract def List<Level> getLevels();
     abstract def List<Module> getModules();
     abstract def List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
     abstract def List<Session> getSessions();
     abstract def List<Unit> getUnits();
+    abstract def AbstractUnit getAbstractUnitByID(Integer key)
+    abstract def Group getGroupByID(Integer integer)
+
+    abstract def Module getModuleByID(Integer mid)
 }
