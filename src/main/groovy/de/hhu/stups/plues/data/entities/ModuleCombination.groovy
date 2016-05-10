@@ -1,4 +1,4 @@
-package de.stups.slottool.data.entities
+package de.hhu.stups.plues.data.entities
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

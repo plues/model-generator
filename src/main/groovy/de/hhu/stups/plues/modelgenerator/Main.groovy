@@ -1,6 +1,8 @@
-import de.stups.slottool.FileType
-import de.stups.slottool.Renderer
-import de.stups.slottool.data.Store
+package de.hhu.stups.plues.modelgenerator
+
+import de.hhu.stups.plues.modelgenerator.FileType
+import de.hhu.stups.plues.modelgenerator.Renderer
+import de.hhu.stups.plues.data.Store
 
 class Main {
 

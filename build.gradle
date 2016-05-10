@@ -8,7 +8,7 @@ sourceCompatibility = 8
 version = '2.0.0-SNAPSHOT'
 group = "de.stups.slottool"
 
-mainClassName = "Main"
+mainClassName = "de.hhu.stups.plues.modelgenerator.Main"
 
 repositories {
     mavenCentral()

@@ -1,4 +1,4 @@
-package de.stups.slottool
+package de.hhu.stups.plues.modelgenerator
 
 /**
  * Created by david on 01.02.15.

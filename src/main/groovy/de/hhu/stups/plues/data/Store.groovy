@@ -1,4 +1,16 @@
-package de.stups.slottool.data
+package de.hhu.stups.plues.data
+
+import de.hhu.stups.plues.data.entities.AbstractUnit
+import de.hhu.stups.plues.data.entities.AbstractUnitUnitSemester
+import de.hhu.stups.plues.data.entities.Course
+import de.hhu.stups.plues.data.entities.Group
+import de.hhu.stups.plues.data.entities.Info
+import de.hhu.stups.plues.data.entities.Level
+import de.hhu.stups.plues.data.entities.Log
+import de.hhu.stups.plues.data.entities.Module
+import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
+import de.hhu.stups.plues.data.entities.Session
+import de.hhu.stups.plues.data.entities.Unit
 import de.stups.slottool.data.entities.*
 import org.hibernate.HibernateException
 import org.hibernate.SessionFactory
@@ -81,11 +93,11 @@ class Store extends AbstractStore {
         session.createQuery("from ModuleAbstractUnitSemester").setCacheable(true).list()
     }
 
-    def List<de.stups.slottool.data.entities.Session> getSessions() {
+    def List<Session> getSessions() {
         session.createQuery("from Session").setCacheable(true).list()
     }
-    def de.stups.slottool.data.entities.Session getSessionByID(int id) {
-        session.get(de.stups.slottool.data.entities.Session, id)
+    def Session getSessionByID(int id) {
+        session.get(Session, id)
     }
 
     def List<Unit> getUnits() {
@@ -97,7 +109,7 @@ class Store extends AbstractStore {
         session.createQuery("from Log").setCacheable(true).list()
     }
 
-    def moveSession(de.stups.slottool.data.entities.Session session, String target_day, String target_time) {
+    def moveSession(Session session, String target_day, String target_time) {
         String src_day = session.getDay()
         String src_time = session.getTime()
         session.day = target_day

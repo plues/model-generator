@@ -34,17 +34,17 @@
         <property name="format_sql">false</property>
 
         <!-- Names the annotated entity class -->
-        <mapping class="de.stups.slottool.data.entities.AbstractUnit"/>
-        <mapping class="de.stups.slottool.data.entities.AbstractUnitUnitSemester"/>
-        <mapping class="de.stups.slottool.data.entities.Course"/>
-        <mapping class="de.stups.slottool.data.entities.Group"/>
-        <mapping class="de.stups.slottool.data.entities.Info"/>
-        <mapping class="de.stups.slottool.data.entities.Level"/>
-        <mapping class="de.stups.slottool.data.entities.Log"/>
-        <mapping class="de.stups.slottool.data.entities.Module"/>
-        <mapping class="de.stups.slottool.data.entities.ModuleAbstractUnitSemester"/>
-        <mapping class="de.stups.slottool.data.entities.ModuleCombination"/>
-        <mapping class="de.stups.slottool.data.entities.Session"/>
-        <mapping class="de.stups.slottool.data.entities.Unit"/>
+        <mapping class="de.hhu.stups.plues.data.entities.AbstractUnit"/>
+        <mapping class="de.hhu.stups.plues.data.entities.AbstractUnitUnitSemester"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Course"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Group"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Info"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Level"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Log"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Module"/>
+        <mapping class="de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester"/>
+        <mapping class="de.hhu.stups.plues.data.entities.ModuleCombination"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Session"/>
+        <mapping class="de.hhu.stups.plues.data.entities.Unit"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,8 +1,8 @@
-package de.stups.slottool
+package de.hhu.stups.plues.modelgenerator
 
-import de.stups.slottool.data.entities.Course
-import de.stups.slottool.data.entities.Level
-import de.stups.slottool.data.entities.Module
+import de.hhu.stups.plues.data.entities.Course
+import de.hhu.stups.plues.data.entities.Level
+import de.hhu.stups.plues.data.entities.Module
 
 class XMLHelper {
 

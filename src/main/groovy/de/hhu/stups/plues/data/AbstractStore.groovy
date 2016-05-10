@@ -1,15 +1,15 @@
-package de.stups.slottool.data
+package de.hhu.stups.plues.data
 
-import de.stups.slottool.data.entities.AbstractUnit
-import de.stups.slottool.data.entities.AbstractUnitUnitSemester
-import de.stups.slottool.data.entities.Course
-import de.stups.slottool.data.entities.Group
-import de.stups.slottool.data.entities.Info
-import de.stups.slottool.data.entities.Level
-import de.stups.slottool.data.entities.Module
-import de.stups.slottool.data.entities.ModuleAbstractUnitSemester
-import de.stups.slottool.data.entities.Session
-import de.stups.slottool.data.entities.Unit
+import de.hhu.stups.plues.data.entities.AbstractUnit
+import de.hhu.stups.plues.data.entities.AbstractUnitUnitSemester
+import de.hhu.stups.plues.data.entities.Course
+import de.hhu.stups.plues.data.entities.Group
+import de.hhu.stups.plues.data.entities.Info
+import de.hhu.stups.plues.data.entities.Level
+import de.hhu.stups.plues.data.entities.Module
+import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
+import de.hhu.stups.plues.data.entities.Session
+import de.hhu.stups.plues.data.entities.Unit
 
 abstract class AbstractStore {
     abstract def List<Info> getInfo();

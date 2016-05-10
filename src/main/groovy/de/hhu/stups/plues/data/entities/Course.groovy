@@ -1,4 +1,4 @@
-package de.stups.slottool.data.entities
+package de.hhu.stups.plues.data.entities
 
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy

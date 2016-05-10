@@ -1,4 +1,4 @@
-package de.stups.slottool.data
+package de.hhu.stups.plues.data
 
 /**
  * Created by David Schneider on 10.02.15.

@@ -1,29 +1,34 @@
-package de.stups.slottool.data.entities
+package de.hhu.stups.plues.data.entities
 
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.NaturalId
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
 
+import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
-import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
-@Table(name="groups")
+@Table(name = "units")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
-        region="groups")
+        region="units")
+class Unit implements Serializable {
 
-class Group implements Serializable{
     @Id
     @GeneratedValue
     int id
-    int half_semester
+
+    @NaturalId
+    @Column(name = "unit_key")
+    String key
+
+    String title
     @CreationTimestamp
     @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
@@ -31,15 +36,17 @@ class Group implements Serializable{
     @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
 
-    @OneToMany(mappedBy = "group")
-    Set<Session> sessions
+    @OneToMany(mappedBy = "unit")
+    Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    Unit unit
+    @OneToMany(mappedBy = "unit")
+    Set<Group> groups
 
-    def Group() {}
+    def Unit() {}
 
-    def half_semester_word() {
-        ( half_semester == 1 ) ? "first" : "second"
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    def getAbstractUnits() {
+        // cache result
+        new HashSet<>(abstract_unit_unit_semester.collect { it.abstract_unit })
     }
 }

@@ -1,9 +1,8 @@
-package de.stups.slottool
+package de.hhu.stups.plues.modelgenerator
 
-import de.stups.slottool.data.Store
+import de.hhu.stups.plues.data.Store
 
 import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 
 class XMLExporter extends Renderer {
