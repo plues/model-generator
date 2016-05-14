@@ -152,5 +152,6 @@ PROPERTIES
         <% courses.each { course -> %>
         ("<%= course.key %>", {<%= course.modules.collect { it.id }.join(" ,") %>})<% if(course != courses.last()) { %>,<% } %><% } %>
     }
-
+ASSERTIONS
+  course_names = dom(course_module_combinations)
 END
