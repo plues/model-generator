@@ -3,6 +3,7 @@ package de.hhu.stups.plues.data.entities
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Immutable
 import org.hibernate.annotations.NaturalId
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
@@ -19,6 +20,7 @@ import javax.persistence.Entity
 @Table(name="modules")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="modules")
+@Immutable
 class Module implements Serializable {
     @Id
     @GeneratedValue

@@ -2,6 +2,7 @@ package de.hhu.stups.plues.data.entities
 
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.hibernate.annotations.Immutable
 
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -13,6 +14,7 @@ import javax.persistence.Table
 @Table(name="unit_abstract_unit_semester")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="unit_abstract_unit_semester")
+@Immutable
 class AbstractUnitUnitSemester implements Serializable {
     @Id
     @ManyToOne(fetch=FetchType.EAGER)

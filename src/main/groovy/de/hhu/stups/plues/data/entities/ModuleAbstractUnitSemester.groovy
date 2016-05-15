@@ -2,6 +2,7 @@ package de.hhu.stups.plues.data.entities
 
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.hibernate.annotations.Immutable
 
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -12,6 +13,7 @@ import javax.persistence.Table
 @Table(name="modules_abstract_units_semesters")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="modules_abstract_units_semesters")
+@Immutable
 class ModuleAbstractUnitSemester implements Serializable {
     @Id
     @ManyToOne

@@ -1,5 +1,7 @@
 package de.hhu.stups.plues.data.entities
 
+import org.hibernate.annotations.Immutable
+
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -9,6 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name="course_modules_combinations")
+@Immutable
 class ModuleCombination implements Serializable {
     @Id
     @GeneratedValue

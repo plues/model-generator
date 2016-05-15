@@ -3,6 +3,7 @@ package de.hhu.stups.plues.data.entities
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Immutable
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
 
@@ -20,6 +21,7 @@ import javax.persistence.Table
 @Table(name="levels")
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="leves")
+@Immutable
 class Level implements Serializable{
     @Id
     Integer id
