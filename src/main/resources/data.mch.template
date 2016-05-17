@@ -1,4 +1,5 @@
 /* Machine generated: ${new Date()} */
+/* Model generator version: 2.0.0-SNAPSHOT */
 /* Database information: */
 <% info.each { %>/*  <%= it.key %>: <%= it.value %> */
 <% } %>
