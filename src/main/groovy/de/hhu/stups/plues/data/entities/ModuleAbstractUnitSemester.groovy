@@ -23,6 +23,7 @@ class ModuleAbstractUnitSemester implements Serializable {
     @ManyToOne
     AbstractUnit abstract_unit
 
+    @Id
     Integer semester
 
     def ModuleAbstractUnitSemester() {}
@@ -44,6 +45,5 @@ class ModuleAbstractUnitSemester implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(this.module, this.abstract_unit, this.semester);
-
     }
 }
