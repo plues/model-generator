@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModulBaum>
+    <% courses.each { course -> %>
+    <!-- <%= course.key %> -->
+    <b abschl="<%= course.degree %>" stg="<%= course.short_name %>" kzfa="<%= course.kzfa %>" <%= helper.format_credit_points(course) %> pversion="<%= course.po %>" name="<%= course.long_name %>"><% course.levels.each { level -> %>
+<%= helper.traverse(level, 2) %><% } /* course.levels */ %>
+    </b><% } /* courses */ %>
+</ModulBaum>

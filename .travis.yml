@@ -2,7 +2,7 @@ language: groovy
 script:
 - ./gradlew buildStandaloneJar
 jdk:
-- oraclejdk7
+- oraclejdk8
 branches:
   only:
   - develop
