@@ -22,7 +22,6 @@ import static java.lang.Thread.currentThread
 
 class Store extends AbstractStore {
 
-    LinkedHashMap units
     String dbpath
     SessionFactory sessionFactory
     org.hibernate.Session session
