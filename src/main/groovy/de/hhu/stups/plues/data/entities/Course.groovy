@@ -101,7 +101,7 @@ class Course implements Serializable {
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    public Map<Integer, List<Integer>> getModuleCombinations() {
+    public List<List<Integer>> getModuleCombinations() {
         def combinations = [:]
         module_combinations.each { mc ->
             if(!combinations.containsKey(mc.combination_id)) {
@@ -109,7 +109,7 @@ class Course implements Serializable {
             }
             combinations[mc.combination_id] << mc.module_id
         }
-        return combinations.values()
+        return new ArrayList<List<Integer>>(combinations.values())
     }
 
     static enum KZFA {
