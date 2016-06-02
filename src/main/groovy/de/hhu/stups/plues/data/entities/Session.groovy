@@ -35,5 +35,5 @@ class Session implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     Group group
 
-    def Session() {}
+    public Session() {}
 }

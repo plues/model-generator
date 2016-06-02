@@ -49,6 +49,6 @@ class AbstractUnit implements Serializable{
     @Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
     Set<Module> modules
 
-    def AbstractUnit() {}
+    public AbstractUnit() {}
 
 }

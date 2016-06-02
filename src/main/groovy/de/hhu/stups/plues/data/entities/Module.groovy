@@ -50,9 +50,9 @@ class Module implements Serializable {
     @OneToMany(mappedBy="module")
     Set<ModuleAbstractUnitSemester> module_abstract_units_semester
 
-    def Module() {}
+    public Module() {}
 
-    def getCredit_points() {
+    public int getCredit_points() {
         if(credit_points == null ) {
             return -1
         }

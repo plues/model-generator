@@ -64,21 +64,21 @@ class Course implements Serializable {
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<ModuleCombination> module_combinations
 
-    def Course() {}
+    public Course() {}
 
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getName() {
+    public String getName() {
         return this.key
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getFullName() {
+    public String getFullName() {
         return "${this.long_name} (${this.degree} ${this.kzfa}) PO:${this.po}"
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getCredit_points() {
+    public int getCredit_points() {
         if(credit_points == null) {
             return -1
         }
@@ -86,22 +86,22 @@ class Course implements Serializable {
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def isMajor() {
+    public boolean isMajor() {
         this.kzfa == "H"
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def isMinor() {
+    public boolean isMinor() {
         this.kzfa == "N"
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def isCombinable() {
+    public boolean isCombinable() {
         this.degree == "bk" // bk is combinable ba is not
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getModuleCombinations() {
+    public Map<Integer, List<Integer>> getModuleCombinations() {
         def combinations = [:]
         module_combinations.each { mc ->
             if(!combinations.containsKey(mc.combination_id)) {

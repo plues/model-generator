@@ -28,7 +28,7 @@ class Log implements Serializable {
     @Type(type = "org.hibernate.usertype.SQLiteDateTimeType")
     Date created_at
 
-    def Log() {}
+    public Log() {}
 
     @Override
     public boolean equals(Object o) {

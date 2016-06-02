@@ -47,7 +47,7 @@ class Unit implements Serializable {
     def Unit() {}
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getAbstractUnits() {
+    public HashSet<AbstractUnit> getAbstractUnits() {
         // cache result
         new HashSet<>(abstract_unit_unit_semester.collect { it.abstract_unit })
     }

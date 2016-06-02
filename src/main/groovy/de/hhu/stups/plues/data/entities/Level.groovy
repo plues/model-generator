@@ -61,10 +61,10 @@ class Level implements Serializable{
             joinColumns=@JoinColumn(name="level_id", referencedColumnName="id"))
     Course course // belongs to one course
 
-    def Level() {}
+    public Level() {}
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getMin() {
+    public int getMin() {
         if(this.min == null) {
             return -1
         }
@@ -72,7 +72,7 @@ class Level implements Serializable{
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getMax() {
+    public int getMax() {
         if(this.max == null) {
             return -1
         }
@@ -81,7 +81,7 @@ class Level implements Serializable{
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getMax_credit_points() {
+    public int getMax_credit_points() {
         if(this.max_credit_points == null) {
             return -1
         }
@@ -89,7 +89,7 @@ class Level implements Serializable{
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    def getMin_credit_points() {
+    public int getMin_credit_points() {
         if(this.min_credit_points == null) {
             return -1
         }

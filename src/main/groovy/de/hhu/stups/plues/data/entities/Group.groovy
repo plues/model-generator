@@ -38,9 +38,9 @@ class Group implements Serializable{
     @ManyToOne(fetch=FetchType.EAGER)
     Unit unit
 
-    def Group() {}
+    public Group() {}
 
-    def half_semester_word() {
+    public String half_semester_word() {
         ( half_semester == 1 ) ? "first" : "second"
     }
 }

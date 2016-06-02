@@ -26,7 +26,7 @@ class AbstractUnitUnitSemester implements Serializable {
     @Id
     Integer semester
 
-    def AbstractUnitUnitSemester() {}
+    public AbstractUnitUnitSemester() {}
 
     @Override
     public boolean equals(Object o) {
