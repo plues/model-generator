@@ -27,9 +27,22 @@ class Store extends AbstractStore {
     org.hibernate.Session session
 
     def Store(String dbpath) {
-        this.dbpath = dbpath
+        this.init(dbpath);
+    }
+
+    def Store() {
+    }
+
+    @Override
+    void init() {
+        assert this.dbpath != null
         openDataBase(dbpath)
         checkSchemaVersion()
+    }
+
+    void init(String dbpath) {
+        this.dbpath = dbpath;
+        this.init();
     }
 
     def List<Info> getInfo() {
@@ -174,13 +187,13 @@ class Store extends AbstractStore {
         this.session = sessionFactory.openSession()
     }
 
-    def close() {
+    void close() {
         this.clear()
         session.close()
         sessionFactory.close()
     }
 
-    def clear() {
+    void clear() {
         sessionFactory.cache.evictAllRegions()
         session.flush()
         session.clear()
