@@ -11,21 +11,28 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
 import de.hhu.stups.plues.data.entities.Session
 import de.hhu.stups.plues.data.entities.Unit
 
+// move to interface (?)
 abstract class AbstractStore {
-    abstract def List<Info> getInfo();
-    abstract def List<AbstractUnit> getAbstractUnits();
-    abstract def getAbstractUnitUnitSemesterByUnitID(def unit_id);
-    abstract def List<AbstractUnitUnitSemester> getAbstractUnitUnitSemester();
-    abstract def List<Course> getCourses();
-    abstract def Course getCourseByKey(String key);
-    abstract def List<Group> getGroups();
-    abstract def List<Level> getLevels();
-    abstract def List<Module> getModules();
-    abstract def List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
-    abstract def List<Session> getSessions();
-    abstract def List<Unit> getUnits();
-    abstract def AbstractUnit getAbstractUnitByID(Integer key)
-    abstract def Group getGroupByID(Integer integer)
+    abstract void init();
+    abstract void init(String dbpath);
 
-    abstract def Module getModuleByID(Integer mid)
+    abstract void close();
+
+    abstract List<Info> getInfo();
+    abstract List<AbstractUnit> getAbstractUnits();
+    abstract getAbstractUnitUnitSemesterByUnitID(def unit_id);
+    abstract List<AbstractUnitUnitSemester> getAbstractUnitUnitSemester();
+    abstract List<Course> getCourses();
+    abstract Course getCourseByKey(String key);
+    abstract List<Group> getGroups();
+    abstract List<Level> getLevels();
+    abstract List<Module> getModules();
+    abstract List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
+    abstract List<Session> getSessions();
+    abstract List<Unit> getUnits();
+    abstract AbstractUnit getAbstractUnitByID(Integer key)
+    abstract Group getGroupByID(Integer integer)
+
+    abstract Module getModuleByID(Integer mid)
+
 }
