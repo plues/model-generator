@@ -32,9 +32,14 @@ CONSTANTS
     level_modules,
     sessions,
     units,
+    meta_data,
     modules,
     module_abstract_unit_semester
 PROPERTIES
+    meta_data = {
+        <%= info.collect { "(\"${it.key}\", \"${it.value}\")" }.join(",\n        ") %>
+    }
+    &
     modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
     &
     modules = {
