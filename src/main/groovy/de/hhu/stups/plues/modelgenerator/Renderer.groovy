@@ -15,7 +15,7 @@ class Renderer {
     }
     protected loadTemplate(FileType tp) {
         def template = "data.${tp.extension}.template"
-        println(template)
+        println("Using template: ${template}")
         this.loadTemplateFromResource("/" + template)
     }
 
