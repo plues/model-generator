@@ -15,10 +15,11 @@ MACHINE data
  */
 DEFINITIONS
  "LibraryIO.def";
- SEMESTERS==1..6;
 SETS
     TYPES={m,e};
     DAYS = {mon, tue, wed, thu, fri, sat, sun};
+    SLOTS = {<%= (1..8).collect { "slot${it}" }.join(", ") %>};
+    SEMESTERS = {<%= (1..6).collect { "sem${it}" }.join(", ") %>};
     ABSTRACT_UNITS = {<%= abstract_units.collate(20, 20).collect { row -> row.collect { "au${it.id}" }.join(", ") }.join(",\n          ") %>};
     UNITS = {<%= units.collate(20, 20).collect { row -> row.collect{ "unit${it.id}" }.join(", ") }.join(",\n          ") %>};
     GROUPS = {<%= groups.collate(20, 20).collect { row -> row.collect{ "group${it.id}" }.join(", ") }.join(",\n          ") %>};
@@ -69,12 +70,12 @@ PROPERTIES
         <%= courses.collect { course -> "(\"${course.key}\" |-> {\n                ${course.moduleCombinations.collect { comb -> "{${comb.collect { "mod${it}"}.join(', ')}}"}.join(',\n                ') }})" }.join(',\n        ') %>
     }
     &
-    sessions : POW(SESSIONS * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))
+    sessions : POW(SESSIONS * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:SLOTS))
     &
     sessions = {
         <%=
         sessions.collect { session ->
-            "(session${session.id}, rec(dow:${session.day}, slot:${session.time}, rhythm:${session.rhythm}, duration:${session.duration}))"
+            "(session${session.id}, rec(dow:${session.day}, slot:slot${session.time}, rhythm:${session.rhythm}, duration:${session.duration}))"
         }.join(',\n        ')
         %>
     }
@@ -93,7 +94,7 @@ PROPERTIES
     &
     module_abstract_unit_semester = {
         <%= module_abstract_unit_semester.collect { maus ->
-            "(mod${maus.module.id}, au${maus.abstract_unit.id}, ${maus.semester})"
+            "(mod${maus.module.id}, au${maus.abstract_unit.id}, sem${maus.semester})"
         }.join(',\n        ')
         %>
     }
@@ -113,7 +114,7 @@ PROPERTIES
     abstract_unit_unit_semester = {
         <%=
         abstract_unit_unit_semester.collect { auas ->
-            "(au${auas.abstract_unit.id}, unit${auas.unit.id}, ${auas.semester})"
+            "(au${auas.abstract_unit.id}, unit${auas.unit.id}, sem${auas.semester})"
         }.join(',\n        ')
         %>
     }
