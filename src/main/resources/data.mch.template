@@ -11,7 +11,6 @@ MACHINE data
  *  - Build all pairs ahead of time
  *  - Choose to options
  *  - Provide a faculty configuration which things can be selected by the user
- * Add an assertion that all levels with modules are leaves
  * Generate docs along with data
  */
 DEFINITIONS
@@ -19,7 +18,12 @@ DEFINITIONS
  SEMESTERS==1..6;
 SETS
     TYPES={m,e};
-    DAYS = {mon, tue, wed, thu, fri, sat, sun}
+    DAYS = {mon, tue, wed, thu, fri, sat, sun};
+    ABSTRACT_UNITS = {<%= abstract_units.collate(20, 20).collect { row -> row.collect { "au${it.id}" }.join(", ") }.join(",\n          ") %>};
+    UNITS = {<%= units.collate(20, 20).collect { row -> row.collect{ "unit${it.id}" }.join(", ") }.join(",\n          ") %>};
+    GROUPS = {<%= groups.collate(20, 20).collect { row -> row.collect{ "group${it.id}" }.join(", ") }.join(",\n          ") %>};
+    SESSIONS = {<%= sessions.collate(20, 20).collect { row -> row.collect { "session${it.id}" }.join(", ") }.join(",\n          ") %>};
+    MODULES = {<%= modules.collate(20, 20).collect { row -> row.collect { "mod${it.id}" }.join(", ") }.join(",\n          ") %>}
 CONSTANTS
     abstract_units,
     abstract_unit_unit_semester,
@@ -37,17 +41,17 @@ PROPERTIES
         <%= info.collect { "(\"${it.key}\", \"${it.value}\")" }.join(",\n        ") %>
     }
     &
-    modules : POW(NATURAL1 * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
+    modules : POW(MODULES * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
     &
     modules = {
         <%=
         modules.collect { module ->
-            "(${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", credit_points:${module.credit_points}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
+            "(mod${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", credit_points:${module.credit_points}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
         }.join(',\n        ')
         %>
     }
     &
-    courses : POW(STRING*struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, credit_points:NATURAL \\/ {-1}, po:NATURAL1, kzfa:STRING))
+    courses : POW(STRING * struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, credit_points:NATURAL \\/ {-1}, po:NATURAL1, kzfa:STRING))
     &
     courses = {
         <%=
@@ -57,68 +61,68 @@ PROPERTIES
         %>
     }
     &
-    course_names : POW(STRING)
+    course_names : POW(dom(courses))
     &
     course_names = dom(courses)
     &
     course_module_combinations = {
-        <%= courses.collect { course -> "(\"${course.key}\" |-> {\n                ${course.moduleCombinations.collect { comb -> "{${comb.join(', ')}}"}.join(',\n                ') }})" }.join(',\n        ') %>
+        <%= courses.collect { course -> "(\"${course.key}\" |-> {\n                ${course.moduleCombinations.collect { comb -> "{${comb.collect { "mod${it}"}.join(', ')}}"}.join(',\n                ') }})" }.join(',\n        ') %>
     }
     &
-    sessions : POW(NATURAL1 * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))
+    sessions : POW(SESSIONS * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:NATURAL1))
     &
     sessions = {
         <%=
         sessions.collect { session ->
-            "(${session.id}, rec(dow:${session.day}, slot:${session.time}, rhythm:${session.rhythm}, duration:${session.duration}))"
+            "(session${session.id}, rec(dow:${session.day}, slot:${session.time}, rhythm:${session.rhythm}, duration:${session.duration}))"
         }.join(',\n        ')
         %>
     }
     &
-    abstract_units : POW(NATURAL1 * struct(idx:NATURAL, title:STRING, key:STRING, type: TYPES))
+    abstract_units : POW(ABSTRACT_UNITS * struct(idx:NATURAL, title:STRING, key:STRING, type: TYPES))
     &
     abstract_units = {
         <%=
         abstract_units.collect { au ->
-            "(${au.id}, rec(idx:${au.id}, title:\"${au.title}\", key:\"${au.key}\", type:${au.type}))"
+            "(au${au.id}, rec(idx:${au.id}, title:\"${au.title}\", key:\"${au.key}\", type:${au.type}))"
         }.join(',\n        ')
         %>
     }
     &
-    module_abstract_unit_semester : POW((dom(modules) * dom(abstract_units)) * SEMESTERS)
+    module_abstract_unit_semester : POW((MODULES * ABSTRACT_UNITS) * SEMESTERS)
     &
     module_abstract_unit_semester = {
         <%= module_abstract_unit_semester.collect { maus ->
-            "(${maus.module.id}, ${maus.abstract_unit.id}, ${maus.semester})"
+            "(mod${maus.module.id}, au${maus.abstract_unit.id}, ${maus.semester})"
         }.join(',\n        ')
         %>
     }
     &
-    units :  POW(NATURAL1 * struct(idx:NATURAL1, key:STRING, groups:POW(INTEGER*struct(half_semester:0..2, sessions:POW(INTEGER))), title:STRING))
+    units :  POW(UNITS * struct(idx:NATURAL1, key:STRING, groups:POW(GROUPS * struct(half_semester:0..2, sessions:POW(SESSIONS))), title:STRING))
     &
     units = {
         <%=
         units.collect { unit ->
-            "(${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", groups:{${unit.groups.collect { group -> "(${group.id}, rec(half_semester:${group.half_semester}, sessions:{${group.sessions.collect { it.id }.join(', ')}}))"}.join(', ')}}))"
+            "(unit${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", groups:{${unit.groups.collect { group -> "(group${group.id}, rec(half_semester:${group.half_semester}, sessions:{${group.sessions.collect { "session${it.id}" }.join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
     &
-    abstract_unit_unit_semester : POW((dom(abstract_units) * dom(units)) * SEMESTERS)
+    abstract_unit_unit_semester : POW((ABSTRACT_UNITS * UNITS) * SEMESTERS)
     &
     abstract_unit_unit_semester = {
         <%=
         abstract_unit_unit_semester.collect { auas ->
-            "(${auas.abstract_unit.id}, ${auas.unit.id}, ${auas.semester})"
+            "(au${auas.abstract_unit.id}, unit${auas.unit.id}, ${auas.semester})"
         }.join(',\n        ')
         %>
     }
     &
-    course_modules : dom(courses) --> POW(dom(modules))
+    course_modules : course_names --> POW(MODULES)
     &
     course_modules = {
         <% courses.each { course -> %>
-        ("<%= course.key %>", {<%= course.modules.collect { it.id }.join(" ,") %>})<% if(course != courses.last()) { %>,<% } %><% } %>
+        ("<%= course.key %>", {<%= course.modules.collect { "mod${it.id}" }.join(" ,") %>})<% if(course != courses.last()) { %>,<% } %><% } %>
     }
 ASSERTIONS
   course_names = dom(course_module_combinations)
