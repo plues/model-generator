@@ -25,12 +25,8 @@ CONSTANTS
     abstract_unit_unit_semester,
     courses,
     course_names,
-    course_levels,
     course_modules,
     course_module_combinations,
-    course_tree_leaves,
-    LEVELS,
-    level_modules,
     sessions,
     units,
     meta_data,
@@ -116,41 +112,6 @@ PROPERTIES
             "(${auas.abstract_unit.id}, ${auas.unit.id}, ${auas.semester})"
         }.join(',\n        ')
         %>
-    }
-    &
-    LEVELS = {<%= levels.collect { level -> level.id}.join (', ') %>}
-    &
-    course_levels : dom(courses) <-> tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, min_credit_points: NATURAL \\/ {-1}, max_credit_points: NATURAL \\/ {-1}, from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
-    &
-    #(<%= levels.toList().collate(10).collect { it.collect { level -> "level_${level.id}" }.join(', ') }.join(',\n        ') %>).(
-    <% levels.each { level -> %>
-        level_<%= level.id %> : tree(struct(idx: LEVELS, art:STRING, name: STRING, tm: STRING, min_credit_points: NATURAL \\/ {-1}, max_credit_points: NATURAL \\/ {-1},  from: NATURAL \\/ {-1}, to: NATURAL \\/ {-1}))
-        &
-        level_<%= level.id %> = <%if(level.children.size() >0) { %>
-            const(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", min_credit_points:${level.min_credit_points}, max_credit_points:${level.max_credit_points}, from:${level.min}, to:${level.max}), [<%= level.children.collect { child -> "level_${child.id}" }.join(', ') %>])<% } else { %>
-            bin(rec(idx:${level.id}, art:"${level.art}", name:"${level.name}", tm:"${level.tm}", min_credit_points:${level.min_credit_points}, max_credit_points:${level.max_credit_points}, from:${level.min}, to:${level.max}))
-        <% } %><% if (level != levels.last()) { %> & <% } %><% } %>
-      &
-      course_levels = {
-        <%= courses.collect { course -> course.levels.collect { level -> "(\"${course.key}\", level_${level.id})"}.join(', ') }.join(',\n        ') %>
-      }
-    )
-    &
-    course_tree_leaves : POW((dom(courses)*LEVELS)*POW(seq(INTEGER)))
-    &
-    !(cc, tt).( cc : dom(courses) & tt : course_levels[{cc}] =>
-        course_tree_leaves(cc, top(tt)'idx) = {xx | xx : dom(tt) & sizet(subtree(tt, xx)) = 1}
-    )
-    &
-    /*
-     * Maps from level ID to the set of modules associated with that level (leaf)
-     */
-    level_modules : LEVELS <-> dom(modules)
-    &
-    level_modules = {
-        <%= levels.findAll { level -> level.modules.size() > 0 }.collect { level ->
-             level.modules.collect { module -> "(${level.id} |-> ${module.id})" }.join(", ")
-        }.join(',\n        ') %>
     }
     &
     course_modules : dom(courses) --> POW(dom(modules))
