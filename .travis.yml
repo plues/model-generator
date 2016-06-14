@@ -7,7 +7,7 @@ branches:
   only:
   - develop
   - master
-  - feature/schema-3.0
+  - feature/ids
 before_install:
   - rvm install 2.0.0
   - gem install travis-custom-deploy

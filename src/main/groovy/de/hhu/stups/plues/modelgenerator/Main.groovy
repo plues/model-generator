@@ -4,7 +4,7 @@ import de.hhu.stups.plues.data.Store
 
 class Main {
 
-    static String VERSION = "2.0.0-SNAPSHOT"
+    static String VERSION = "3.0.0-SNAPSHOT"
 
     public static void main(String[] args) {
         printVersion()
