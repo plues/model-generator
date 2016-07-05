@@ -36,8 +36,11 @@ class AbstractUnit implements Serializable{
     @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
 
-    @OneToMany(mappedBy="abstract_unit")
-    Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
+    @ManyToMany()
+    @JoinTable(name="unit_abstract_unit",
+            joinColumns=@JoinColumn(name="abstract_unit_id", referencedColumnName = "id"),
+            inverseJoinColumns=@JoinColumn(name="unit_id", referencedColumnName = "id"))
+    Set<Unit> units;
 
     @OneToMany(mappedBy="abstract_unit")
     Set<ModuleAbstractUnitSemester> module_abstract_unit_semester

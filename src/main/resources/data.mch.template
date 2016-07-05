@@ -27,7 +27,7 @@ SETS
     MODULES = {<%= modules.collate(20, 20).collect { row -> row.collect { "mod${it.id}" }.join(", ") }.join(",\n          ") %>}
 CONSTANTS
     abstract_units,
-    abstract_unit_unit_semester,
+    abstract_unit_unit,
     courses,
     course_names,
     course_modules,
@@ -99,22 +99,24 @@ PROPERTIES
         %>
     }
     &
-    units :  POW(UNITS * struct(idx:NATURAL1, key:STRING, groups:POW(GROUPS * struct(half_semester:0..2, sessions:POW(SESSIONS))), title:STRING))
+    units :  POW(UNITS * struct(idx:NATURAL1, key:STRING, semesters: POW(SEMESTERS), groups:POW(GROUPS * struct(half_semester:0..2, sessions:POW(SESSIONS))), title:STRING))
     &
     units = {
         <%=
         units.collect { unit ->
-            "(unit${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", groups:{${unit.groups.collect { group -> "(group${group.id}, rec(half_semester:${group.half_semester}, sessions:{${group.sessions.collect { "session${it.id}" }.join(', ')}}))"}.join(', ')}}))"
+            "(unit${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", semesters:{${unit.semesters.collect { sem -> "sem${sem}" }.join(", ") }}, groups:{${unit.groups.collect { group -> "(group${group.id}, rec(half_semester:${group.half_semester}, sessions:{${group.sessions.collect { "session${it.id}" }.join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
     &
-    abstract_unit_unit_semester : POW((ABSTRACT_UNITS * UNITS) * SEMESTERS)
+    abstract_unit_unit : POW(ABSTRACT_UNITS * UNITS)
     &
-    abstract_unit_unit_semester = {
+    abstract_unit_unit = {
         <%=
-        abstract_unit_unit_semester.collect { auas ->
-            "(au${auas.abstract_unit.id}, unit${auas.unit.id}, sem${auas.semester})"
+        abstract_units.findAll { it.units.size() > 0 }.collect { au ->
+                au.units.collect { u ->
+                        "(au${au.id}, unit${u.id})"
+                }.join(',\n        ')
         }.join(',\n        ')
         %>
     }
