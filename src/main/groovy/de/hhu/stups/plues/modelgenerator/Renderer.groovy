@@ -43,7 +43,6 @@ class Renderer {
                 info: store.info,
 
                 abstract_units: store.abstractUnits,
-                abstract_unit_unit_semester: store.abstractUnitUnitSemester,
                 courses: store.courses,
                 groups: store.groups,
                 levels: store.levels,
