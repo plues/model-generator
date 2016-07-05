@@ -7,11 +7,17 @@ import org.hibernate.annotations.Immutable
 import org.hibernate.annotations.NaturalId
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.engine.jdbc.ColumnNameCache
 
+import javax.persistence.CollectionTable
 import javax.persistence.Column
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToMany
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
@@ -38,17 +44,16 @@ class Unit implements Serializable {
     @Type(type="org.hibernate.usertype.SQLiteDateTimeType")
     Date updated_at
 
-    @OneToMany(mappedBy = "unit")
-    Set<AbstractUnitUnitSemester> abstract_unit_unit_semester
+    @ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name="unit_semester", joinColumns = @JoinColumn(name="unit_id"))
+    @Column(name="semester")
+    Set<Integer> semesters;
+
+    @ManyToMany(mappedBy = "units")
+    Set<AbstractUnit> abstractUnits;
 
     @OneToMany(mappedBy = "unit")
     Set<Group> groups
 
     def Unit() {}
-
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    public HashSet<AbstractUnit> getAbstractUnits() {
-        // cache result
-        new HashSet<>(abstract_unit_unit_semester.collect { it.abstract_unit })
-    }
 }
