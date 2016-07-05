@@ -1,7 +1,6 @@
 package de.hhu.stups.plues.data
 
 import de.hhu.stups.plues.data.entities.AbstractUnit
-import de.hhu.stups.plues.data.entities.AbstractUnitUnitSemester
 import de.hhu.stups.plues.data.entities.Course
 import de.hhu.stups.plues.data.entities.Group
 import de.hhu.stups.plues.data.entities.Info
@@ -63,14 +62,6 @@ class Store extends AbstractStore {
 
     Module getModuleByID(Integer mid) {
         session.createCriteria(Module.class).add(Restrictions.eq("id", mid)).setCacheable(true).uniqueResult() as Module
-    }
-
-    def getAbstractUnitUnitSemesterByUnitID(def unit_id) {
-        session.createCriteria(AbstractUnitUnitSemester.class).add(Restrictions.eq("unit.id", unit_id)).list()
-    }
-
-    def List<AbstractUnitUnitSemester> getAbstractUnitUnitSemester() {
-        session.createQuery("from AbstractUnitUnitSemester").setCacheable(true).list()
     }
 
     def List<Course> getCourses() {

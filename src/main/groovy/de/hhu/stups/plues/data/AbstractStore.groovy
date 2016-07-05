@@ -1,7 +1,6 @@
 package de.hhu.stups.plues.data
 
 import de.hhu.stups.plues.data.entities.AbstractUnit
-import de.hhu.stups.plues.data.entities.AbstractUnitUnitSemester
 import de.hhu.stups.plues.data.entities.Course
 import de.hhu.stups.plues.data.entities.Group
 import de.hhu.stups.plues.data.entities.Info
@@ -20,8 +19,6 @@ abstract class AbstractStore {
 
     abstract List<Info> getInfo();
     abstract List<AbstractUnit> getAbstractUnits();
-    abstract getAbstractUnitUnitSemesterByUnitID(def unit_id);
-    abstract List<AbstractUnitUnitSemester> getAbstractUnitUnitSemester();
     abstract List<Course> getCourses();
     abstract Course getCourseByKey(String key);
     abstract List<Group> getGroups();
