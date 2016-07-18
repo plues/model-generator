@@ -66,6 +66,8 @@ PROPERTIES
     &
     course_names = dom(courses)
     &
+    course_module_combinations : STRING <-> POW(POW(MODULES))
+    &
     course_module_combinations = {
         <%= courses.collect { course -> "(\"${course.key}\" |-> {\n                ${course.moduleCombinations.collect { comb -> "{${comb.collect { "mod${it}"}.join(', ')}}"}.join(',\n                ') }})" }.join(',\n        ') %>
     }
