@@ -36,7 +36,8 @@ CONSTANTS
     units,
     meta_data,
     modules,
-    module_abstract_unit_semester
+    module_abstract_unit_semester,
+    module_abstract_unit_type
 PROPERTIES
     meta_data = {
         <%= info.collect { "(\"${it.key}\", \"${it.value}\")" }.join(",\n        ") %>
@@ -82,12 +83,12 @@ PROPERTIES
         %>
     }
     &
-    abstract_units : POW(ABSTRACT_UNITS * struct(idx:NATURAL, title:STRING, key:STRING, type: TYPES))
+    abstract_units : POW(ABSTRACT_UNITS * struct(idx:NATURAL, title:STRING, key:STRING))
     &
     abstract_units = {
         <%=
         abstract_units.collect { au ->
-            "(au${au.id}, rec(idx:${au.id}, title:\"${au.title}\", key:\"${au.key}\", type:${au.type}))"
+            "(au${au.id}, rec(idx:${au.id}, title:\"${au.title}\", key:\"${au.key}\"))"
         }.join(',\n        ')
         %>
     }
@@ -97,6 +98,15 @@ PROPERTIES
     module_abstract_unit_semester = {
         <%= module_abstract_unit_semester.collect { maus ->
             "(mod${maus.module.id}, au${maus.abstract_unit.id}, sem${maus.semester})"
+        }.join(',\n        ')
+        %>
+    }
+    &
+    module_abstract_unit_type : ((MODULES*ABSTRACT_UNITS)<->TYPES)
+    &
+    module_abstract_unit_type = {
+        <%= module_abstract_unit_type.collect { maut ->
+            "(mod${maut.module.id}, au${maut.abstract_unit.id}, ${maut.type})"
         }.join(',\n        ')
         %>
     }

@@ -42,6 +42,7 @@
         <mapping class="de.hhu.stups.plues.data.entities.Log"/>
         <mapping class="de.hhu.stups.plues.data.entities.Module"/>
         <mapping class="de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester"/>
+        <mapping class="de.hhu.stups.plues.data.entities.ModuleAbstractUnitType"/>
         <mapping class="de.hhu.stups.plues.data.entities.ModuleCombination"/>
         <mapping class="de.hhu.stups.plues.data.entities.Session"/>
         <mapping class="de.hhu.stups.plues.data.entities.Unit"/>

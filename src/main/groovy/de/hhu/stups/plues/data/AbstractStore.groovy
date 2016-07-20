@@ -7,6 +7,7 @@ import de.hhu.stups.plues.data.entities.Info
 import de.hhu.stups.plues.data.entities.Level
 import de.hhu.stups.plues.data.entities.Module
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
+import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType
 import de.hhu.stups.plues.data.entities.Session
 import de.hhu.stups.plues.data.entities.Unit
 
@@ -25,11 +26,11 @@ abstract class AbstractStore {
     abstract List<Level> getLevels();
     abstract List<Module> getModules();
     abstract List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
+    abstract List<ModuleAbstractUnitType> getModuleAbstractUnitType()
     abstract List<Session> getSessions();
     abstract List<Unit> getUnits();
     abstract AbstractUnit getAbstractUnitByID(Integer key)
     abstract Group getGroupByID(Integer integer)
 
     abstract Module getModuleByID(Integer mid)
-
 }

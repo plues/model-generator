@@ -8,6 +8,7 @@ import de.hhu.stups.plues.data.entities.Level
 import de.hhu.stups.plues.data.entities.Log
 import de.hhu.stups.plues.data.entities.Module
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
+import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType
 import de.hhu.stups.plues.data.entities.Session
 import de.hhu.stups.plues.data.entities.Unit
 import de.stups.slottool.data.entities.*
@@ -94,6 +95,10 @@ class Store extends AbstractStore {
 
     def List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
         session.createQuery("from ModuleAbstractUnitSemester").setCacheable(true).list()
+    }
+
+    List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
+        session.createQuery("from ModuleAbstractUnitType").setCacheable(true).list()
     }
 
     def List<Session> getSessions() {

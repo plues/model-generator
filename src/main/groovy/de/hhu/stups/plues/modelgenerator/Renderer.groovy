@@ -48,6 +48,7 @@ class Renderer {
                 levels: store.levels,
                 modules: store.modules,
                 module_abstract_unit_semester: store.moduleAbstractUnitSemester,
+                module_abstract_unit_type: store.moduleAbstractUnitType,
                 sessions: store.sessions,
                 units: store.units,
                 helper: helper,

@@ -50,6 +50,9 @@ class Module implements Serializable {
     @OneToMany(mappedBy="module")
     Set<ModuleAbstractUnitSemester> module_abstract_units_semester
 
+    @OneToMany(mappedBy="module")
+    Set<ModuleAbstractUnitType> module_abstract_units_types
+
     public Module() {}
 
     public int getCredit_points() {
