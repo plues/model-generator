@@ -43,12 +43,12 @@ PROPERTIES
         <%= info.collect { "(\"${it.key}\", \"${it.value}\")" }.join(",\n        ") %>
     }
     &
-    modules : POW(MODULES * struct(idx:NATURAL1, name:STRING, credit_points:NATURAL \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
+    modules : POW(MODULES * struct(idx:NATURAL1, name:STRING, key:STRING, credit_points:NATURAL \\/ {-1}, title:STRING, pordnr:NATURAL, elective_units:NATURAL, mandatory:BOOL))
     &
     modules = {
         <%=
         modules.collect { module ->
-            "(mod${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", credit_points:${module.credit_points}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
+            "(mod${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", key:\"${module.key}\", credit_points:${module.credit_points}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
         }.join(',\n        ')
         %>
     }
