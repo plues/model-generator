@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
     <modules><% modules.each { module -> %>
-        <module id="<%= module.key %>" title="<%= module.title %>" pordnr="<%= module.pordnr %>" elective-units="<%= module.elective_units %>"><% module.abstract_units.each { au -> %>
-            <abstract-unit id="<%= au.key %>" title="<%= au.title %>" type="<%= au.type %>" semester="<%= module_abstract_unit_semester.findAll { mau -> mau.abstract_unit == au && mau.module == module /* TODO: we need a better way to filter than this */ }.collect { it.semester }.join(',') %>" /><% } %>
+        <module id="<%= module.key %>" title="<%= module.title %>" pordnr="<%= module.pordnr %>" elective-units="<%= module.elective_units %>"><% module.module_abstract_units_types.each { aut -> %>
+            <abstract-unit id="<%= aut.abstract_unit.key %>" title="<%= aut.abstract_unit.title %>" type="<%= aut.type %>" semester="<%= module.module_abstract_units_semester.findAll { mau -> mau.abstract_unit == aut.abstract_unit && mau.module == module }.collect { it.semester }.join(',') %>" /><% } %>
         </module><% } %>
     </modules>
     <units><% units.each { unit -> %>
@@ -10,7 +10,7 @@
             <group <% if(group.half_semester > 0) { %>half-semester="<%= group.half_semester_word() %>"<% } %>><% group.sessions.each { session -> %>
                 <session day="<%= session.day %>" time="<%= session.time %>" duration="<%= session.duration %>" rhythm="<%= session.rhythm %>" /><% } %>
             </group><% } %>
-            <% unit.abstract_units.each { au -> %>
+            <% unit.abstractUnits.each { au -> %>
             <abstract-unit id="<%= au.key %>" /><!-- <%= au.id %> --><% } %>
         </unit><% } %>
     </units>
