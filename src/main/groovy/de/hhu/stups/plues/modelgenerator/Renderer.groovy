@@ -30,7 +30,7 @@ class Renderer {
 
     def renderWith(String path) {
         def template = loadTemplate(path)
-        this.render(template)
+        this.render(template, output)
     }
 
     public Writable renderFor(FileType tp) {
@@ -41,7 +41,7 @@ class Renderer {
     protected Writable render(def template, def helper=null) {
         def binding = [
                 info: store.info,
-
+                short_name: store.getInfoByKey("short-name"),
                 abstract_units: store.abstractUnits,
                 courses: store.courses,
                 groups: store.groups,

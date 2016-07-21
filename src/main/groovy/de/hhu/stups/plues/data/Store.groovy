@@ -45,6 +45,9 @@ class Store extends AbstractStore {
         this.init();
     }
 
+    def String getInfoByKey(String key) {
+        session.createCriteria(Info.class).add(Restrictions.eq("key", key)).setCacheable(true).uniqueResult().value
+    }
     def List<Info> getInfo() {
         session.createQuery("from Info").setCacheable(true).list()
     }
