@@ -14,7 +14,16 @@ MACHINE data
  * Generate docs along with data
  */
 DEFINITIONS
- "LibraryIO.def";
+  "LibraryIO.def";
+  "LibraryStrings.mch";
+  XML_ELement_Type == struct(
+                        recId: NATURAL1,
+                        pId:NATURAL,
+                        element:STRING,
+                        attributes: STRING +-> STRING,
+                        meta: STRING +-> STRING);
+  EXTERNAL_FUNCTION_READ_XML == STRING --> seq(XML_ELement_Type);
+  READ_XML(file) == {};
 SETS
     TYPES={m,e};
     DAYS = {mon, tue, wed, thu, fri, sat, sun};
@@ -37,7 +46,8 @@ CONSTANTS
     meta_data,
     modules,
     module_abstract_unit_semester,
-    module_abstract_unit_type
+    module_abstract_unit_type,
+    course_module_combination_data
 PROPERTIES
     meta_data = {
         <%= info.collect { "(\"${it.key}\", \"${it.value}\")" }.join(",\n        ") %>
@@ -67,11 +77,29 @@ PROPERTIES
     &
     course_names = dom(courses)
     &
-    course_module_combinations : STRING <-> POW(POW(MODULES))
+    course_module_combination_data = READ_XML("${short_name.value}-data.xml") &  course_module_combination_data : seq(XML_ELement_Type)
     &
-    course_module_combinations = {
-        <%= courses.collect { course -> "(\"${course.key}\" |-> {\n                ${course.moduleCombinations.collect { comb -> "{${comb.collect { "mod${it}"}.join(', ')}}"}.join(',\n                ') }})" }.join(',\n        ') %>
-    }
+    course_module_combinations : course_names +-> POW(POW(MODULES))
+    &
+    course_module_combinations =
+      LET helper BE
+        helper = UNION(x, y).((x,y) : course_module_combination_data & y'pId /= 0 |
+        LET
+            attrs
+        BE
+            attrs = y'attributes
+        IN
+            LET
+                mods
+            BE
+                mods = ran(STRING_SPLIT(attrs("value"), ","))
+            IN
+                {(attrs("course") |-> UNION(n).(n : mods | {STRING_TO_ENUM(n)}))}
+            END
+        END)
+      IN
+        %(x).(x : dom(helper) | helper[{x}])
+      END
     &
     sessions : POW(SESSIONS * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:SLOTS))
     &
