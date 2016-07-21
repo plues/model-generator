@@ -22,8 +22,8 @@ DEFINITIONS
                         element:STRING,
                         attributes: STRING +-> STRING,
                         meta: STRING +-> STRING);
-EXTERNAL_FUNCTION_READ_XML == STRING --> seq(XML_ELement_Type);
-READ_XML(file) == {};
+  EXTERNAL_FUNCTION_READ_XML == STRING --> seq(XML_ELement_Type);
+  READ_XML(file) == {};
 SETS
     TYPES={m,e};
     DAYS = {mon, tue, wed, thu, fri, sat, sun};
@@ -77,11 +77,13 @@ PROPERTIES
     &
     course_names = dom(courses)
     &
-    course_module_combination_data = READ_XML("${short_name.value}-data.xml") &  Data : seq(XML_ELement_Type)
+    course_module_combination_data = READ_XML("${short_name.value}-data.xml") &  course_module_combination_data : seq(XML_ELement_Type)
     &
-    course_module_combinations : STRING <-> POW(POW(MODULES))
+    course_module_combinations : course_names +-> POW(POW(MODULES))
     &
-    course_module_combinations = UNION(x, y).((x,y) : course_module_combination_data & y'pId /= 0 |
+    course_module_combinations =
+      LET helper BE
+        helper = UNION(x, y).((x,y) : course_module_combination_data & y'pId /= 0 |
         LET
             attrs
         BE
@@ -94,8 +96,10 @@ PROPERTIES
             IN
                 {(attrs("course") |-> UNION(n).(n : mods | {STRING_TO_ENUM(n)}))}
             END
-        END
-    )
+        END)
+      IN
+        %(x).(x : dom(helper) | helper[{x}])
+      END
     &
     sessions : POW(SESSIONS * struct(duration:INTEGER, rhythm:INTEGER, dow:DAYS, slot:SLOTS))
     &
