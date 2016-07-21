@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<combinations>
+<% courses.each { course -> %>
+<% course.moduleCombinations.each { comb -> %>
+    <combination course="<%= course.key %>" value="<%= comb.collect { "mod${it}"}.join(',') %>" /><% }} %>
+</combinations>
