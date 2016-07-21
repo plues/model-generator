@@ -31,6 +31,7 @@ abstract class AbstractStore {
     abstract List<Unit> getUnits();
     abstract AbstractUnit getAbstractUnitByID(Integer key)
     abstract Group getGroupByID(Integer integer)
+    abstract String getInfoByKey(String key)
 
     abstract Module getModuleByID(Integer mid)
 }
