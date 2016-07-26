@@ -22,8 +22,8 @@ DEFINITIONS
                         element:STRING,
                         attributes: STRING +-> STRING,
                         meta: STRING +-> STRING);
-  EXTERNAL_FUNCTION_READ_XML == STRING --> seq(XML_ELement_Type);
-  READ_XML(file) == {};
+  EXTERNAL_FUNCTION_READ_XML == (STRING * STRING) --> seq(XML_ELement_Type);
+  READ_XML(file, encoding) == {};
 SETS
     TYPES={m,e};
     DAYS = {mon, tue, wed, thu, fri, sat, sun};
@@ -77,7 +77,7 @@ PROPERTIES
     &
     course_names = dom(courses)
     &
-    course_module_combination_data = READ_XML("${short_name.value}-data.xml") &  course_module_combination_data : seq(XML_ELement_Type)
+    course_module_combination_data = READ_XML("${short_name.value}-data.xml", "UTF-8") &  course_module_combination_data : seq(XML_ELement_Type)
     &
     course_module_combinations : course_names --> POW(POW(MODULES))
     &
