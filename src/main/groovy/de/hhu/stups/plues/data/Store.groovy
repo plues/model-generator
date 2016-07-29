@@ -11,7 +11,6 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType
 import de.hhu.stups.plues.data.entities.Session
 import de.hhu.stups.plues.data.entities.Unit
-import de.stups.slottool.data.entities.*
 import org.hibernate.HibernateException
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
@@ -34,13 +33,13 @@ class Store extends AbstractStore {
     }
 
     @Override
-    void init() {
+    void init() throws IncompatibleSchemaError {
         assert this.dbpath != null
         openDataBase(dbpath)
         checkSchemaVersion()
     }
 
-    void init(String dbpath) {
+    void init(String dbpath) throws IncompatibleSchemaError {
         this.dbpath = dbpath;
         this.init();
     }
@@ -148,7 +147,7 @@ class Store extends AbstractStore {
         }
     }
 
-    def checkSchemaVersion() {
+    def checkSchemaVersion() throws de.hhu.stups.plues.data.IncompatibleSchemaError {
         def properties = new Properties()
         properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
 

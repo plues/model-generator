@@ -13,8 +13,8 @@ import de.hhu.stups.plues.data.entities.Unit
 
 // move to interface (?)
 abstract class AbstractStore {
-    abstract void init();
-    abstract void init(String dbpath);
+    abstract void init() throws IncompatibleSchemaError;
+    abstract void init(String dbpath) throws IncompatibleSchemaError;
 
     abstract void close();
 
