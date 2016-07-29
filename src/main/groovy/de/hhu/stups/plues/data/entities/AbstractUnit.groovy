@@ -1,5 +1,6 @@
 package de.hhu.stups.plues.data.entities
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
@@ -21,7 +22,8 @@ import javax.persistence.Table
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="abstract_units")
 @Immutable
-class AbstractUnit implements Serializable{
+@FindBugsSuppressWarnings(["SE_NO_SERIALVERSIONID","SE_TRANSIENT_FIELD_NOT_RESTORED", "EI_EXPOSE_REP", "EI_EXPOSE_REP2"])
+class AbstractUnit implements Serializable {
 
     @Id
     @GeneratedValue

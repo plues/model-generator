@@ -1,5 +1,6 @@
 package de.hhu.stups.plues.data.entities
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.annotations.CreationTimestamp
@@ -21,6 +22,7 @@ import javax.persistence.Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY,
         region="modules")
 @Immutable
+@FindBugsSuppressWarnings(["SE_NO_SERIALVERSIONID","SE_TRANSIENT_FIELD_NOT_RESTORED", "EI_EXPOSE_REP", "EI_EXPOSE_REP2"])
 class Module implements Serializable {
     @Id
     @GeneratedValue

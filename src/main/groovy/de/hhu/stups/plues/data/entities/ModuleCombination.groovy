@@ -1,5 +1,6 @@
 package de.hhu.stups.plues.data.entities
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings
 import org.hibernate.annotations.Immutable
 
 import javax.persistence.Entity
@@ -12,6 +13,7 @@ import javax.persistence.Table
 @Entity
 @Table(name="course_modules_combinations")
 @Immutable
+@FindBugsSuppressWarnings(["SE_NO_SERIALVERSIONID","SE_TRANSIENT_FIELD_NOT_RESTORED", "EQ_UNUSUAL"])
 class ModuleCombination implements Serializable {
     @Id
     @GeneratedValue
