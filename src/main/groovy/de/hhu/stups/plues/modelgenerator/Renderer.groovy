@@ -1,6 +1,6 @@
 package de.hhu.stups.plues.modelgenerator
 
-import de.hhu.stups.plues.data.Store
+import de.hhu.stups.plues.data.AbstractStore
 import groovy.text.SimpleTemplateEngine
 
 /**
@@ -8,11 +8,12 @@ import groovy.text.SimpleTemplateEngine
  */
 class Renderer {
 
-    Store store
+    AbstractStore store
 
-    def Renderer(Store db) {
+    def Renderer(AbstractStore db) {
         this.store = db
     }
+
     protected loadTemplate(FileType tp) {
         def template = "data.${tp.extension}.template"
         println("Using template: ${template}")
@@ -24,6 +25,7 @@ class Renderer {
         new SimpleTemplateEngine().createTemplate(resource.text)
 
     }
+
     protected loadTemplate(String path) {
         new SimpleTemplateEngine().createTemplate(new FileReader(path))
     }
