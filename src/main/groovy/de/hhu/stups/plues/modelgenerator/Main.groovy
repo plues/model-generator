@@ -1,9 +1,6 @@
 package de.hhu.stups.plues.modelgenerator
 
-import de.hhu.stups.plues.data.Store
-
-import java.nio.file.Files
-import java.nio.file.Path
+import de.hhu.stups.plues.data.SQLiteStore
 
 class Main {
 
@@ -29,7 +26,7 @@ class Main {
         }
 
 
-        def store = new Store(options.database)
+        def store = new SQLiteStore(options.database)
         def renderer = new Renderer(store)
         def output = options.output.replaceFirst("^~", System.getProperty("user.home"));
         def result

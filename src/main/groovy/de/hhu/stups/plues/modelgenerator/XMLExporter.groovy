@@ -13,6 +13,7 @@ class XMLExporter extends Renderer {
     final String TREE_FILE = "Modulbaum.xml"
 
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     XMLExporter(Store db) {
         super(db)
     }
@@ -41,7 +42,7 @@ class XMLExporter extends Renderer {
             zos.write(dataBytes)
             zos.closeEntry()
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace()
             throw ioe
         } finally {
