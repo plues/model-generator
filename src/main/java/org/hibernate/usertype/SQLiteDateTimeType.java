@@ -2,6 +2,7 @@ package org.hibernate.usertype;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
@@ -37,7 +38,7 @@ public class SQLiteDateTimeType implements UserType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         assert names.length == 1;
         String dateStr = rs.getString(names[0]);
         Date d;
@@ -54,7 +55,7 @@ public class SQLiteDateTimeType implements UserType {
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
         try {
             st.setString(index, new SimpleDateFormat(sqliteTextTimeStamp).format(value));
         } catch(IllegalArgumentException e) {
