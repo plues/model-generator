@@ -21,7 +21,7 @@ run {
     }
 }
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.1'
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
     compile 'org.hibernate:hibernate-core:5.2.1.Final'
     compile 'org.hibernate:hibernate-c3p0:5.2.1.Final'
     compile 'org.hibernate:hibernate-ehcache:5.2.1.Final'
