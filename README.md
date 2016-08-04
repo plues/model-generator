@@ -1,6 +1,7 @@
 # Model Generator
 
 [![Build Status](https://travis-ci.org/plues/model-generator.svg?branch=develop)](https://travis-ci.org/plues/model-generator)
+[![Dependency Status](https://www.versioneye.com/user/projects/57a33bea1dadcb004f08e56a/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57a33bea1dadcb004f08e56a)
 
 This tool is used to generate text representations of timetable data to be
 used by different tools. `model-generator` is part of the `PlüS` project.
