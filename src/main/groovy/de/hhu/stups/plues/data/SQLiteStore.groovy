@@ -1,21 +1,14 @@
 package de.hhu.stups.plues.data
 
-import de.hhu.stups.plues.data.entities.AbstractUnit
-import de.hhu.stups.plues.data.entities.Course
-import de.hhu.stups.plues.data.entities.Group
-import de.hhu.stups.plues.data.entities.Info
-import de.hhu.stups.plues.data.entities.Level
-import de.hhu.stups.plues.data.entities.Log
-import de.hhu.stups.plues.data.entities.Module
-import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester
-import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType
-import de.hhu.stups.plues.data.entities.Session
-import de.hhu.stups.plues.data.entities.Unit
+import de.hhu.stups.plues.data.entities.*
 import org.hibernate.HibernateException
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
 import org.hibernate.cfg.Configuration
-import org.hibernate.criterion.Restrictions
+
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.Root
 
 import static java.lang.Thread.currentThread
 
@@ -44,9 +37,38 @@ class SQLiteStore extends Store {
         this.init();
     }
 
-    def String getInfoByKey(String key) {
-        session.createCriteria(Info.class).add(Restrictions.eq("key", key)).setCacheable(true).uniqueResult().value
+    private <T> T getByID(Integer key, Class<T> type) {
+        CriteriaBuilder cb = session.criteriaBuilder
+
+        CriteriaQuery<T> query = cb.createQuery(type)
+
+        Root<T> root = query.from(type)
+        query.where(cb.equal(root.get("id"), key))
+
+        session.createQuery(query).setCacheable(true).getSingleResult()
     }
+
+
+    private <T> T getByKey(String key, Class<T> type) {
+        CriteriaBuilder cb = session.criteriaBuilder
+
+        CriteriaQuery<T> query = cb.createQuery(type)
+
+        Root<T> root = query.from(type)
+        query.where(cb.equal(root.get("key"), key))
+
+        session.createQuery(query).setCacheable(true).getSingleResult()
+    }
+
+    def String getInfoByKey(String key) {
+        getByKey(key, Info.class)
+    }
+
+    Course getCourseByKey(String key) {
+        getByKey(key, Course.class)
+    }
+
+
     def List<Info> getInfo() {
         session.createQuery("from Info").setCacheable(true).list()
     }
@@ -55,32 +77,43 @@ class SQLiteStore extends Store {
         session.createQuery("from AbstractUnit").setCacheable(true).list()
     }
 
+
     def AbstractUnit getAbstractUnitByID(Integer key) {
-        session.createCriteria(AbstractUnit.class).add(Restrictions.eq("id", key)).setCacheable(true).uniqueResult() as AbstractUnit
+        getByID(key, AbstractUnit.class)
     }
 
     def Group getGroupByID(Integer gid) {
-        session.createCriteria(Group.class).add(Restrictions.eq("id", gid)).setCacheable(true).uniqueResult() as Group
+        getByID(gid, Group.class)
     }
 
     Module getModuleByID(Integer mid) {
-        session.createCriteria(Module.class).add(Restrictions.eq("id", mid)).setCacheable(true).uniqueResult() as Module
+        getByID(mid, Module.class)
     }
 
     def List<Course> getCourses() {
         session.createQuery("from Course").setCacheable(true).list()
     }
 
-    Course getCourseByKey(String key) {
-        session.createCriteria(Course.class).add(Restrictions.eq("key", key)).setCacheable(true).uniqueResult() as Course
-    }
-
     def List<Course> getMinors() {
-        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MINOR)).setCacheable(true).list()
+        CriteriaBuilder cb = session.criteriaBuilder
+
+        CriteriaQuery<Course> query = cb.createQuery(Course.class)
+
+        Root<Course> root = query.from(Course.class)
+        query.where(root.get("kzfa"), Course.KZFA.MINOR)
+
+        session.createQuery(query).setCacheable(true).getResultList()
     }
 
     def List<Course> getMajors() {
-        session.createCriteria(Course.class).add(Restrictions.eq("kzfa", Course.KZFA.MAJOR)).setCacheable(true).list()
+        CriteriaBuilder cb = session.criteriaBuilder
+
+        CriteriaQuery<Course> query = cb.createQuery(Course.class)
+
+        Root<Course> root = query.from(Course.class)
+        query.where(root.get("kzfa"), Course.KZFA.MAJOR)
+
+        session.createQuery(query).setCacheable(true).getResultList()
     }
 
     def List<Group> getGroups() {
@@ -96,16 +129,19 @@ class SQLiteStore extends Store {
     }
 
     def List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
-        session.createQuery("from ModuleAbstractUnitSemester").setCacheable(true).list()
+        session.createQuery("from ModuleAbstractUnitSemester")
+                .setCacheable(true).list()
     }
 
     List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
-        session.createQuery("from ModuleAbstractUnitType").setCacheable(true).list()
+        session.createQuery("from ModuleAbstractUnitType")
+                .setCacheable(true).list()
     }
 
     def List<Session> getSessions() {
         session.createQuery("from Session").setCacheable(true).list()
     }
+
     def Session getSessionByID(int id) {
         session.get(Session, id)
     }
@@ -127,40 +163,47 @@ class SQLiteStore extends Store {
 
         Log log = new Log();
         // TODO day and time should each be a field in the log table
-        log.setSrc(src_day+src_time);
-        log.setTarget(target_day+target_time)
+        log.setSrc(src_day + src_time);
+        log.setTarget(target_day + target_time)
         log.setSession(session);
 
         Transaction tx;
         def s = this.session
 
-        try{
+        try {
             tx = s.beginTransaction();
             s.persist(session);
             s.persist(log);
             tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
-        }finally {
-           s.flush()
+        } finally {
+            s.flush()
         }
     }
 
-    def checkSchemaVersion() throws de.hhu.stups.plues.data.IncompatibleSchemaError {
+    def checkSchemaVersion()
+            throws de.hhu.stups.plues.data.IncompatibleSchemaError {
         def properties = new Properties()
-        properties.load currentThread().contextClassLoader.getResourceAsStream("schema.properties")
+        properties.load(currentThread()
+                .contextClassLoader.getResourceAsStream("schema.properties"))
 
-        def version_str =session.createQuery("from Info where key = 'schema_version'").uniqueResult().value
+        def version_str = session
+                .createQuery("from Info where key = 'schema_version'")
+                .uniqueResult().value
 
         def schema_version = version_str.split("\\.")
-        def required_version = properties.getProperty("schema_version").split("\\.")
+        def required_version = properties
+                .getProperty("schema_version").split("\\.")
 
         // Major versions must match
         // minor version may be higher in database
-        if ( (schema_version[0] != required_version[0])
-                || (Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
-            throw new IncompatibleSchemaError("Expected database schema version ${required_version} but was ${schema_version}")
+        if ((schema_version[0] != required_version[0])
+                || (Integer.parseInt(schema_version[1])
+                        < Integer.parseInt(required_version[1]))) {
+            throw new IncompatibleSchemaError("Expected database schema " +
+                    "version ${required_version} but was ${schema_version}")
         }
     }
 
@@ -171,12 +214,13 @@ class SQLiteStore extends Store {
         def db = new File(db_path)
         def path = db.getAbsolutePath()
 
-        if ( ! (db.exists() && db.isFile())) {
-            throw new IllegalArgumentException(path + " does not exist or is not a file.")
+        if (!(db.exists() && db.isFile())) {
+            throw new IllegalArgumentException(path
+                    + " does not exist or is not a file.")
         }
 
         println("trying to open " + path)
-        def url = "jdbc:sqlite:"+path
+        def url = "jdbc:sqlite:" + path
 
         Configuration conf = new Configuration()
         conf.configure()
@@ -193,7 +237,6 @@ class SQLiteStore extends Store {
 
     void clear() {
         sessionFactory.cache.evictAllRegions()
-        session.flush()
         session.clear()
         System.gc();
     }
