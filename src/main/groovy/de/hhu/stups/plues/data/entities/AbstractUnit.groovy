@@ -64,7 +64,7 @@ class AbstractUnit implements Serializable {
     @JoinTable(name="modules_abstract_units_types",
         joinColumns=@JoinColumn(name="abstract_unit_id", referencedColumnName="id"),
         inverseJoinColumns=@JoinColumn(name="module_id", referencedColumnName="id"))
-    @Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
+    @Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="modules")
     Set<Module> modules
 
     public AbstractUnit() {}
