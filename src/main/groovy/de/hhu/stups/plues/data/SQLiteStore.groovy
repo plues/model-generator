@@ -61,7 +61,7 @@ class SQLiteStore extends Store {
     }
 
     def String getInfoByKey(String key) {
-        getByKey(key, Info.class)
+        getByKey(key, Info.class).value
     }
 
     Course getCourseByKey(String key) {
