@@ -194,8 +194,8 @@ class SQLiteStore extends Store {
                 .createQuery("from Info where key = 'schema_version'")
                 .uniqueResult().value
 
-        String schema_version = version_str.split("\\.")
-        def required_version = properties
+        String[] schema_version = version_str.split("\\.")
+        String[] required_version = properties
                 .getProperty("schema_version").split("\\.")
 
         // Major versions must match
