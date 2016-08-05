@@ -100,7 +100,7 @@ class SQLiteStore extends Store {
         CriteriaQuery<Course> query = cb.createQuery(Course.class)
 
         Root<Course> root = query.from(Course.class)
-        query.where(root.get("kzfa"), Course.KZFA.MINOR)
+        query.where(cb.equal(root.get("kzfa"), Course.KZFA.MINOR))
 
         session.createQuery(query).setCacheable(true).getResultList()
     }
@@ -111,7 +111,7 @@ class SQLiteStore extends Store {
         CriteriaQuery<Course> query = cb.createQuery(Course.class)
 
         Root<Course> root = query.from(Course.class)
-        query.where(root.get("kzfa"), Course.KZFA.MAJOR)
+        query.where(cb.equal(root.get("kzfa"), Course.KZFA.MAJOR))
 
         session.createQuery(query).setCacheable(true).getResultList()
     }
@@ -151,6 +151,7 @@ class SQLiteStore extends Store {
     }
 
 
+    @SuppressWarnings("GroovyUnusedDeclaration")
     def getLogEntries() {
         session.createQuery("from Log").setCacheable(true).list()
     }
@@ -184,16 +185,16 @@ class SQLiteStore extends Store {
     }
 
     def checkSchemaVersion()
-            throws de.hhu.stups.plues.data.IncompatibleSchemaError {
+            throws IncompatibleSchemaError {
         def properties = new Properties()
         properties.load(currentThread()
                 .contextClassLoader.getResourceAsStream("schema.properties"))
 
-        def version_str = session
+        String version_str = session
                 .createQuery("from Info where key = 'schema_version'")
                 .uniqueResult().value
 
-        def schema_version = version_str.split("\\.")
+        String schema_version = version_str.split("\\.")
         def required_version = properties
                 .getProperty("schema_version").split("\\.")
 
