@@ -1,7 +1,10 @@
 package de.hhu.stups.plues.modelgenerator
 
 import de.hhu.stups.plues.data.Store
-import groovy.text.SimpleTemplateEngine
+import org.jtwig.JtwigModel
+import org.jtwig.JtwigTemplate
+
+import java.text.SimpleDateFormat
 
 /**
  * Created by David Schneider on 02.02.15.
@@ -15,46 +18,50 @@ class Renderer {
     }
 
     protected loadTemplate(FileType tp) {
-        def template = "data.${tp.extension}.template"
+        def template = "data.${tp.extension}.twig"
         println("Using template: ${template}")
         this.loadTemplateFromResource("/" + template)
     }
 
     protected loadTemplateFromResource(String path) {
-        def resource = this.class.getResourceAsStream(path)
-        new SimpleTemplateEngine().createTemplate(resource.text)
-
+        return JtwigTemplate.classpathTemplate(path);
     }
 
     protected loadTemplate(String path) {
-        new SimpleTemplateEngine().createTemplate(new FileReader(path))
+//        new SimpleTemplateEngine().createTemplate(new FileReader(path))
     }
 
-    def renderWith(String path) {
+    ByteArrayOutputStream renderWith(String path) {
         def template = loadTemplate(path)
         this.render(template, output)
     }
 
-    public Writable renderFor(FileType tp) {
+    public ByteArrayOutputStream renderFor(FileType tp) {
         def template = loadTemplate(tp)
         this.render(template)
     }
 
-    protected Writable render(def template, def helper=null) {
-        def binding = [
-                info: store.info,
-                short_name: store.getInfoByKey("short-name"),
-                abstract_units: store.abstractUnits,
-                courses: store.courses,
-                groups: store.groups,
-                levels: store.levels,
-                modules: store.modules,
-                module_abstract_unit_semester: store.moduleAbstractUnitSemester,
-                module_abstract_unit_type: store.moduleAbstractUnitType,
-                sessions: store.sessions,
-                units: store.units,
-                helper: helper,
-        ]
-        template.make(binding)
+    protected ByteArrayOutputStream render(JtwigTemplate template) {
+        return render(template, null);
+    }
+
+    protected ByteArrayOutputStream render(JtwigTemplate template, XMLHelper helper) {
+        JtwigModel model = JtwigModel.newModel()
+                .with("data", new SimpleDateFormat("yyyy-MM-dd").format(new Date()))
+                .with("info", store.info)
+                .with("short_name", store.getInfoByKey("short-name"))
+                .with("abstract_units", store.abstractUnits)
+                .with("courses", store.courses)
+                .with("groups", store.groups)
+                .with("levels", store.levels)
+                .with("modules", store.modules)
+                .with("module_abstract_unit_semester", store.moduleAbstractUnitSemester)
+                .with("module_abstract_unit_type", store.moduleAbstractUnitType)
+                .with("sessions", store.sessions)
+                .with("units", store.units)
+                .with("helper", helper);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        template.render(model, out);
+        return out;
     }
 }
