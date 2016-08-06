@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
     <modules><% modules.each { module -> %>
-        <module id="<%= module.key %>" title="<%= module.title %>" pordnr="<%= module.pordnr %>" elective-units="<%= module.elective_units %>"><% module.module_abstract_units_types.each { aut -> %>
-            <abstract-unit id="<%= aut.abstract_unit.key %>" title="<%= aut.abstract_unit.title %>" type="<%= aut.type %>" semester="<%= module.module_abstract_units_semester.findAll { mau -> mau.abstract_unit == aut.abstract_unit && mau.module == module }.collect { it.semester }.join(',') %>" /><% } %>
+        <module id="<%= module.key %>" title="<%= module.title %>" pordnr="<%= module.pordnr %>" elective-units="<%= module.electiveUnits %>"><% module.module_abstract_units_types.each { aut -> %>
+            <abstract-unit id="<%= aut.abstractUnit.key %>" title="<%= aut.abstractUnit.title %>" type="<%= aut.type %>" semester="<%= module.module_abstract_units_semester.findAll { mau -> mau.abstractUnit == aut.abstractUnit && mau.module == module }.collect { it.semester }.join(',') %>" /><% } %>
         </module><% } %>
     </modules>
     <units><% units.each { unit -> %>
         <unit id="<%= unit.key %>" title="<%= unit.title %>" semester="<%= unit.semesters.join(',')}" > <!-- <%= unit.id %> --><% unit.groups.each { group -> %>
-            <group <% if(group.half_semester > 0) { %>half-semester="<%= group.half_semester_word() %>"<% } %>><% group.sessions.each { session -> %>
+            <group <% if(group.halfSemester > 0) { %>half-semester="<%= group.halfSemesterWord() %>"<% } %>><% group.sessions.each { session -> %>
                 <session day="<%= session.day %>" time="<%= session.time %>" duration="<%= session.duration %>" rhythm="<%= session.rhythm %>" /><% } %>
             </group><% } %>
             <% unit.abstractUnits.each { au -> %>

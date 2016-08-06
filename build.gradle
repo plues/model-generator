@@ -16,8 +16,23 @@ repositories {
 
 // https://simonharrer.wordpress.com/2013/09/17/building-command-line-apps-with-gradle/
 run {
-    if(project.hasProperty('args')){
+    if (project.hasProperty('args')) {
         args project.args.split('\\s+')
+    }
+}
+sourceSets {
+    main {
+        groovy {
+            // this makes the groovy-compiler compile groovy- as well
+            // as java-files.
+            // Needed, because java is normally compiled before groovy.
+            // Since we are using groovy objects from java, we need it
+            // the other way round.
+            srcDirs = ['src/main/groovy', 'src/main/java']
+        }
+        java {
+            srcDirs = [] // don't compile Java code twice
+        }
     }
 }
 dependencies {
@@ -36,12 +51,14 @@ task wrapper(type: Wrapper) {
 }
 
 task buildStandaloneJar(type: Jar) {
-  manifest {
-    attributes 'Implementation-Title': 'Model generator for timetable data',
+    manifest {
+        attributes 'Implementation-Title': 'Model generator for timetable data',
                 'Implementation-Version': version,
                 'Main-Class': mainClassName
-  }
-  baseName = project.name + '-standalone'
-  from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
-  with jar
+    }
+    baseName = project.name + '-standalone'
+    from {
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
 }

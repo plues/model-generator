@@ -9,31 +9,31 @@ class XMLHelper {
     static String INDENTATION = "    "
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    static def format_credit_points(Module module) {
-        if (module.credit_points > -1) {
-            return "cp=\"${module.credit_points}\""
+    static def formatCreditPoints(Module module) {
+        if (module.creditPoints > -1) {
+            return "cp=\"${module.creditPoints}\""
         }
         ""
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    static def format_credit_points(Course course) {
-        if (course.credit_points > -1) {
-            return "cp=\"${course.credit_points}\""
+    static def formatCreditPoints(Course course) {
+        if (course.creditPoints > -1) {
+            return "cp=\"${course.creditPoints}\""
         }
         ""
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    static def format_credit_points(Level level) {
-        if(level.min_credit_points > -1 && level.max_credit_points > -1) {
-            return "min-cp=\"${level.min_credit_points}\" max-cp=\"${level.max_credit_points}\""
+    static def formatCreditPoints(Level level) {
+        if(level.minCreditPoints > -1 && level.maxCreditPoints > -1) {
+            return "min-cp=\"${level.minCreditPoints}\" max-cp=\"${level.maxCreditPoints}\""
         }
         ""
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    static def format_mandatory(Module mod) {
+    static def formatMandatory(Module mod) {
         if (mod.mandatory) {
             "pflicht=\"j\""
         }
@@ -41,7 +41,7 @@ class XMLHelper {
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    static def format_requirements(Level level) {
+    static def formatRequirements(Level level) {
         if (level.min > -1 && level.max > -1) {
             return "min=\"${level.min}\" max=\"${level.max}\""
         }
@@ -58,11 +58,11 @@ class XMLHelper {
         }
         children = children.collect{ l -> traverse(l, depth + 1) }.join("\n")
         def indent = INDENTATION * depth
-        indent + "<l name=\"${level.name}\" ${format_credit_points(level)} ${format_requirements(level)}>\n" + children + "\n" + indent + "</l>"
+        indent + "<l name=\"${level.name}\" ${formatCreditPoints(level)} ${formatRequirements(level)}>\n" + children + "\n" + indent + "</l>"
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     static def traverse(Module module, Integer depth) {
-        (INDENTATION * depth) + "<m name=\"${module.title}\" ${format_mandatory(module)} pordnr=\"${module.pordnr}\" ${format_credit_points(module)} />"
+        (INDENTATION * depth) + "<m name=\"${module.title}\" ${formatMandatory(module)} pordnr=\"${module.pordnr}\" ${formatCreditPoints(module)} />"
     }
 }

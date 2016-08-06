@@ -58,7 +58,7 @@ PROPERTIES
     modules = {
         <%=
         modules.collect { module ->
-            "(mod${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", key:\"${module.key}\", credit_points:${module.credit_points}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.elective_units},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
+            "(mod${module.id} |-> rec(idx:${module.id}, name:\"${module.name}\", key:\"${module.key}\", credit_points:${module.creditPoints}, title:\"${module.title}\", pordnr:${module.pordnr}, elective_units:${module.electiveUnits},  mandatory:${(module.mandatory)?'TRUE':'FALSE'}))"
         }.join(',\n        ')
         %>
     }
@@ -68,7 +68,7 @@ PROPERTIES
     courses = {
         <%=
         courses.collect { course ->
-            "(\"${course.key}\" |-> rec(idx: ${course.id}, name: \"${course.key}\", long_name:\"${course.fullName}\", credit_points:${course.credit_points}, degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
+            "(\"${course.key}\" |-> rec(idx: ${course.id}, name: \"${course.key}\", long_name:\"${course.fullName}\", credit_points:${course.creditPoints}, degree:\"${course.degree}\", kzfa:\"${course.kzfa}\", po:${course.po}))"
         }.join(',\n        ')
         %>
     }
@@ -125,7 +125,7 @@ PROPERTIES
     &
     module_abstract_unit_semester = {
         <%= module_abstract_unit_semester.collect { maus ->
-            "(mod${maus.module.id}, au${maus.abstract_unit.id}, sem${maus.semester})"
+            "(mod${maus.module.id}, au${maus.abstractUnit.id}, sem${maus.semester})"
         }.join(',\n        ')
         %>
     }
@@ -134,7 +134,7 @@ PROPERTIES
     &
     module_abstract_unit_type = {
         <%= module_abstract_unit_type.collect { maut ->
-            "(mod${maut.module.id}, au${maut.abstract_unit.id}, ${maut.type})"
+            "(mod${maut.module.id}, au${maut.abstractUnit.id}, ${maut.type})"
         }.join(',\n        ')
         %>
     }
@@ -144,7 +144,7 @@ PROPERTIES
     units = {
         <%=
         units.collect { unit ->
-            "(unit${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", semesters:{${unit.semesters.collect { sem -> "sem${sem}" }.join(", ") }}, groups:{${unit.groups.collect { group -> "(group${group.id}, rec(half_semester:${group.half_semester}, sessions:{${group.sessions.collect { "session${it.id}" }.join(', ')}}))"}.join(', ')}}))"
+            "(unit${unit.id}, rec(idx:${unit.id}, title:\"${unit.title}\", key:\"${unit.key}\", semesters:{${unit.semesters.collect { sem -> "sem${sem}" }.join(", ") }}, groups:{${unit.groups.collect { group -> "(group${group.id}, rec(half_semester:${group.halfSemester}, sessions:{${group.sessions.collect { "session${it.id}" }.join(', ')}}))"}.join(', ')}}))"
         }.join(',\n        ')
         %>
     }
