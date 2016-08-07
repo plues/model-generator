@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModulBaum>
+    {% for course in courses %}
+    <!-- {{ course.key }} -->
+    <b abschl="{{ course.degree }}" stg="{{ course.shortName }}"
+        kzfa="{{ course.kzfa }}" {{ formatCreditPoints(course) }}
+        pversion="{{ course.po }}" name="{{ course.longName }}">{% for level in course.levels %}
+{{ traverse(level, 2) }}{% endfor %}{#/* course.levels */ #}
+    </b>{% endfor %}{# courses #}
+</ModulBaum>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<combinations>
+{% for course in courses %}{% for comb in course.moduleCombinations %}
+<combination course="{{ course.key }}" value="{% for it in comb %}mod{{it}}{% if not (loop.last) %},{% endif %}{% endfor %}" />{% endfor %}{% endfor %}
+</combinations>
