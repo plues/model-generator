@@ -1,6 +1,5 @@
 package de.hhu.stups.plues.data.entities;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,7 +21,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,141 +30,9 @@ import java.util.Set;
 @Table(name = "courses")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "courses")
 @Immutable
-@FindBugsSuppressWarnings({"SE_NO_SERIALVERSIONID", "SE_TRANSIENT_FIELD_NOT_RESTORED", "EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class Course implements Serializable {
-    public Course() {
-    }
 
-    public String getName() {
-        return this.key;
-    }
-
-    public String getFullName() {
-        return this.longName + " (" + this.degree + " " + this.kzfa + ") PO:" + String.valueOf(this.po);
-    }
-
-    public int getCreditPoints() {
-        if(creditPoints == null) {
-            return -1;
-        }
-
-        return creditPoints;
-    }
-
-    public boolean isMajor() {
-        return this.kzfa.equals("H");
-    }
-
-    public boolean isMinor() {
-        return this.kzfa.equals("N");
-    }
-
-    public boolean isCombinable() {
-        return this.degree.equals("bk");// bk is combinable ba is not
-    }
-
-    public List<List<Integer>> getModuleCombinations() {
-        final Map<Integer, List<Integer>> combinations = new LinkedHashMap();
-        moduleCombinations.forEach(mc -> {
-            if(!combinations.containsKey(mc.getCombinationId())) {
-                combinations.put(mc.getCombinationId(), new ArrayList<>());
-            }
-            combinations.get(mc.getCombinationId()).add(mc.getModuleId());
-        });
-        return new ArrayList<>(combinations.values());
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Integer getPo() {
-        return po;
-    }
-
-    public void setPo(Integer po) {
-        this.po = po;
-    }
-
-    public void setCreditPoints(Integer creditPoints) {
-        this.creditPoints = creditPoints;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public String getLongName() {
-        return longName;
-    }
-
-    public void setLongName(String longName) {
-        this.longName = longName;
-    }
-
-    public String getDegree() {
-        return degree;
-    }
-
-    public void setDegree(String degree) {
-        this.degree = degree;
-    }
-
-    public String getKzfa() {
-        return kzfa;
-    }
-
-    public void setKzfa(String kzfa) {
-        this.kzfa = kzfa;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Set<Module> getModules() {
-        return modules;
-    }
-
-    public void setModules(Set<Module> modules) {
-        this.modules = modules;
-    }
-
-    public Set<Level> getLevels() {
-        return levels;
-    }
-
-    public void setLevels(Set<Level> levels) {
-        this.levels = levels;
-    }
+    private static final long serialVersionUID = 5212299499702133835L;
 
     @Id
     @GeneratedValue
@@ -213,26 +80,138 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<ModuleCombination> moduleCombinations;
 
-    public static enum KZFA {
-        ;
 
-        public static String getMINOR() {
-            return MINOR;
+    public Course() {
+    }
+
+    public String getName() {
+        return this.key;
+    }
+
+    public String getFullName() {
+        return this.longName + " (" + this.degree + " " + this.kzfa + ") PO:" + String.valueOf(this.po);
+    }
+
+    public int getCreditPoints() {
+        if(creditPoints == null) {
+            return -1;
         }
 
-        public static void setMINOR(String MINOR) {
-            KZFA.MINOR = MINOR;
-        }
+        return creditPoints;
+    }
 
-        public static String getMAJOR() {
-            return MAJOR;
-        }
+    public boolean isMajor() {
+        return this.kzfa.equals("H");
+    }
 
-        public static void setMAJOR(String MAJOR) {
-            KZFA.MAJOR = MAJOR;
-        }
+    public boolean isMinor() {
+        return this.kzfa.equals("N");
+    }
 
-        private static String MINOR = "N";
-        private static String MAJOR = "H";
+    public boolean isCombinable() {
+        return this.degree.equals("bk");// bk is combinable ba is not
+    }
+
+    public List<List<Integer>> getModuleCombinations() {
+        final Map<Integer, List<Integer>> combinations = new HashMap<>();
+        moduleCombinations.forEach(mc -> {
+            if(!combinations.containsKey(mc.getCombinationId())) {
+                combinations.put(mc.getCombinationId(), new ArrayList<>());
+            }
+            combinations.get(mc.getCombinationId()).add(mc.getModuleId());
+        });
+        return new ArrayList<>(combinations.values());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(final String key) {
+        this.key = key;
+    }
+
+    public Integer getPo() {
+        return po;
+    }
+
+    public void setPo(final Integer po) {
+        this.po = po;
+    }
+
+    public void setCreditPoints(final Integer creditPoints) {
+        this.creditPoints = creditPoints;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(final String shortName) {
+        this.shortName = shortName;
+    }
+
+    public String getLongName() {
+        return longName;
+    }
+
+    public void setLongName(final String longName) {
+        this.longName = longName;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(final String degree) {
+        this.degree = degree;
+    }
+
+    public String getKzfa() {
+        return kzfa;
+    }
+
+    public void setKzfa(final String kzfa) {
+        this.kzfa = kzfa;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(final Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(final Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Set<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(final Set<Module> modules) {
+        this.modules = modules;
+    }
+
+    public Set<Level> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(final Set<Level> levels) {
+        this.levels = levels;
     }
 }

@@ -1,7 +1,5 @@
 package de.hhu.stups.plues.data;
 
-import java.io.IOException;
-
 public class StoreExeception extends Throwable {
     private final Exception exception;
 

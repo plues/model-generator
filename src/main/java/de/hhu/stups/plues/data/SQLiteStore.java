@@ -22,11 +22,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 public class SQLiteStore extends Store {
-    public SQLiteStore(String dbpath) throws IncompatibleSchemaError, StoreExeception {
+    public SQLiteStore(final String dbpath) throws IncompatibleSchemaError, StoreExeception {
         this.init(dbpath);
     }
 
@@ -39,126 +40,115 @@ public class SQLiteStore extends Store {
         try {
             openDataBase(dbpath);
             checkSchemaVersion();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new StoreExeception(e);
-        } catch (IOException e) {
+        } catch (final ClassNotFoundException | IOException e) {
             e.printStackTrace();
             throw new StoreExeception(e);
         }
     }
 
-    public void init(String dbpath) throws IncompatibleSchemaError, StoreExeception {
+    public void init(final String dbpath) throws IncompatibleSchemaError, StoreExeception {
         this.dbpath = dbpath;
         this.init();
     }
 
-    private <T> T getByID(Integer key, Class<T> type) {
-        CriteriaBuilder cb = session.getCriteriaBuilder();
+    private <T> T getByID(final Integer key, final Class<T> type) {
+        final CriteriaBuilder cb = session.getCriteriaBuilder();
 
-        CriteriaQuery<T> query = cb.createQuery(type);
+        final CriteriaQuery<T> query = cb.createQuery(type);
 
-        Root<T> root = query.from(type);
+        final Root<T> root = query.from(type);
         query.where(cb.equal(root.get("id"), key));
 
         return session.createQuery(query).setCacheable(true).getSingleResult();
     }
 
-    private <T> T getByKey(String key, Class<T> type) {
-        CriteriaBuilder cb = session.getCriteriaBuilder();
+    private <T> T getByKey(final String key, final Class<T> type) {
+        final CriteriaBuilder cb = session.getCriteriaBuilder();
 
-        CriteriaQuery<T> query = cb.createQuery(type);
+        final CriteriaQuery<T> query = cb.createQuery(type);
 
-        Root<T> root = query.from(type);
+        final Root<T> root = query.from(type);
         query.where(cb.equal(root.get("key"), key));
 
         return session.createQuery(query).setCacheable(true).getSingleResult();
     }
 
-    public String getInfoByKey(String key) {
+    public String getInfoByKey(final String key) {
         return getByKey(key, Info.class).getValue();
     }
 
-    public Course getCourseByKey(String key) {
+    public Course getCourseByKey(final String key) {
         return getByKey(key, Course.class);
     }
 
     public List<Info> getInfo() {
-        return session.createQuery("from Info").setCacheable(true).list();
+        return session.createQuery("from Info", Info.class)
+                .setCacheable(true).list();
     }
 
     public List<AbstractUnit> getAbstractUnits() {
-        return session.createQuery("from AbstractUnit").setCacheable(true).list();
+        return session.createQuery("from AbstractUnit", AbstractUnit.class)
+                .setCacheable(true).list();
     }
 
-    public AbstractUnit getAbstractUnitByID(Integer key) {
+    public AbstractUnit getAbstractUnitByID(final Integer key) {
         return getByID(key, AbstractUnit.class);
     }
 
-    public Group getGroupByID(Integer gid) {
+    public Group getGroupByID(final Integer gid) {
         return getByID(gid, Group.class);
     }
 
-    public Module getModuleByID(Integer mid) {
+    public Module getModuleByID(final Integer mid) {
         return getByID(mid, Module.class);
     }
 
     public List<Course> getCourses() {
-        return session.createQuery("from Course").setCacheable(true).list();
-    }
-
-    public List<Course> getMinors() {
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-
-        CriteriaQuery<Course> query = cb.createQuery(Course.class);
-
-        Root<Course> root = query.from(Course.class);
-        query.where(cb.equal(root.get("kzfa"), Course.KZFA.getMINOR()));
-
-        return session.createQuery(query).setCacheable(true).getResultList();
-    }
-
-    public List<Course> getMajors() {
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-
-        CriteriaQuery<Course> query = cb.createQuery(Course.class);
-
-        Root<Course> root = query.from(Course.class);
-        query.where(cb.equal(root.get("kzfa"), Course.KZFA.getMAJOR()));
-
-        return session.createQuery(query).setCacheable(true).getResultList();
+        return session.createQuery("from Course", Course.class)
+                .setCacheable(true).list();
     }
 
     public List<Group> getGroups() {
-        return session.createQuery("from Group").setCacheable(true).list();
+        return session.createQuery("from Group", Group.class)
+                .setCacheable(true).list();
     }
 
     public List<Level> getLevels() {
-        return session.createQuery("from Level").setCacheable(true).list();
+        return session.createQuery("from Level", Level.class)
+                .setCacheable(true).list();
     }
 
     public List<Module> getModules() {
-        return session.createQuery("from Module").setCacheable(true).list();
+        return session.createQuery("from Module", Module.class)
+                .setCacheable(true).list();
     }
 
     public List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
-        return session.createQuery("from ModuleAbstractUnitSemester").setCacheable(true).list();
+        return session
+                .createQuery("from ModuleAbstractUnitSemester",
+                        ModuleAbstractUnitSemester.class)
+                .setCacheable(true).list();
     }
 
     public List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
-        return session.createQuery("from ModuleAbstractUnitType").setCacheable(true).list();
+        return session
+                .createQuery("from ModuleAbstractUnitType",
+                        ModuleAbstractUnitType.class)
+                .setCacheable(true).list();
     }
 
     public List<Session> getSessions() {
-        return session.createQuery("from Session").setCacheable(true).list();
+        return session.createQuery("from Session", Session.class)
+                .setCacheable(true).list();
     }
 
-    public Session getSessionByID(int id) {
+    public Session getSessionByID(final int id) {
         return session.get(Session.class, id);
     }
 
     public List<Unit> getUnits() {
-        return session.createQuery("from Unit").setCacheable(true).list();
+        return session.createQuery("from Unit", Unit.class)
+                .setCacheable(true).list();
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -166,20 +156,21 @@ public class SQLiteStore extends Store {
         return session.createQuery("from Log").setCacheable(true).list();
     }
 
-    public void moveSession(Session session, String targetDay, String targetTime) {
-        String srcDay = session.getDay();
-        String srcTime = session.getTime().toString();
+    public void moveSession(final Session session, final String targetDay,
+                            final String targetTime) {
+        final String srcDay = session.getDay();
+        final String srcTime = session.getTime().toString();
 
         session.setDay(targetDay);
         session.setTime(Integer.parseInt(targetTime));
 
-        Log log = new Log();
+        final Log log = new Log();
         // TODO day and time should each be a field in the log table
         log.setSrc(srcDay + srcTime);
         log.setTarget(targetDay + targetTime);
         log.setSession(session);
 
-        org.hibernate.Session s = this.session;
+        final org.hibernate.Session s = this.session;
 
         final Transaction tx = s.beginTransaction();
         try {
@@ -196,10 +187,10 @@ public class SQLiteStore extends Store {
     }
 
     public void checkSchemaVersion() throws IncompatibleSchemaError, IOException {
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("schema.properties"));
 
-        String version_str = this.getInfoByKey("schema_version");
+        final String version_str = this.getInfoByKey("schema_version");
 
         final String[] schema_version = version_str.split("\\.");
         final String[] required_version = properties.getProperty("schema_version").split("\\.");
@@ -207,17 +198,19 @@ public class SQLiteStore extends Store {
         // Major versions must match
         // minor version may be higher in database
         if((!schema_version[0].equals(required_version[0])) || (Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
-            throw new IncompatibleSchemaError("Expected database schema " + "version " + String.valueOf(required_version) + " but was " + String.valueOf(schema_version));
+            throw new IncompatibleSchemaError("Expected database schema "
+                    + "version " + Arrays.toString(required_version)
+                    + " but was " + String.valueOf(schema_version));
         }
 
     }
 
     private org.hibernate.Session openDataBase(String db_path) throws ClassNotFoundException {
-        Class.class.forName("org.sqlite.JDBC");
+        Class.forName("org.sqlite.JDBC");
         db_path = db_path.replaceFirst("^~", System.getProperty("user.home"));
 
-        File db = new File(db_path);
-        String path = db.getAbsolutePath();
+        final File db = new File(db_path);
+        final String path = db.getAbsolutePath();
 
         if(!(db.exists() && db.isFile())) {
             throw new IllegalArgumentException(path + " does not exist or is not a file.");
@@ -225,9 +218,9 @@ public class SQLiteStore extends Store {
 
 
         DefaultGroovyMethods.println(this, "trying to open " + path);
-        String url = "jdbc:sqlite:" + path;
+        final String url = "jdbc:sqlite:" + path;
 
-        Configuration conf = new Configuration();
+        final Configuration conf = new Configuration();
         conf.configure();
         conf.setProperty("hibernate.connection.url", url);
         this.sessionFactory = conf.buildSessionFactory();
@@ -250,7 +243,7 @@ public class SQLiteStore extends Store {
         return session;
     }
 
-    public void setSession(org.hibernate.Session session) {
+    public void setSession(final org.hibernate.Session session) {
         this.session = session;
     }
 

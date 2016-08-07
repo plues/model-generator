@@ -13,6 +13,6 @@ public enum FileType {
         return ((String) (this.name));
     }
 
-    public final Object name;
+    public final String name;
     public final String extension;
 }
