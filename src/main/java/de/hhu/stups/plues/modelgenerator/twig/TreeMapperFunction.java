@@ -1,7 +1,6 @@
 package de.hhu.stups.plues.modelgenerator.twig;
 
 import com.google.common.base.Strings;
-import de.hhu.stups.plues.data.entities.Course;
 import de.hhu.stups.plues.data.entities.Level;
 import de.hhu.stups.plues.data.entities.Module;
 import org.jtwig.functions.FunctionRequest;
@@ -9,7 +8,6 @@ import org.jtwig.functions.SimpleJtwigFunction;
 
 import java.math.BigDecimal;
 
-// TODO: migrate to StringBuilder
 class TreeMapperFunction extends SimpleJtwigFunction {
     private static final String INDENTATION = "    ";
 
@@ -39,7 +37,7 @@ class TreeMapperFunction extends SimpleJtwigFunction {
                 .append("\" ").append(formatCreditPoints(level)).append(" ")
                 .append(formatRequirements(level)).append(">\n");
 
-        if(level.getChildren() != null && level.getChildren().size() > 0) {
+        if (level.getChildren() != null && level.getChildren().size() > 0) {
             level.getChildren().forEach(l -> traverse(l, newDepth, sb));
         } else {
             level.getModules().forEach(m -> traverse(m, newDepth, sb));
@@ -64,7 +62,7 @@ class TreeMapperFunction extends SimpleJtwigFunction {
     }
 
     private String formatCreditPoints(final Level level) {
-        if(level.getMinCreditPoints() < 0 || level.getMaxCreditPoints() < 0) {
+        if (level.getMinCreditPoints() < 0 || level.getMaxCreditPoints() < 0) {
             return "";
         }
         return "min-cp=\"" + level.getMinCreditPoints() + "\" "
@@ -72,21 +70,21 @@ class TreeMapperFunction extends SimpleJtwigFunction {
     }
 
     private String formatRequirements(final Level level) {
-        if(level.getMin() < 0 || level.getMax() < 0) {
+        if (level.getMin() < 0 || level.getMax() < 0) {
             return "";
         }
         return "min=\"" + level.getMin() + "\" max=\"" + level.getMax() + "\"";
     }
 
     private String formatCreditPoints(final Module module) {
-        if(module.getCreditPoints() < 0) {
+        if (module.getCreditPoints() < 0) {
             return "";
         }
         return "cp=\"" + module.getCreditPoints() + "\"";
     }
 
     private String formatMandatory(final Module mod) {
-        if(!mod.getMandatory()) {
+        if (!mod.getMandatory()) {
             return "";
         }
         return "pflicht=\"j\"";
