@@ -1,6 +1,5 @@
 package de.hhu.stups.plues.data.entities;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -19,7 +18,6 @@ import java.util.Date;
 @Entity
 @Table(name = "log")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "log")
-@FindBugsSuppressWarnings({"SE_TRANSIENT_FIELD_NOT_RESTORED", "EQ_UNUSUAL", "SE_NO_SERIALVERSIONID", "EI_EXPOSE_REP2", "EI_EXPOSE_REP"})
 public class Log implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @Id

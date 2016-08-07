@@ -1,6 +1,5 @@
 package de.hhu.stups.plues.data.entities;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,7 +16,6 @@ import java.io.Serializable;
 @Table(name = "modules_abstract_units_types")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "modules_abstract_units_types")
 @Immutable
-@FindBugsSuppressWarnings({"SE_NO_SERIALVERSIONID", "SE_TRANSIENT_FIELD_NOT_RESTORED", "EQ_UNUSUAL"})
 public class ModuleAbstractUnitType implements Serializable {
 
     @Id

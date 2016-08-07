@@ -1,6 +1,5 @@
 package de.hhu.stups.plues.data.entities;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.hibernate.annotations.Immutable;
 
@@ -16,8 +15,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "course_modules_combinations")
 @Immutable
-@FindBugsSuppressWarnings({"SE_NO_SERIALVERSIONID",
-        "SE_TRANSIENT_FIELD_NOT_RESTORED", "EQ_UNUSUAL"})
 public class ModuleCombination implements Serializable {
     @Id
     @GeneratedValue

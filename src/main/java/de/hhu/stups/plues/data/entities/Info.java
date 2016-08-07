@@ -1,6 +1,5 @@
 package de.hhu.stups.plues.data.entities;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
 
@@ -12,7 +11,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "info")
 @Immutable
-@FindBugsSuppressWarnings({"SE_NO_SERIALVERSIONID", "SE_TRANSIENT_FIELD_NOT_RESTORED"})
 public class Info implements Serializable {
 
     @Id
