@@ -12,10 +12,10 @@ import java.util.zip.ZipOutputStream;
 @SuppressWarnings("unused")
 public class XMLExporter extends Renderer {
 
-    private final String DATA_TEMPLATE = "/xml/data.xml.twig";
-    private final String DATA_FILE = "Moduldaten.xml";
-    private final String TREE_TEMPLATE = "/xml/tree.xml.twig";
-    private final String TREE_FILE = "Modulbaum.xml";
+    private static final String DATA_TEMPLATE = "/xml/data.xml.twig";
+    private static final String DATA_FILE = "Moduldaten.xml";
+    private static final String TREE_TEMPLATE = "/xml/tree.xml.twig";
+    private static final String TREE_FILE = "Modulbaum.xml";
 
     public XMLExporter(final Store db) {
         super(db);

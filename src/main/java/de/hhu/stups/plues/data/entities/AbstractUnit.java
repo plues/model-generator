@@ -114,19 +114,19 @@ public class AbstractUnit implements Serializable {
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return (Date) createdAt.clone();
     }
 
     public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt = (Date) createdAt.clone();
     }
 
     public Date getUpdatedAt() {
-        return updatedAt;
+        return (Date) updatedAt.clone();
     }
 
     public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updatedAt = (Date) updatedAt.clone();
     }
 
     public Set<Unit> getUnits() {

@@ -1,6 +1,7 @@
 package de.hhu.stups.plues.data;
 
 import de.hhu.stups.plues.data.entities.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -222,6 +223,7 @@ public class SQLiteStore extends Store {
         sessionFactory.close();
     }
 
+    @SuppressFBWarnings("DM_GC")
     public void clear() {
         sessionFactory.getCache().evictAllRegions();
         session.clear();
