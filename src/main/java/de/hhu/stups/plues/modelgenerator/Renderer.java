@@ -7,7 +7,7 @@ import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,15 +47,45 @@ public class Renderer {
         return this.render(template);
     }
 
+    public void renderWith(final String path, File out) {
+        final JtwigTemplate template = loadTemplate(path);
+        this.render(template, out);
+    }
+
     @SuppressWarnings("WeakerAccess")
     public ByteArrayOutputStream renderFor(final FileType tp) {
         final JtwigTemplate template = loadTemplate(tp);
         return this.render(template);
     }
 
+    public void renderFor(final FileType tp, File out) {
+        final JtwigTemplate template = loadTemplate(tp);
+        this.render(template, out);
+    }
+
     protected ByteArrayOutputStream render(final JtwigTemplate template) {
-        final JtwigModel model = JtwigModel.newModel()
-                .with("data", new SimpleDateFormat("yyyy-MM-dd")
+        final JtwigModel model = geModel();
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        template.render(model, out);
+        return out;
+    }
+
+    protected void render(final JtwigTemplate template, File out) {
+        final JtwigModel model = geModel();
+
+        try (FileOutputStream fos = new FileOutputStream(out)) {
+            try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+                template.render(model, bos);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JtwigModel geModel() {
+        return JtwigModel.newModel()
+                .with("date", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
                         .format(new Date()))
                 .with("info", store.getInfo())
                 .with("short_name", store.getInfoByKey("short-name"))
@@ -70,9 +100,5 @@ public class Renderer {
                         store.getModuleAbstractUnitType())
                 .with("sessions", store.getSessions())
                 .with("units", store.getUnits());
-
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        template.render(model, out);
-        return out;
     }
 }

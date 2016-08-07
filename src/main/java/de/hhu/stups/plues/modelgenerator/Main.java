@@ -7,6 +7,7 @@ import de.hhu.stups.plues.data.StoreExeception;
 import org.apache.commons.cli.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -39,18 +40,14 @@ public class Main {
 
 
         final ByteArrayOutputStream result;
+        File out = new File(output);
         if (ft == FileType.Unknown) {
             final String tmpl = template
                     .replaceFirst("^~", System.getProperty("user.home"));
-            result = renderer.renderWith(tmpl);
+            renderer.renderWith(tmpl, out);
         } else {
-            result = renderer.renderFor(ft);
+            renderer.renderFor(ft, out);
         }
-
-        final FileOutputStream fos = new FileOutputStream(output);
-        fos.write(result.toByteArray());
-        fos.flush();
-        fos.close();
 
         System.out.println("Wrote to " + line.getOptionValue("output"));
         store.close();
