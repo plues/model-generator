@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,24 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "abstract_units")
 @Immutable
 public class AbstractUnit implements Serializable {
+    private static final long serialVersionUID = 6530093545778592625L;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractUnit that = (AbstractUnit) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(key, that.key) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(createdAt, that.createdAt) &&
+                Objects.equals(updatedAt, that.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, key, title, createdAt, updatedAt);
+    }
 
     @Id
     @GeneratedValue

@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,6 +26,7 @@ import java.util.Set;
 @Immutable
 public class Group implements Serializable {
 
+    private static final long serialVersionUID = -2048455700838010908L;
     @Id
     @GeneratedValue
     private int id;
@@ -104,4 +106,19 @@ public class Group implements Serializable {
         this.unit = unit;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return id == group.id &&
+                halfSemester == group.halfSemester &&
+                Objects.equals(createdAt, group.createdAt) &&
+                Objects.equals(updatedAt, group.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, halfSemester, createdAt, updatedAt);
+    }
 }

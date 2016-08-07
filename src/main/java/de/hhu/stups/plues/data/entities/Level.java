@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,7 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "leves")
 @Immutable
 public class Level implements Serializable {
+    private static final long serialVersionUID = -7800840594086486428L;
     @Id
     private Integer id;
     private String art;
@@ -184,5 +186,27 @@ public class Level implements Serializable {
 
     public Set<Level> getChildren() {
         return children;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Level level = (Level) o;
+        return Objects.equals(id, level.id) &&
+                Objects.equals(art, level.art) &&
+                Objects.equals(name, level.name) &&
+                Objects.equals(tm, level.tm) &&
+                Objects.equals(max, level.max) &&
+                Objects.equals(min, level.min) &&
+                Objects.equals(minCreditPoints, level.minCreditPoints) &&
+                Objects.equals(maxCreditPoints, level.maxCreditPoints) &&
+                Objects.equals(createdAt, level.createdAt) &&
+                Objects.equals(updatedAt, level.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, art, name, tm, max, min, minCreditPoints, maxCreditPoints, createdAt, updatedAt);
     }
 }

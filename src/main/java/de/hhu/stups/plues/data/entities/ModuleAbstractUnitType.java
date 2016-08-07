@@ -1,16 +1,12 @@
 package de.hhu.stups.plues.data.entities;
 
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "modules_abstract_units_types")
@@ -18,6 +14,7 @@ import java.io.Serializable;
 @Immutable
 public class ModuleAbstractUnitType implements Serializable {
 
+    private static final long serialVersionUID = 114371757676964184L;
     @Id
     @ManyToOne
     private Module module;
@@ -29,27 +26,6 @@ public class ModuleAbstractUnitType implements Serializable {
 
     @Id
     private Character type;
-
-    public boolean equals(Object o) {
-        if(DefaultGroovyMethods.is(this, o)) return true;
-        if(!getClass().equals(o.getClass())) return false;
-
-        ModuleAbstractUnitType that = (ModuleAbstractUnitType) o;
-
-        if(!type.equals(that.type)) return false;
-        if(!abstractUnit.equals(that.abstractUnit)) return false;
-        if(!module.equals(that.module)) return false;
-
-        return true;
-    }
-
-    public int hashCode() {
-        int result;
-        result = ((int) ((module != null ? module.hashCode() : 0)));
-        result = ((int) (31 * result + (abstractUnit != null ? abstractUnit.hashCode() : 0)));
-        result = 31 * result + (int) type;
-        return result;
-    }
 
     public Module getModule() {
         return module;
@@ -73,5 +49,20 @@ public class ModuleAbstractUnitType implements Serializable {
 
     public void setType(Character type) {
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleAbstractUnitType that = (ModuleAbstractUnitType) o;
+        return Objects.equals(module, that.module) &&
+                Objects.equals(abstractUnit.getId(), that.abstractUnit.getId()) &&
+                Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(module, abstractUnit, type);
     }
 }

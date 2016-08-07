@@ -1,15 +1,10 @@
 package de.hhu.stups.plues.data.entities;
 
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,6 +14,7 @@ import java.util.Objects;
 @Immutable
 public class ModuleAbstractUnitSemester implements Serializable {
 
+    private static final long serialVersionUID = 9021333343897176890L;
     @Id
     @ManyToOne
     private Module module;
@@ -36,21 +32,17 @@ public class ModuleAbstractUnitSemester implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if(DefaultGroovyMethods.is(this, o)) {
-            return true;
-        }
-
-        if(o == null || !getClass().equals(o.getClass())) {
-            return false;
-        }
-
-        ModuleAbstractUnitSemester that = DefaultGroovyMethods.asType(o, ModuleAbstractUnitSemester.class);
-        return (this.semester == that.semester && this.module.equals(that.module) && this.abstractUnit.equals(that.abstractUnit));
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleAbstractUnitSemester that = (ModuleAbstractUnitSemester) o;
+        return Objects.equals(module, that.module) &&
+                Objects.equals(abstractUnit, that.abstractUnit) &&
+                Objects.equals(semester, that.semester);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.module, this.abstractUnit, this.semester);
+        return Objects.hash(module, abstractUnit, semester);
     }
 
     public Module getModule() {

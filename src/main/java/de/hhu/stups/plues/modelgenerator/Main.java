@@ -4,20 +4,10 @@ import de.hhu.stups.plues.data.IncompatibleSchemaError;
 import de.hhu.stups.plues.data.SQLiteStore;
 import de.hhu.stups.plues.data.Store;
 import de.hhu.stups.plues.data.StoreExeception;
-import groovy.lang.Writable;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
@@ -36,10 +26,10 @@ public class Main {
         final String template = line.getOptionValue("template");
         /* If no template is provided we default to generating a B (.mch)
         file */
-        if(template != null) {
+        if (template != null) {
             ft = FileType.Unknown;
-            for(final FileType i : FileType.values()) {
-                if(i.name.equals(template)) {
+            for (final FileType i : FileType.values()) {
+                if (i.name.equals(template)) {
                     ft = i;
                 }
             }
@@ -49,7 +39,7 @@ public class Main {
 
 
         final ByteArrayOutputStream result;
-        if(ft == FileType.Unknown) {
+        if (ft == FileType.Unknown) {
             final String tmpl = template
                     .replaceFirst("^~", System.getProperty("user.home"));
             result = renderer.renderWith(tmpl);

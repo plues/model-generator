@@ -1,14 +1,8 @@
 package de.hhu.stups.plues.data.entities;
 
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -16,38 +10,19 @@ import java.util.Objects;
 @Table(name = "course_modules_combinations")
 @Immutable
 public class ModuleCombination implements Serializable {
+    private static final long serialVersionUID = 571230335150242610L;
     @Id
     @GeneratedValue
     private int id;
 
-    @Column(name="combination_id")
+    @Column(name = "combination_id")
     private int combinationId;
 
-    @Column(name="module_id")
+    @Column(name = "module_id")
     private int moduleId;
 
     @ManyToOne
     private Course course;
-
-    @Override
-    public boolean equals(Object o) {
-        if(DefaultGroovyMethods.is(this, o)) {
-            return true;
-        }
-
-        if(o == null || !getClass().equals(o.getClass())) {
-            return false;
-        }
-
-        ModuleCombination that = DefaultGroovyMethods.asType(o, ModuleCombination.class);
-        return (combinationId == that.combinationId && moduleId == that.moduleId);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.combinationId, this.course, this.moduleId);
-    }
 
     public int getId() {
         return id;
@@ -82,4 +57,19 @@ public class ModuleCombination implements Serializable {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleCombination that = (ModuleCombination) o;
+        return id == that.id &&
+                combinationId == that.combinationId &&
+                moduleId == that.moduleId &&
+                Objects.equals(course, that.course);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, combinationId, moduleId, course);
+    }
 }

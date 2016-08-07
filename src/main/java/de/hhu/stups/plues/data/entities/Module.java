@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,6 +26,8 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "modules")
 @Immutable
 public class Module implements Serializable {
+    private static final long serialVersionUID = -9153665188193235995L;
+
     public Module() {
     }
 
@@ -173,4 +176,26 @@ public class Module implements Serializable {
 
     @OneToMany(mappedBy = "module")
     private Set<ModuleAbstractUnitType> moduleAbstractUnitTypes;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Module module = (Module) o;
+        return id == module.id &&
+                Objects.equals(key, module.key) &&
+                Objects.equals(name, module.name) &&
+                Objects.equals(title, module.title) &&
+                Objects.equals(pordnr, module.pordnr) &&
+                Objects.equals(mandatory, module.mandatory) &&
+                Objects.equals(electiveUnits, module.electiveUnits) &&
+                Objects.equals(creditPoints, module.creditPoints) &&
+                Objects.equals(updatedAt, module.updatedAt) &&
+                Objects.equals(createdAt, module.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, key, name, title, pordnr, mandatory, electiveUnits, creditPoints, updatedAt, createdAt);
+    }
 }

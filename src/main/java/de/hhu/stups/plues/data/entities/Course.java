@@ -1,36 +1,43 @@
 package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "courses")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "courses")
 @Immutable
 public class Course implements Serializable {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id &&
+                Objects.equals(key, course.key) &&
+                Objects.equals(po, course.po) &&
+                Objects.equals(creditPoints, course.creditPoints) &&
+                Objects.equals(shortName, course.shortName) &&
+                Objects.equals(longName, course.longName) &&
+                Objects.equals(degree, course.degree) &&
+                Objects.equals(kzfa, course.kzfa) &&
+                Objects.equals(createdAt, course.createdAt) &&
+                Objects.equals(updatedAt, course.updatedAt) &&
+                Objects.equals(modules, course.modules) &&
+                Objects.equals(levels, course.levels) &&
+                Objects.equals(moduleCombinations, course.moduleCombinations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, key, po, creditPoints, shortName, longName, degree, kzfa, createdAt, updatedAt);
+    }
 
     private static final long serialVersionUID = 5212299499702133835L;
 
@@ -93,7 +100,7 @@ public class Course implements Serializable {
     }
 
     public int getCreditPoints() {
-        if(creditPoints == null) {
+        if (creditPoints == null) {
             return -1;
         }
 
@@ -115,7 +122,7 @@ public class Course implements Serializable {
     public List<List<Integer>> getModuleCombinations() {
         final Map<Integer, List<Integer>> combinations = new HashMap<>();
         moduleCombinations.forEach(mc -> {
-            if(!combinations.containsKey(mc.getCombinationId())) {
+            if (!combinations.containsKey(mc.getCombinationId())) {
                 combinations.put(mc.getCombinationId(), new ArrayList<>());
             }
             combinations.get(mc.getCombinationId()).add(mc.getModuleId());

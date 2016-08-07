@@ -1,17 +1,6 @@
 package de.hhu.stups.plues.data;
 
-import de.hhu.stups.plues.data.entities.AbstractUnit;
-import de.hhu.stups.plues.data.entities.Course;
-import de.hhu.stups.plues.data.entities.Group;
-import de.hhu.stups.plues.data.entities.Info;
-import de.hhu.stups.plues.data.entities.Level;
-import de.hhu.stups.plues.data.entities.Log;
-import de.hhu.stups.plues.data.entities.Module;
-import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
-import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
-import de.hhu.stups.plues.data.entities.Session;
-import de.hhu.stups.plues.data.entities.Unit;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+import de.hhu.stups.plues.data.entities.*;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -178,7 +167,7 @@ public class SQLiteStore extends Store {
             s.persist(log);
             tx.commit();
         } catch (HibernateException e) {
-            if(tx != null) tx.rollback();
+            if (tx != null) tx.rollback();
             e.printStackTrace();
         } finally {
             s.flush();
@@ -197,7 +186,7 @@ public class SQLiteStore extends Store {
 
         // Major versions must match
         // minor version may be higher in database
-        if((!schema_version[0].equals(required_version[0])) || (Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
+        if ((!schema_version[0].equals(required_version[0])) || (Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
             throw new IncompatibleSchemaError("Expected database schema "
                     + "version " + Arrays.toString(required_version)
                     + " but was " + String.valueOf(schema_version));
@@ -212,12 +201,12 @@ public class SQLiteStore extends Store {
         final File db = new File(db_path);
         final String path = db.getAbsolutePath();
 
-        if(!(db.exists() && db.isFile())) {
+        if (!(db.exists() && db.isFile())) {
             throw new IllegalArgumentException(path + " does not exist or is not a file.");
         }
 
 
-        DefaultGroovyMethods.println(this, "trying to open " + path);
+        System.out.println("trying to open " + path);
         final String url = "jdbc:sqlite:" + path;
 
         final Configuration conf = new Configuration();

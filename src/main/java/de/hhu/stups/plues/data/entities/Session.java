@@ -15,12 +15,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "sessions")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "session")
 public class Session implements Serializable {
 
+    private static final long serialVersionUID = 7760428839071975511L;
     @Id
     @GeneratedValue
     private int id;
@@ -108,5 +110,24 @@ public class Session implements Serializable {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Session session = (Session) o;
+        return id == session.id &&
+                Objects.equals(day, session.day) &&
+                Objects.equals(time, session.time) &&
+                Objects.equals(rhythm, session.rhythm) &&
+                Objects.equals(duration, session.duration) &&
+                Objects.equals(createdAt, session.createdAt) &&
+                Objects.equals(updatedAt, session.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, day, time, rhythm, duration, createdAt, updatedAt);
     }
 }
