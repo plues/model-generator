@@ -3,7 +3,6 @@ package de.hhu.stups.plues.data;
 import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.Course;
 import de.hhu.stups.plues.data.entities.Group;
-import de.hhu.stups.plues.data.entities.Info;
 import de.hhu.stups.plues.data.entities.Level;
 import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
@@ -20,7 +19,9 @@ public abstract class Store {
 
     public abstract void close();
 
-    public abstract List<Info> getInfo();
+    public abstract void clear();
+
+    public abstract List getInfo();
 
     public abstract List<AbstractUnit> getAbstractUnits();
 
@@ -49,4 +50,5 @@ public abstract class Store {
     public abstract String getInfoByKey(String key);
 
     public abstract Module getModuleByID(Integer mid);
+
 }

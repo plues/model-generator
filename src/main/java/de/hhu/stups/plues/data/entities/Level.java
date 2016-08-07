@@ -184,4 +184,7 @@ public class Level implements Serializable {
     }
 
 
+    public Set<Level> getChildren() {
+        return children;
+    }
 }
