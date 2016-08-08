@@ -1,8 +1,9 @@
-apply plugin: 'idea'
-apply plugin: 'application'
-apply plugin: 'maven'
-apply plugin: 'java'
-
+plugins {
+    id 'application'
+    id 'findbugs'
+    id 'idea'
+    id 'java'
+}
 sourceCompatibility = 8
 version = '3.0.0-SNAPSHOT'
 group = "de.stups.slottool"
