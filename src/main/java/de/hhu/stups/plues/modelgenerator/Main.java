@@ -8,7 +8,6 @@ import org.apache.commons.cli.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Main {
