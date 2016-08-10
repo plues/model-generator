@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -56,7 +57,7 @@ public class ModuleCombination implements Serializable, Iterable<Integer> {
         }
         final ModuleCombination integers = (ModuleCombination) o;
         return this.id == integers.id &&
-                Objects.equals(this.combination, integers.combination);
+                Arrays.equals(this.combination, integers.combination);
     }
 
     @Override
