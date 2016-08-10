@@ -38,7 +38,8 @@ public class Renderer {
 
     @SuppressWarnings("WeakerAccess")
     protected JtwigTemplate loadTemplate(final String path) {
-        return JtwigTemplate.fileTemplate(path, config);
+        String tmpl = new File(path).getAbsolutePath();
+        return JtwigTemplate.fileTemplate(tmpl, config);
     }
 
     @SuppressWarnings("WeakerAccess")
