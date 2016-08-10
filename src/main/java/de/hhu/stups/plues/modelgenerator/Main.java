@@ -3,7 +3,7 @@ package de.hhu.stups.plues.modelgenerator;
 import de.hhu.stups.plues.data.IncompatibleSchemaError;
 import de.hhu.stups.plues.data.SQLiteStore;
 import de.hhu.stups.plues.data.Store;
-import de.hhu.stups.plues.data.StoreExeception;
+import de.hhu.stups.plues.data.StoreException;
 import org.apache.commons.cli.*;
 
 import java.io.ByteArrayOutputStream;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(final String[] args) throws IncompatibleSchemaError,
-            StoreExeception, IOException {
+                                                        StoreException, IOException {
         printVersion();
         final CommandLine line = getCommandLine(args);
 

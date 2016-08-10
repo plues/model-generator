@@ -1,9 +1,9 @@
 package de.hhu.stups.plues.data;
 
-public class StoreExeception extends Throwable {
+public class StoreException extends Exception {
     private final Exception exception;
 
-    public StoreExeception(final Exception e) {
+    public StoreException(final Exception e) {
         this.exception = e;
     }
 

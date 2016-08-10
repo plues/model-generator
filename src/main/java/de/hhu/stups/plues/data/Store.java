@@ -13,9 +13,9 @@ import de.hhu.stups.plues.data.entities.Unit;
 import java.util.List;
 
 public abstract class Store {
-    public abstract void init() throws IncompatibleSchemaError, StoreExeception;
+    public abstract void init() throws IncompatibleSchemaError, StoreException;
 
-    public abstract void init(String dbpath) throws IncompatibleSchemaError, StoreExeception;
+    public abstract void init(String dbpath) throws IncompatibleSchemaError, StoreException;
 
     public abstract void close();
 

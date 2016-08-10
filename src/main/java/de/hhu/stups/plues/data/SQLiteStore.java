@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class SQLiteStore extends Store {
-    public SQLiteStore(final String dbpath) throws IncompatibleSchemaError, StoreExeception {
+    public SQLiteStore(final String dbpath) throws IncompatibleSchemaError, StoreException {
         this.init(dbpath);
     }
 
@@ -25,18 +25,18 @@ public class SQLiteStore extends Store {
     }
 
     @Override
-    public void init() throws IncompatibleSchemaError, StoreExeception {
+    public void init() throws IncompatibleSchemaError, StoreException {
         assert this.dbpath != null;
         try {
             openDataBase(dbpath);
             checkSchemaVersion();
         } catch (final ClassNotFoundException | IOException e) {
             e.printStackTrace();
-            throw new StoreExeception(e);
+            throw new StoreException(e);
         }
     }
 
-    public void init(final String dbpath) throws IncompatibleSchemaError, StoreExeception {
+    public void init(final String dbpath) throws IncompatibleSchemaError, StoreException {
         this.dbpath = dbpath;
         this.init();
     }
