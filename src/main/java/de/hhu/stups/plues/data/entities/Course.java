@@ -1,13 +1,27 @@
 package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -15,31 +29,34 @@ import java.util.*;
 @Immutable
 public class Course implements Serializable {
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return id == course.id &&
-                Objects.equals(key, course.key) &&
-                Objects.equals(po, course.po) &&
-                Objects.equals(creditPoints, course.creditPoints) &&
-                Objects.equals(shortName, course.shortName) &&
-                Objects.equals(longName, course.longName) &&
-                Objects.equals(degree, course.degree) &&
-                Objects.equals(kzfa, course.kzfa) &&
-                Objects.equals(createdAt, course.createdAt) &&
-                Objects.equals(updatedAt, course.updatedAt) &&
-                Objects.equals(modules, course.modules) &&
-                Objects.equals(levels, course.levels) &&
-                Objects.equals(moduleCombinations, course.moduleCombinations);
+    public boolean equals(final Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        final Course course = (Course) o;
+        return this.id == course.id &&
+                Objects.equals(this.key, course.key) &&
+                Objects.equals(this.po, course.po) &&
+                Objects.equals(this.creditPoints, course.creditPoints) &&
+                Objects.equals(this.shortName, course.shortName) &&
+                Objects.equals(this.longName, course.longName) &&
+                Objects.equals(this.degree, course.degree) &&
+                Objects.equals(this.kzfa, course.kzfa) &&
+                Objects.equals(this.createdAt, course.createdAt) &&
+                Objects.equals(this.updatedAt, course.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, key, po, creditPoints, shortName, longName, degree, kzfa, createdAt, updatedAt);
+        return Objects.hash(this.id, this.key, this.po, this.creditPoints,
+                            this.shortName, this.longName, this.degree,
+                            this.kzfa, this.createdAt, this.updatedAt);
     }
 
-    private static final long serialVersionUID = 5212299499702133835L;
+    private static final long serialVersionUID = 4805589618641984556L;
 
     @Id
     @GeneratedValue
@@ -96,11 +113,12 @@ public class Course implements Serializable {
     }
 
     public String getFullName() {
-        return this.longName + " (" + this.degree + " " + this.kzfa + ") PO:" + String.valueOf(this.po);
+        return this.longName + " (" + this.degree + " " + this.kzfa + ") PO:"
+                + String.valueOf(this.po);
     }
 
     public int getCreditPoints() {
-        if (creditPoints == null) {
+        if(creditPoints == null) {
             return -1;
         }
 
@@ -119,15 +137,8 @@ public class Course implements Serializable {
         return this.degree.equals("bk");// bk is combinable ba is not
     }
 
-    public List<List<Integer>> getModuleCombinations() {
-        final Map<Integer, List<Integer>> combinations = new HashMap<>();
-        moduleCombinations.forEach(mc -> {
-            if (!combinations.containsKey(mc.getCombinationId())) {
-                combinations.put(mc.getCombinationId(), new ArrayList<>());
-            }
-            combinations.get(mc.getCombinationId()).add(mc.getModuleId());
-        });
-        return new ArrayList<>(combinations.values());
+    public Set<ModuleCombination> getModuleCombinations() {
+        return this.moduleCombinations;
     }
 
     public int getId() {

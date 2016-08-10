@@ -2,24 +2,29 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.BitSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 @Entity
 @Table(name = "course_modules_combinations")
 @Immutable
-public class ModuleCombination implements Serializable {
-    private static final long serialVersionUID = 571230335150242610L;
+public class ModuleCombination implements Serializable, Iterable<Integer> {
+    private static final long serialVersionUID = 768471461766386796L;
     @Id
     @GeneratedValue
     private int id;
 
-    @Column(name = "combination_id")
-    private int combinationId;
-
-    @Column(name = "module_id")
-    private int moduleId;
+    @Column(columnDefinition = "BLOB NOT NULL")
+    @SuppressWarnings("unused")
+    private byte[] combination;
 
     @ManyToOne
     private Course course;
@@ -32,22 +37,6 @@ public class ModuleCombination implements Serializable {
         this.id = id;
     }
 
-    public int getCombinationId() {
-        return combinationId;
-    }
-
-    public void setCombinationId(int combinationId) {
-        this.combinationId = combinationId;
-    }
-
-    public int getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(int moduleId) {
-        this.moduleId = moduleId;
-    }
-
     public Course getCourse() {
         return course;
     }
@@ -58,18 +47,25 @@ public class ModuleCombination implements Serializable {
 
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ModuleCombination that = (ModuleCombination) o;
-        return id == that.id &&
-                combinationId == that.combinationId &&
-                moduleId == that.moduleId &&
-                Objects.equals(course, that.course);
+    public boolean equals(final Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        final ModuleCombination integers = (ModuleCombination) o;
+        return this.id == integers.id &&
+                Objects.equals(this.combination, integers.combination);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, combinationId, moduleId, course);
+        return Objects.hash(this.id, this.combination);
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return BitSet.valueOf(this.combination).stream().iterator();
     }
 }
