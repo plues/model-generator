@@ -241,7 +241,7 @@ public class SQLiteStore extends Store {
     }
 
     @SuppressFBWarnings("DM_GC")
-    public void clear() {
+    public final void clear() {
         sessionFactory.getCache().evictAllRegions();
         session.clear();
         System.gc();
