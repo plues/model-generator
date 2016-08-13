@@ -42,6 +42,7 @@ CONSTANTS
     course_modules,
     course_module_combinations,
     sessions,
+    groups,
     units,
     meta_data,
     modules,
@@ -99,6 +100,17 @@ PROPERTIES
         (session{{session.id}}, rec(dow:{{session.day}}, slot:slot{{session .time}}, rhythm:{{session.rhythm}}, duration:{{session.duration}})){% if not (loop.last) %},{% endif %}{% endfor %}
     }
     &
+    groups : POW(GROUPS * struct(half_semester:0..2, sessions:POW(SESSIONS)))
+    &
+    groups = { {% for group in groups %}
+        (group{{group.id}}, rec(half_semester:{{group.halfSemester}},
+                 sessions:{ {% for it in group.sessions %}session{{it.id}}{% if not (loop.last) %},{% endif %}{% endfor %} })){% if not (loop.last) %},{% endif %}{% endfor %}
+    }
+    &
+    sessions = { {% for session in sessions %}
+        (session{{session.id}}, rec(dow:{{session.day}}, slot:slot{{session .time}}, rhythm:{{session.rhythm}}, duration:{{session.duration}})){% if not (loop.last) %},{% endif %}{% endfor %}
+    }
+    &
     abstract_units : POW(ABSTRACT_UNITS * struct(idx:NATURAL, title:STRING, key:STRING))
     &
     abstract_units = { {% for au in abstract_units %}
@@ -117,14 +129,11 @@ PROPERTIES
         (mod{{maut.module.id}}, au{{maut.abstractUnit.id}}, {{maut.type}}){% if not (loop.last) %},{% endif %}{% endfor %}
     }
     &
-    units :  POW(UNITS * struct(idx:NATURAL1, key:STRING, semesters: POW(SEMESTERS), groups:POW(GROUPS * struct(half_semester:0..2, sessions:POW(SESSIONS))), title:STRING))
+    units :  POW(UNITS * struct(idx:NATURAL1, key:STRING, semesters: POW(SEMESTERS), groups:POW(GROUPS), title:STRING))
     &
     units = { {% for unit in units %}
         (unit{{unit.id}}, rec(idx:{{unit.id}}, title:"{{unit.title}}", key:"{{unit.key}}", semesters:{ {% for s in unit.semesters %}sem{{ s }}{% if not (loop.last) %},{% endif %}{% endfor %} },
-            groups:{ {% for group in unit.groups %}
-                (group{{group.id}}, rec(half_semester:{{group.halfSemester}},
-                 sessions:{ {% for it in group.sessions %}
-                    session{{it.id}}{% if not (loop.last) %},{% endif %}{% endfor %} })){% if not (loop.last) %},{% endif %}{% endfor %} })){% if not (loop.last) %},{% endif %}{% endfor %}
+            groups:{ {% for group in unit.groups %}group{{group.id}}{% if not (loop.last) %},{% endif %}{% endfor %} })){% if not (loop.last) %},{% endif %}{% endfor %}
     }
     &
     abstract_unit_unit : POW(ABSTRACT_UNITS * UNITS)
