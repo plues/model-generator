@@ -8,6 +8,11 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,148 +22,147 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "abstract_units")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "abstract_units")
 @Immutable
 public class AbstractUnit implements Serializable {
-    private static final long serialVersionUID = 6530093545778592625L;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AbstractUnit that = (AbstractUnit) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(key, that.key) &&
-                Objects.equals(title, that.title) &&
-                Objects.equals(createdAt, that.createdAt) &&
-                Objects.equals(updatedAt, that.updatedAt);
+  private static final long serialVersionUID = 6530093545778592625L;
+
+  @Id
+  @GeneratedValue
+  private Integer id;
+
+  @NaturalId
+  private String key;
+  private String title;
+
+  @CreationTimestamp
+  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
+  @Column(name = "created_at")
+  private Date createdAt;
+
+  @UpdateTimestamp
+  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
+  @Column(name = "updated_at")
+  private Date updatedAt;
+
+  @ManyToMany
+  @JoinTable(name = "unit_abstract_unit",
+      joinColumns = @JoinColumn(name = "abstract_unit_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "unit_id", referencedColumnName = "id"))
+  private Set<Unit> units;
+
+  @OneToMany(mappedBy = "abstractUnit")
+  private Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters;
+
+  @OneToMany(mappedBy = "abstractUnit")
+  private Set<ModuleAbstractUnitType> moduleAbstractUnitTypes;
+
+  @ManyToMany
+  @JoinTable(name = "modules_abstract_units_types",
+      joinColumns = @JoinColumn(name = "abstract_unit_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
+  @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "modules")
+  private Set<Module> modules;
+
+  public AbstractUnit() {
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, key, title, createdAt, updatedAt);
+    if (other == null || getClass() != other.getClass()) {
+      return false;
     }
+    AbstractUnit that = (AbstractUnit) other;
+    return Objects.equals(id, that.id)
+        && Objects.equals(key, that.key)
+        && Objects.equals(title, that.title)
+        && Objects.equals(createdAt, that.createdAt)
+        && Objects.equals(updatedAt, that.updatedAt);
+  }
 
-    @Id
-    @GeneratedValue
-    private Integer id;
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, key, title, createdAt, updatedAt);
+  }
 
-    @NaturalId
-    private String key;
+  public Integer getId() {
+    return id;
+  }
 
-    private String title;
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    @CreationTimestamp
-    @Type(type = "org.hibernate.usertype.SQLiteDateTimeType")
-    @Column(name = "created_at")
-    private Date createdAt;
+  public String getKey() {
+    return key;
+  }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    @UpdateTimestamp
-    @Type(type = "org.hibernate.usertype.SQLiteDateTimeType")
-    @Column(name = "updated_at")
-    private Date updatedAt;
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    @ManyToMany
-    @JoinTable(name = "unit_abstract_unit", joinColumns = @JoinColumn(name = "abstract_unit_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "unit_id", referencedColumnName = "id"))
-    private Set<Unit> units;
+  public String getTitle() {
+    return title;
+  }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    @OneToMany(mappedBy = "abstractUnit")
-    private Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters;
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    @OneToMany(mappedBy = "abstractUnit")
-    private Set<ModuleAbstractUnitType> moduleAbstractUnitTypes;
+  public Date getCreatedAt() {
+    return (Date) createdAt.clone();
+  }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
-    @ManyToMany
-    @JoinTable(name = "modules_abstract_units_types", joinColumns = @JoinColumn(name = "abstract_unit_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "modules")
-    private Set<Module> modules;
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = (Date) createdAt.clone();
+  }
 
-    public AbstractUnit() {
-    }
+  public Date getUpdatedAt() {
+    return (Date) updatedAt.clone();
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = (Date) updatedAt.clone();
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Set<Unit> getUnits() {
+    return units;
+  }
 
-    public String getKey() {
-        return key;
-    }
+  public void setUnits(Set<Unit> units) {
+    this.units = units;
+  }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+  public Set<ModuleAbstractUnitSemester> getModuleAbstractUnitSemesters() {
+    return moduleAbstractUnitSemesters;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public void setModuleAbstractUnitSemesters(
+      Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters) {
+    this.moduleAbstractUnitSemesters = moduleAbstractUnitSemesters;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public Set<ModuleAbstractUnitType> getModuleAbstractUnitTypes() {
+    return moduleAbstractUnitTypes;
+  }
 
-    public Date getCreatedAt() {
-        return (Date) createdAt.clone();
-    }
+  public void setModuleAbstractUnitTypes(Set<ModuleAbstractUnitType> moduleAbstractUnitTypes) {
+    this.moduleAbstractUnitTypes = moduleAbstractUnitTypes;
+  }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = (Date) createdAt.clone();
-    }
+  public Set<Module> getModules() {
+    return modules;
+  }
 
-    public Date getUpdatedAt() {
-        return (Date) updatedAt.clone();
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = (Date) updatedAt.clone();
-    }
-
-    public Set<Unit> getUnits() {
-        return units;
-    }
-
-    public void setUnits(Set<Unit> units) {
-        this.units = units;
-    }
-
-    public Set<ModuleAbstractUnitSemester> getModuleAbstractUnitSemesters() {
-        return moduleAbstractUnitSemesters;
-    }
-
-    public void setModuleAbstractUnitSemesters(Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters) {
-        this.moduleAbstractUnitSemesters = moduleAbstractUnitSemesters;
-    }
-
-    public Set<ModuleAbstractUnitType> getModuleAbstractUnitTypes() {
-        return moduleAbstractUnitTypes;
-    }
-
-    public void setModuleAbstractUnitTypes(Set<ModuleAbstractUnitType> moduleAbstractUnitTypes) {
-        this.moduleAbstractUnitTypes = moduleAbstractUnitTypes;
-    }
-
-    public Set<Module> getModules() {
-        return modules;
-    }
-
-    public void setModules(Set<Module> modules) {
-        this.modules = modules;
-    }
+  public void setModules(Set<Module> modules) {
+    this.modules = modules;
+  }
 
 }

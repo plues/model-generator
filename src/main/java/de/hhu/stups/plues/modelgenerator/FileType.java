@@ -1,18 +1,18 @@
 package de.hhu.stups.plues.modelgenerator;
 
 public enum FileType {
-    BMachine("b", "mch"), ModuleCombination("mc", "xml"), Unknown("?", "?");
+  BMachine("b", "mch"), ModuleCombination("mc", "xml"), Unknown("?", "?");
 
-    private FileType(String name, String extension) {
-        this.name = name;
-        this.extension = extension;
-    }
+  public final String name;
+  public final String extension;
 
-    @Override
-    public String toString() {
-        return ((String) (this.name));
-    }
+  FileType(final String name, final String extension) {
+    this.name = name;
+    this.extension = extension;
+  }
 
-    public final String name;
-    public final String extension;
+  @Override
+  public String toString() {
+    return this.name;
+  }
 }

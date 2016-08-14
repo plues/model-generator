@@ -1,9 +1,7 @@
 package org.hibernate.usertype;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -15,77 +13,79 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class SQLiteDateTimeType implements UserType {
-    static final String sqliteTextTimeStamp = "yyyy-MM-dd kk:mm:ss"; // e.g. 2016-04-27 15:40:18
-    @Override
-    public int[] sqlTypes() {
-        return new int[] { Types.TIMESTAMP };
-    }
+public class SqliteDateTimeType implements UserType {
+  static final String sqliteTextTimeStamp = "yyyy-MM-dd kk:mm:ss"; // e.g. 2016-04-27 15:40:18
 
-    @Override
-    public Class returnedClass() {
-        return java.util.Date.class;
-   }
+  @Override
+  public int[] sqlTypes() {
+    return new int[]{Types.TIMESTAMP};
+  }
 
-    @Override
-    public boolean equals(Object x, Object y) throws HibernateException {
-        return Objects.equals(x, y);
-    }
+  @Override
+  public Class returnedClass() {
+    return java.util.Date.class;
+  }
 
-    @Override
-    public int hashCode(Object x) throws HibernateException {
-        return Objects.hashCode(x);
-    }
+  @Override
+  public boolean equals(final Object object, final Object other) throws HibernateException {
+    return Objects.equals(object, other);
+  }
 
-    @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
-        assert names.length == 1;
-        String dateStr = rs.getString(names[0]);
-        Date d;
-        try {
-            d = new SimpleDateFormat(sqliteTextTimeStamp).parse(dateStr.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            throw new HibernateException(e.getMessage());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            throw new HibernateException(e.getMessage());
-        }
-        return d;
-    }
+  @Override
+  public int hashCode(final Object object) throws HibernateException {
+    return Objects.hashCode(object);
+  }
 
-    @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
-        try {
-            st.setString(index, new SimpleDateFormat(sqliteTextTimeStamp).format(value));
-        } catch(IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new HibernateException(e.getMessage());
-        }
+  @Override
+  public Object nullSafeGet(final ResultSet rs, final String[] names,
+                            final SharedSessionContractImplementor session, final Object owner)
+      throws HibernateException, SQLException {
+    assert names.length == 1;
+    final String dateStr = rs.getString(names[0]);
+    final Date date;
+    try {
+      date = new SimpleDateFormat(sqliteTextTimeStamp).parse(dateStr);
+    } catch (final ParseException | NullPointerException exception) {
+      exception.printStackTrace();
+      throw new HibernateException(exception.getMessage());
     }
+    return date;
+  }
 
-    @Override
-    public Object deepCopy(Object value) throws HibernateException {
-        return value;
+  @Override
+  public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
+                          final SharedSessionContractImplementor session)
+      throws HibernateException, SQLException {
+    try {
+      st.setString(index, new SimpleDateFormat(sqliteTextTimeStamp).format(value));
+    } catch (final IllegalArgumentException exception) {
+      exception.printStackTrace();
+      throw new HibernateException(exception.getMessage());
     }
+  }
 
-    @Override
-    public boolean isMutable() {
-        return false;
-    }
+  @Override
+  public Object deepCopy(final Object value) throws HibernateException {
+    return value;
+  }
 
-    @Override
-    public Serializable disassemble(Object value) throws HibernateException {
-        return ((Date) value).getTime();
-    }
+  @Override
+  public boolean isMutable() {
+    return false;
+  }
 
-    @Override
-    public Object assemble(Serializable cached, Object owner) throws HibernateException {
-        throw new HibernateException("Currently not supported");
-    }
+  @Override
+  public Serializable disassemble(final Object value) throws HibernateException {
+    return ((Date) value).getTime();
+  }
 
-    @Override
-    public Object replace(Object original, Object target, Object owner) throws HibernateException {
-        throw new HibernateException("Currently not supported");
-    }
+  @Override
+  public Object assemble(Serializable cached, Object owner) throws HibernateException {
+    throw new HibernateException("Currently not supported");
+  }
+
+  @Override
+  public Object replace(Object original, Object target, Object owner) throws HibernateException {
+    throw new HibernateException("Currently not supported");
+  }
 }
