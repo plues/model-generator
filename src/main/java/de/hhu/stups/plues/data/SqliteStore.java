@@ -243,7 +243,6 @@ public class SqliteStore extends Store {
   }
 
   public void close() {
-    this.clear();
     session.close();
     sessionFactory.close();
   }
