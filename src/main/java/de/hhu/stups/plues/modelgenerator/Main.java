@@ -98,5 +98,5 @@ public class Main {
         System.out.println("model-generator: Version " + VERSION);
     }
 
-    private static final String VERSION = "3.0.0-SNAPSHOT";
+    private static final String VERSION = "3.0.1-SNAPSHOT";
 }
