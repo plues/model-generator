@@ -8,6 +8,10 @@ import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,8 +21,12 @@ public class Renderer {
     private final Store store;
 
     private final static EnvironmentConfiguration config
-            = EnvironmentConfigurationBuilder.configuration().extensions()
-            .add(new HelperExtension()).and().build();
+            = EnvironmentConfigurationBuilder.configuration()
+                .extensions()
+                    .add(new HelperExtension()).and()
+                .render()
+                    .withOutputCharset(Charset.forName("utf8"))
+            .and().build();
 
     public Renderer(final Store db) {
         this.store = db;
