@@ -8,22 +8,26 @@ import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Renderer {
 
 
-  private static final EnvironmentConfiguration config
-      = EnvironmentConfigurationBuilder.configuration().extensions()
-      .add(new HelperExtension()).and().build();
-  private final Store store;
+    private final Store store;
 
+    private final static EnvironmentConfiguration config
+            = EnvironmentConfigurationBuilder.configuration()
+                .extensions()
+                    .add(new HelperExtension()).and()
+                .render()
+                    .withOutputCharset(Charset.forName("utf8"))
+            .and().build();
   public Renderer(final Store db) {
     this.store = db;
   }
