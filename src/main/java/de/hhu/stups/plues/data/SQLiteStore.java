@@ -190,7 +190,7 @@ public class SQLiteStore extends Store {
         if ((!schema_version[0].equals(required_version[0])) || (Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
             throw new IncompatibleSchemaError("Expected database schema "
                     + "version " + Arrays.toString(required_version)
-                    + " but was " + String.valueOf(schema_version));
+                    + " but was " + String.join(",", schema_version));
         }
 
     }
