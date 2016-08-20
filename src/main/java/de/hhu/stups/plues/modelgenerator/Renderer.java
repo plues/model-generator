@@ -8,26 +8,24 @@ import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Renderer {
 
 
-    private final Store store;
+  private static final EnvironmentConfiguration config = EnvironmentConfigurationBuilder
+      .configuration().extensions().add(new HelperExtension()).and()
+      .render().withOutputCharset(Charset.forName("utf8"))
+      .and().build();
+  private final Store store;
 
-    private final static EnvironmentConfiguration config
-            = EnvironmentConfigurationBuilder.configuration()
-                .extensions()
-                    .add(new HelperExtension()).and()
-                .render()
-                    .withOutputCharset(Charset.forName("utf8"))
-            .and().build();
   public Renderer(final Store db) {
     this.store = db;
   }
@@ -94,20 +92,20 @@ public class Renderer {
 
   private JtwigModel geModel() {
     return JtwigModel.newModel()
-        .with("date", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-            .format(new Date()))
-        .with("info", store.getInfo())
-        .with("short_name", store.getInfoByKey("short-name"))
-        .with("abstract_units", store.getAbstractUnits())
-        .with("courses", store.getCourses())
-        .with("groups", store.getGroups())
-        .with("levels", store.getLevels())
-        .with("modules", store.getModules())
-        .with("module_abstract_unit_semester",
-            store.getModuleAbstractUnitSemester())
-        .with("module_abstract_unit_type",
-            store.getModuleAbstractUnitType())
-        .with("sessions", store.getSessions())
-        .with("units", store.getUnits());
+      .with("date", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        .format(new Date()))
+      .with("info", store.getInfo())
+      .with("short_name", store.getInfoByKey("short-name"))
+      .with("abstract_units", store.getAbstractUnits())
+      .with("courses", store.getCourses())
+      .with("groups", store.getGroups())
+      .with("levels", store.getLevels())
+      .with("modules", store.getModules())
+      .with("module_abstract_unit_semester",
+        store.getModuleAbstractUnitSemester())
+      .with("module_abstract_unit_type",
+        store.getModuleAbstractUnitType())
+      .with("sessions", store.getSessions())
+      .with("units", store.getUnits());
   }
 }
