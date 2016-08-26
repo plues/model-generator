@@ -54,6 +54,7 @@ public class Renderer {
     return this.render(template);
   }
 
+  @SuppressWarnings("WeakerAccess")
   public void renderWith(final String path, final File out) {
     final JtwigTemplate template = loadTemplate(path);
     this.render(template, out);
@@ -70,6 +71,7 @@ public class Renderer {
     this.render(template, out);
   }
 
+  @SuppressWarnings("WeakerAccess")
   protected ByteArrayOutputStream render(final JtwigTemplate template) {
     final JtwigModel model = geModel();
 
@@ -78,6 +80,7 @@ public class Renderer {
     return out;
   }
 
+  @SuppressWarnings("WeakerAccess")
   protected void render(final JtwigTemplate template, final File out) {
     final JtwigModel model = geModel();
 
