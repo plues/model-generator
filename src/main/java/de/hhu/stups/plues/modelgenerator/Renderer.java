@@ -16,8 +16,11 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class Renderer {
+
+  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
 
   private static final EnvironmentConfiguration config = EnvironmentConfigurationBuilder
@@ -44,7 +47,7 @@ public class Renderer {
   @SuppressWarnings("WeakerAccess")
   protected JtwigTemplate loadTemplate(final FileType tp) {
     final String template = "data." + tp.extension + ".twig";
-    System.out.println("Using template: " + template);
+    logger.info("Using template: " + template);
     return this.loadTemplateFromResource("/" + template);
   }
 

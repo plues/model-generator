@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,6 +36,8 @@ public class SqliteStore extends Store {
   private String dbPath;
   private SessionFactory sessionFactory;
   private org.hibernate.Session session;
+
+  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
   public SqliteStore(final String dbPath) throws IncompatibleSchemaError, StoreException {
     this.init(dbPath);
@@ -232,7 +235,7 @@ public class SqliteStore extends Store {
     }
 
 
-    System.out.println("trying to open " + path);
+    logger.info("trying to open " + path);
     final String url = "jdbc:sqlite:" + path;
 
     final Configuration conf = new Configuration();
