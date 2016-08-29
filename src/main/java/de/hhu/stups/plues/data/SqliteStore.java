@@ -18,6 +18,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class SqliteStore extends Store {
   }
 
   @Override
-  public void init() throws IncompatibleSchemaError, StoreException {
+  public synchronized void init() throws IncompatibleSchemaError, StoreException {
     assert this.dbPath != null;
     try {
       openDataBase(dbPath);
@@ -58,12 +59,12 @@ public class SqliteStore extends Store {
     }
   }
 
-  public void init(final String dbpath) throws IncompatibleSchemaError, StoreException {
+  public synchronized void init(final String dbpath) throws IncompatibleSchemaError, StoreException {
     this.dbPath = dbpath;
     this.init();
   }
 
-  private <T> T getById(final Integer key, final Class<T> type) {
+  private synchronized <T> T getById(final Integer key, final Class<T> type) {
     final CriteriaBuilder cb = session.getCriteriaBuilder();
 
     final CriteriaQuery<T> query = cb.createQuery(type);
@@ -74,7 +75,7 @@ public class SqliteStore extends Store {
     return session.createQuery(query).setCacheable(true).getSingleResult();
   }
 
-  private <T> T getByKey(final String key, final Class<T> type) {
+  private synchronized <T> T getByKey(final String key, final Class<T> type) {
     final CriteriaBuilder cb = session.getCriteriaBuilder();
 
     final CriteriaQuery<T> query = cb.createQuery(type);
@@ -85,88 +86,88 @@ public class SqliteStore extends Store {
     return session.createQuery(query).setCacheable(true).getSingleResult();
   }
 
-  public String getInfoByKey(final String key) {
+  public synchronized String getInfoByKey(final String key) {
     return getByKey(key, Info.class).getValue();
   }
 
-  public Course getCourseByKey(final String key) {
+  public synchronized Course getCourseByKey(final String key) {
     return getByKey(key, Course.class);
   }
 
-  public List<Info> getInfo() {
+  public synchronized List<Info> getInfo() {
     return session.createQuery("from Info", Info.class)
         .setCacheable(true).list();
   }
 
-  public List<AbstractUnit> getAbstractUnits() {
+  public synchronized List<AbstractUnit> getAbstractUnits() {
     return session.createQuery("from AbstractUnit", AbstractUnit.class)
         .setCacheable(true).list();
   }
 
-  public AbstractUnit getAbstractUnitById(final Integer key) {
+  public synchronized AbstractUnit getAbstractUnitById(final Integer key) {
     return getById(key, AbstractUnit.class);
   }
 
-  public Group getGroupById(final Integer gid) {
+  public synchronized Group getGroupById(final Integer gid) {
     return getById(gid, Group.class);
   }
 
-  public Module getModuleById(final Integer mid) {
+  public synchronized Module getModuleById(final Integer mid) {
     return getById(mid, Module.class);
   }
 
-  public List<Course> getCourses() {
-    return session.createQuery("from Course", Course.class)
-        .setCacheable(true).list();
+  public synchronized List<Course> getCourses() {
+    Query<Course> query = session.createQuery("from Course", Course.class);
+    return query.setCacheable(true).list();
   }
 
-  public List<Group> getGroups() {
+  public synchronized List<Group> getGroups() {
     return session.createQuery("from Group", Group.class)
         .setCacheable(true).list();
   }
 
-  public List<Level> getLevels() {
+  public synchronized List<Level> getLevels() {
     return session.createQuery("from Level", Level.class)
         .setCacheable(true).list();
   }
 
-  public List<Module> getModules() {
+  public synchronized List<Module> getModules() {
     return session.createQuery("from Module", Module.class)
         .setCacheable(true).list();
   }
 
-  public List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
+  public synchronized List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
     return session
         .createQuery("from ModuleAbstractUnitSemester", ModuleAbstractUnitSemester.class)
         .setCacheable(true).list();
   }
 
-  public List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
+  public synchronized List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
     return session
         .createQuery("from ModuleAbstractUnitType", ModuleAbstractUnitType.class)
         .setCacheable(true).list();
   }
 
-  public List<Session> getSessions() {
-    return session.createQuery("from Session", Session.class)
-        .setCacheable(true).list();
+  public synchronized List<Session> getSessions() {
+    Query<Session> query = session.createQuery("from Session", Session.class);
+    return query.setCacheable(true).list();
   }
 
-  public Session getSessionById(final int id) {
+  public synchronized Session getSessionById(final int id) {
     return session.get(Session.class, id);
   }
 
-  public List<Unit> getUnits() {
+  public synchronized List<Unit> getUnits() {
     return session.createQuery("from Unit", Unit.class)
         .setCacheable(true).list();
   }
 
   @SuppressWarnings("GroovyUnusedDeclaration")
-  public List getLogEntries() {
+  public synchronized List getLogEntries() {
     return session.createQuery("from Log").setCacheable(true).list();
   }
 
-  public void moveSession(final Session session, final String targetDay,
+  public synchronized void moveSession(final Session session, final String targetDay,
                           final String targetTime) {
     final String srcDay = session.getDay();
     final String srcTime = session.getTime().toString();
@@ -198,7 +199,7 @@ public class SqliteStore extends Store {
 
   }
 
-  public void checkSchemaVersion() throws IncompatibleSchemaError, IOException {
+  public synchronized void checkSchemaVersion() throws IncompatibleSchemaError, IOException {
     final Properties properties = new Properties();
     properties.load(Thread.currentThread()
         .getContextClassLoader()
@@ -222,7 +223,7 @@ public class SqliteStore extends Store {
 
   }
 
-  private org.hibernate.Session openDataBase(final String dbPath) throws ClassNotFoundException {
+  private synchronized org.hibernate.Session openDataBase(final String dbPath) throws ClassNotFoundException {
     Class.forName("org.sqlite.JDBC");
     final String expandedPath = dbPath.replaceFirst("^~", System.getProperty("user.home"));
 
@@ -245,23 +246,23 @@ public class SqliteStore extends Store {
     return this.session = sessionFactory.openSession();
   }
 
-  public void close() {
+  public synchronized void close() {
     session.close();
     sessionFactory.close();
   }
 
   @SuppressFBWarnings("DM_GC")
-  public final void clear() {
+  public synchronized final void clear() {
     sessionFactory.getCache().evictAllRegions();
     session.clear();
     System.gc();
   }
 
-  public org.hibernate.Session getSession() {
+  public synchronized org.hibernate.Session getSession() {
     return session;
   }
 
-  public void setSession(final org.hibernate.Session session) {
+  public synchronized void setSession(final org.hibernate.Session session) {
     this.session = session;
   }
 }
