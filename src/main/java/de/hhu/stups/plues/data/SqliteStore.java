@@ -59,7 +59,8 @@ public class SqliteStore extends Store {
     }
   }
 
-  public synchronized void init(final String dbpath) throws IncompatibleSchemaError, StoreException {
+  public synchronized void init(final String dbpath)
+      throws IncompatibleSchemaError, StoreException {
     this.dbPath = dbpath;
     this.init();
   }
@@ -162,13 +163,12 @@ public class SqliteStore extends Store {
         .setCacheable(true).list();
   }
 
-  @SuppressWarnings("GroovyUnusedDeclaration")
   public synchronized List getLogEntries() {
     return session.createQuery("from Log").setCacheable(true).list();
   }
 
   public synchronized void moveSession(final Session session, final String targetDay,
-                          final String targetTime) {
+                                       final String targetTime) {
     final String srcDay = session.getDay();
     final String srcTime = session.getTime().toString();
 
@@ -223,7 +223,8 @@ public class SqliteStore extends Store {
 
   }
 
-  private synchronized org.hibernate.Session openDataBase(final String dbPath) throws ClassNotFoundException {
+  private synchronized org.hibernate.Session openDataBase(final String dbPath)
+      throws ClassNotFoundException {
     Class.forName("org.sqlite.JDBC");
     final String expandedPath = dbPath.replaceFirst("^~", System.getProperty("user.home"));
 
@@ -252,7 +253,7 @@ public class SqliteStore extends Store {
   }
 
   @SuppressFBWarnings("DM_GC")
-  public synchronized final void clear() {
+  public final synchronized void clear() {
     sessionFactory.getCache().evictAllRegions();
     session.clear();
     System.gc();
