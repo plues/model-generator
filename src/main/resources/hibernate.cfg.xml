@@ -4,6 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
+
     <session-factory>
 
         <!-- Database connection settings -->
@@ -19,6 +20,7 @@
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
 
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.Sqlite3Dialect</property>
