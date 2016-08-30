@@ -11,9 +11,7 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -34,11 +32,9 @@ import javax.persistence.criteria.Root;
  * Database based storage for timetable data.
  */
 public class SqliteStore extends Store {
+  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
   private String dbPath;
   private SessionFactory sessionFactory;
-  private org.hibernate.Session session;
-
-  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
   public SqliteStore(final String dbPath) throws IncompatibleSchemaError, StoreException {
     this.init(dbPath);
@@ -66,6 +62,8 @@ public class SqliteStore extends Store {
   }
 
   private synchronized <T> T getById(final Integer key, final Class<T> type) {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
     final CriteriaBuilder cb = session.getCriteriaBuilder();
 
     final CriteriaQuery<T> query = cb.createQuery(type);
@@ -73,10 +71,15 @@ public class SqliteStore extends Store {
     final Root<T> root = query.from(type);
     query.where(cb.equal(root.get("id"), key));
 
-    return session.createQuery(query).setCacheable(true).getSingleResult();
+    final T result = session.createQuery(query).setCacheable(true).getSingleResult();
+    tx.commit();
+    return result;
   }
 
   private synchronized <T> T getByKey(final String key, final Class<T> type) {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+
     final CriteriaBuilder cb = session.getCriteriaBuilder();
 
     final CriteriaQuery<T> query = cb.createQuery(type);
@@ -84,7 +87,10 @@ public class SqliteStore extends Store {
     final Root<T> root = query.from(type);
     query.where(cb.equal(root.get("key"), key));
 
-    return session.createQuery(query).setCacheable(true).getSingleResult();
+    final T result = session.createQuery(query).setCacheable(true).getSingleResult();
+    tx.commit();
+
+    return result;
   }
 
   public synchronized String getInfoByKey(final String key) {
@@ -96,13 +102,25 @@ public class SqliteStore extends Store {
   }
 
   public synchronized List<Info> getInfo() {
-    return session.createQuery("from Info", Info.class)
-        .setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<Info> result = session
+        .createQuery("from Info", Info.class)
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<AbstractUnit> getAbstractUnits() {
-    return session.createQuery("from AbstractUnit", AbstractUnit.class)
-        .setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<AbstractUnit> result = session
+        .createQuery("from AbstractUnit", AbstractUnit.class)
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized AbstractUnit getAbstractUnitById(final Integer key) {
@@ -118,53 +136,103 @@ public class SqliteStore extends Store {
   }
 
   public synchronized List<Course> getCourses() {
-    Query<Course> query = session.createQuery("from Course", Course.class);
-    return query.setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final Query<Course> query = session.createQuery("from Course", Course.class);
+    final List<Course> result = query.setCacheable(true).list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<Group> getGroups() {
-    return session.createQuery("from Group", Group.class)
-        .setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<Group> result = session
+        .createQuery("from Group", Group.class)
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<Level> getLevels() {
-    return session.createQuery("from Level", Level.class)
-        .setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<Level> result = session
+        .createQuery("from Level", Level.class)
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<Module> getModules() {
-    return session.createQuery("from Module", Module.class)
-        .setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<Module> result = session
+        .createQuery("from Module", Module.class)
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
-    return session
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<ModuleAbstractUnitSemester> result = session
         .createQuery("from ModuleAbstractUnitSemester", ModuleAbstractUnitSemester.class)
-        .setCacheable(true).list();
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
-    return session
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<ModuleAbstractUnitType> result = session
         .createQuery("from ModuleAbstractUnitType", ModuleAbstractUnitType.class)
-        .setCacheable(true).list();
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
   public synchronized List<Session> getSessions() {
-    Query<Session> query = session.createQuery("from Session", Session.class);
-    return query.setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final Query<Session> query = session.createQuery("from Session", Session.class);
+    final List<Session> result = query.setCacheable(true).list();
+    tx.commit();
+    return result;
   }
 
   public synchronized Session getSessionById(final int id) {
-    return session.get(Session.class, id);
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final Session result = session.get(Session.class, id);
+    tx.commit();
+    return result;
   }
 
   public synchronized List<Unit> getUnits() {
-    return session.createQuery("from Unit", Unit.class)
-        .setCacheable(true).list();
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<Unit> result = session
+        .createQuery("from Unit", Unit.class)
+        .setCacheable(true)
+        .list();
+    tx.commit();
+    return result;
   }
 
-  public synchronized List getLogEntries() {
-    return session.createQuery("from Log").setCacheable(true).list();
+  public synchronized List<Log> getLogEntries() {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final List<Log> result = session.createQuery("from Log", Log.class).setCacheable(true).list();
+    tx.commit();
+    return result;
   }
 
   public synchronized void moveSession(final Session session, final String targetDay,
@@ -181,7 +249,7 @@ public class SqliteStore extends Store {
     log.setTarget(targetDay + targetTime);
     log.setSession(session);
 
-    final org.hibernate.Session s = this.session;
+    final org.hibernate.Session s = sessionFactory.getCurrentSession();
 
     final Transaction tx = s.beginTransaction();
     try {
@@ -209,21 +277,20 @@ public class SqliteStore extends Store {
 
     final String[] schema_version = version_str.split("\\.");
     final String[] required_version
-        = properties.getProperty("schema_version").split("\\.");
+      = properties.getProperty("schema_version").split("\\.");
 
     // Major versions must match
     // minor version may be higher in database
     if ((!schema_version[0].equals(required_version[0])) || (
-        Integer.parseInt(schema_version[1])
-            < Integer.parseInt(required_version[1]))) {
+        Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
       throw new IncompatibleSchemaError("Expected database schema "
-          + "version " + required_version[0] + "." + required_version[1]
-          + " but was " + schema_version[0] + "." + required_version[1]);
+        + "version " + required_version[0] + "." + required_version[1]
+        + " but was " + schema_version[0] + "." + required_version[1]);
     }
 
   }
 
-  private synchronized org.hibernate.Session openDataBase(final String dbPath)
+  private synchronized void openDataBase(final String dbPath)
       throws ClassNotFoundException {
     Class.forName("org.sqlite.JDBC");
     final String expandedPath = dbPath.replaceFirst("^~", System.getProperty("user.home"));
@@ -233,7 +300,7 @@ public class SqliteStore extends Store {
 
     if (!(db.exists() && db.isFile())) {
       throw new IllegalArgumentException(
-          path + " does not exist or is not a file.");
+        path + " does not exist or is not a file.");
     }
 
 
@@ -243,27 +310,16 @@ public class SqliteStore extends Store {
     final Configuration conf = new Configuration();
     conf.configure();
     conf.setProperty("hibernate.connection.url", url);
+
     this.sessionFactory = conf.buildSessionFactory();
-    return this.session = sessionFactory.openSession();
   }
 
   public synchronized void close() {
-    session.close();
     sessionFactory.close();
   }
 
   @SuppressFBWarnings("DM_GC")
   public final synchronized void clear() {
-    sessionFactory.getCache().evictAllRegions();
-    session.clear();
     System.gc();
-  }
-
-  public synchronized org.hibernate.Session getSession() {
-    return session;
-  }
-
-  public synchronized void setSession(final org.hibernate.Session session) {
-    this.session = session;
   }
 }
