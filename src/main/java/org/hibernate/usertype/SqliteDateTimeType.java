@@ -81,7 +81,7 @@ public class SqliteDateTimeType implements UserType {
 
   @Override
   public Object assemble(Serializable cached, Object owner) throws HibernateException {
-    throw new HibernateException("Currently not supported");
+    return new Date(((Long)cached).longValue());
   }
 
   @Override
