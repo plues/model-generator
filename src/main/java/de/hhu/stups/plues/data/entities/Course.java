@@ -247,4 +247,8 @@ public class Course implements Serializable {
     return this.isCombinable() && other.isCombinable()
       && !this.getShortName().equals(other.getShortName());
   }
+
+  public String toString() {
+    return this.getFullName();
+  }
 }
