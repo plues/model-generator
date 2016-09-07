@@ -242,4 +242,9 @@ public class Course implements Serializable {
   public void setLevels(final Set<Level> levels) {
     this.levels = levels;
   }
+
+  public boolean isCombinableWith(final Course other) {
+    return this.isCombinable() && other.isCombinable()
+      && !this.getShortName().equals(other.getShortName());
+  }
 }
