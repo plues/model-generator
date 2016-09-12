@@ -1,5 +1,7 @@
 package de.hhu.stups.plues.data.entities;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +9,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "sessions")
@@ -47,6 +51,7 @@ public class Session implements Serializable {
   private Group group;
 
   public Session() {
+    slotObjectProperty.set(new Slot(getDayOfWeek(), time));
   }
 
   public int getId() {
@@ -61,8 +66,34 @@ public class Session implements Serializable {
     return day;
   }
 
+  private DayOfWeek getDayOfWeek() {
+    if (day == null) {
+      return DayOfWeek.SUNDAY;
+    }
+
+    switch (day) {
+      case "mon":
+        return DayOfWeek.MONDAY;
+      case "tue":
+        return DayOfWeek.TUESDAY;
+      case "wed":
+        return DayOfWeek.WEDNESDAY;
+      case "thu":
+        return DayOfWeek.THURSDAY;
+      case "fri":
+        return DayOfWeek.FRIDAY;
+      default:
+        return DayOfWeek.SUNDAY;
+    }
+  }
+
+  public void initSlotProperty() {
+    slotObjectProperty.set(new Slot(getDayOfWeek(), time));
+  }
+
   public void setDay(final String day) {
     this.day = day;
+    slotObjectProperty.set(new Slot(getDayOfWeek(), time));
   }
 
   public Integer getTime() {
@@ -71,6 +102,7 @@ public class Session implements Serializable {
 
   public void setTime(final Integer time) {
     this.time = time;
+    slotObjectProperty.set(new Slot(getDayOfWeek(), time));
   }
 
   public Integer getRhythm() {
@@ -134,5 +166,51 @@ public class Session implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(id, day, time, rhythm, duration, createdAt, updatedAt);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s (%d/%d)",
+        group.getUnit().getTitle(), group.getId(), group.getUnit().getId());
+  }
+
+  @Transient
+  private ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+
+  public ObjectProperty<Slot> slotProperty() {
+    return slotObjectProperty;
+  }
+
+  public Slot getSlot() {
+    return slotObjectProperty.get();
+  }
+
+  public static class Slot {
+    public DayOfWeek day;
+    public Integer time;
+
+    public Slot(DayOfWeek day, Integer time) {
+      this.day = day;
+      this.time = time;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof Slot)) {
+        return false;
+      }
+      if (obj == this) {
+        return true;
+      }
+
+      Slot slot = (Slot) obj;
+
+      return slot.day.equals(day) && slot.time.equals(time);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(day, time);
+    }
   }
 }
