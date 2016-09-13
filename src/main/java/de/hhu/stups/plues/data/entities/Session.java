@@ -175,7 +175,7 @@ public class Session implements Serializable {
   }
 
   @Transient
-  private ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
   public ObjectProperty<Slot> slotProperty() {
     return slotObjectProperty;
