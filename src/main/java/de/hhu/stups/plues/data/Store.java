@@ -12,43 +12,43 @@ import de.hhu.stups.plues.data.entities.Unit;
 
 import java.util.List;
 
-public abstract class Store {
-  public abstract void init() throws IncompatibleSchemaError, StoreException;
+public interface Store {
+  void init() throws IncompatibleSchemaError, StoreException;
 
-  public abstract void init(String dbpath) throws IncompatibleSchemaError, StoreException;
+  void init(String dbpath) throws IncompatibleSchemaError, StoreException;
 
-  public abstract void close();
+  void close();
 
-  public abstract void clear();
+  void clear();
 
-  public abstract List getInfo();
+  List getInfo();
 
-  public abstract List<AbstractUnit> getAbstractUnits();
+  List<AbstractUnit> getAbstractUnits();
 
-  public abstract List<Course> getCourses();
+  List<Course> getCourses();
 
-  public abstract Course getCourseByKey(String key);
+  Course getCourseByKey(String key);
 
-  public abstract List<Group> getGroups();
+  List<Group> getGroups();
 
-  public abstract List<Level> getLevels();
+  List<Level> getLevels();
 
-  public abstract List<Module> getModules();
+  List<Module> getModules();
 
-  public abstract List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
+  List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
 
-  public abstract List<ModuleAbstractUnitType> getModuleAbstractUnitType();
+  List<ModuleAbstractUnitType> getModuleAbstractUnitType();
 
-  public abstract List<Session> getSessions();
+  List<Session> getSessions();
 
-  public abstract List<Unit> getUnits();
+  List<Unit> getUnits();
 
-  public abstract AbstractUnit getAbstractUnitById(Integer key);
+  AbstractUnit getAbstractUnitById(Integer key);
 
-  public abstract Group getGroupById(Integer integer);
+  Group getGroupById(Integer integer);
 
-  public abstract String getInfoByKey(String key);
+  String getInfoByKey(String key);
 
-  public abstract Module getModuleById(Integer mid);
+  Module getModuleById(Integer mid);
 
 }

@@ -31,7 +31,7 @@ import javax.persistence.criteria.Root;
 /**
  * Database based storage for timetable data.
  */
-public class SqliteStore extends Store {
+public class SqliteStore implements Store {
   private final Logger logger = Logger.getLogger(getClass().getSimpleName());
   private String dbPath;
   private SessionFactory sessionFactory;
