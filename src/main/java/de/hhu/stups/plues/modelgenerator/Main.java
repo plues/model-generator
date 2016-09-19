@@ -4,7 +4,6 @@ import de.hhu.stups.plues.data.IncompatibleSchemaError;
 import de.hhu.stups.plues.data.SqliteStore;
 import de.hhu.stups.plues.data.Store;
 import de.hhu.stups.plues.data.StoreException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -13,13 +12,14 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 public class Main {
+  private static final String OUTPUT = "output";
   private static final String VERSION = "4.0.0-SNAPSHOT";
 
+  private Main() {}
 
   /**
    * CLI entry point.
@@ -34,41 +34,44 @@ public class Main {
       StoreException, IOException {
     printVersion();
     final CommandLine line = getCommandLine(args);
+    if (line == null) {
+      return;
+    }
 
 
     final Store store = new SqliteStore(line.getOptionValue("database"));
     final Renderer renderer = new Renderer(store);
-    final String output = line.getOptionValue("output")
+    final String output = line.getOptionValue(OUTPUT)
         .replaceFirst("^~", System.getProperty("user.home"));
 
-    FileType ft;
     final String template = line.getOptionValue("template");
-    /* If no template is provided we default to generating a B (.mch)
-    file */
-    if (template != null) {
-      ft = FileType.Unknown;
-      for (final FileType i : FileType.values()) {
-        if (i.name.equals(template)) {
-          ft = i;
-        }
-      }
-    } else {
-      ft = FileType.BMachine;
-    }
+    final FileType ft = getFileType(template);
 
 
-    final ByteArrayOutputStream result;
     final File out = new File(output);
     if (ft == FileType.Unknown) {
-      final String tmpl = template
-          .replaceFirst("^~", System.getProperty("user.home"));
+      final String tmpl = template.replaceFirst("^~", System.getProperty("user.home"));
       renderer.renderWith(tmpl, out);
     } else {
       renderer.renderFor(ft, out);
     }
 
-    System.out.println("Wrote to " + line.getOptionValue("output"));
+    System.out.println("Wrote to " + line.getOptionValue(OUTPUT));
     store.close();
+  }
+
+  private static FileType getFileType(final String template) {
+    /* If no template is provided we default to generating a B (.mch) file */
+    if (template != null) {
+      FileType ft = FileType.Unknown;
+      for (final FileType i : FileType.values()) {
+        if (i.typeName.equals(template)) {
+          ft = i;
+        }
+      }
+      return ft;
+    }
+    return FileType.BMachine;
   }
 
   private static CommandLine getCommandLine(final String[] args) {
@@ -80,18 +83,17 @@ public class Main {
     final Options options = getOptions();
 
     final CommandLineParser parser = new DefaultParser();
-    CommandLine line = null;
+
     try {
       // parse the command line arguments
-      line = parser.parse(options, args);
+      return parser.parse(options, args);
     } catch (final ParseException exp) {
       // oops, something went wrong
       System.err.println("Parsing failed.  Reason: " + exp.getMessage());
       final HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp(usage, options);
-      System.exit(0);
     }
-    return line;
+    return null;
   }
 
   private static Options getOptions() {
