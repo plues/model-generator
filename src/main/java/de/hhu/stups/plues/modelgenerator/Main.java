@@ -49,7 +49,7 @@ public class Main {
 
 
     final File out = new File(output);
-    if (ft == FileType.Unknown) {
+    if (ft == FileType.UNKNOWN) {
       final String tmpl = template.replaceFirst("^~", System.getProperty("user.home"));
       renderer.renderWith(tmpl, out);
     } else {
@@ -63,7 +63,7 @@ public class Main {
   private static FileType getFileType(final String template) {
     /* If no template is provided we default to generating a B (.mch) file */
     if (template != null) {
-      FileType ft = FileType.Unknown;
+      FileType ft = FileType.UNKNOWN;
       for (final FileType i : FileType.values()) {
         if (i.typeName.equals(template)) {
           ft = i;
@@ -71,7 +71,7 @@ public class Main {
       }
       return ft;
     }
-    return FileType.BMachine;
+    return FileType.B_MACHINE;
   }
 
   private static CommandLine getCommandLine(final String[] args) {

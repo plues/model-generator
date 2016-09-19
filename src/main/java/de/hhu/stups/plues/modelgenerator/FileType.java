@@ -1,7 +1,7 @@
 package de.hhu.stups.plues.modelgenerator;
 
 public enum FileType {
-  BMachine("b", "mch"), ModuleCombination("mc", "xml"), Unknown("?", "?");
+  B_MACHINE("b", "mch"), MODULE_COMBINATION("mc", "xml"), UNKNOWN("?", "?");
 
   public final String typeName;
   public final String extension;
