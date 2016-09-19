@@ -81,8 +81,8 @@ public class SqliteDateTimeType implements UserType {
   }
 
   @Override
-    return new Date(((Long)cached).longValue());
   public Object assemble(final Serializable cached, final Object owner) {
+    return new Date((Long) cached);
   }
 
   @Override
