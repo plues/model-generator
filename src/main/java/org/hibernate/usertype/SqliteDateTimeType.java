@@ -27,19 +27,19 @@ public class SqliteDateTimeType implements UserType {
   }
 
   @Override
-  public boolean equals(final Object object, final Object other) throws HibernateException {
+  public boolean equals(final Object object, final Object other) {
     return Objects.equals(object, other);
   }
 
   @Override
-  public int hashCode(final Object object) throws HibernateException {
+  public int hashCode(final Object object) {
     return Objects.hashCode(object);
   }
 
   @Override
   public Object nullSafeGet(final ResultSet rs, final String[] names,
                             final SharedSessionContractImplementor session, final Object owner)
-      throws HibernateException, SQLException {
+      throws SQLException {
     assert names.length == 1;
     final String dateStr = rs.getString(names[0]);
     final Date date;
@@ -55,7 +55,7 @@ public class SqliteDateTimeType implements UserType {
   @Override
   public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
                           final SharedSessionContractImplementor session)
-      throws HibernateException, SQLException {
+      throws SQLException {
     try {
       st.setString(index, new SimpleDateFormat(sqliteTextTimeStamp).format(value));
     } catch (final IllegalArgumentException exception) {
@@ -65,7 +65,7 @@ public class SqliteDateTimeType implements UserType {
   }
 
   @Override
-  public Object deepCopy(final Object value) throws HibernateException {
+  public Object deepCopy(final Object value) {
     return value;
   }
 
@@ -75,17 +75,17 @@ public class SqliteDateTimeType implements UserType {
   }
 
   @Override
-  public Serializable disassemble(final Object value) throws HibernateException {
+  public Serializable disassemble(final Object value) {
     return ((Date) value).getTime();
   }
 
   @Override
-  public Object assemble(Serializable cached, Object owner) throws HibernateException {
     return new Date(((Long)cached).longValue());
+  public Object assemble(final Serializable cached, final Object owner) {
   }
 
   @Override
-  public Object replace(Object original, Object target, Object owner) throws HibernateException {
+  public Object replace(final Object original, final Object target, final Object owner) {
     throw new HibernateException("Currently not supported");
   }
 }
