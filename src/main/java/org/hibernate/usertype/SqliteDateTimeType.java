@@ -14,7 +14,8 @@ import java.util.Date;
 import java.util.Objects;
 
 public class SqliteDateTimeType implements UserType {
-  static final String sqliteTextTimeStamp = "yyyy-MM-dd kk:mm:ss"; // e.g. 2016-04-27 15:40:18
+  // e.g. 2016-04-27 15:40:18
+  private static final String SQLITE_TEXT_TIME_STAMP = "yyyy-MM-dd kk:mm:ss";
 
   @Override
   public int[] sqlTypes() {
@@ -44,7 +45,7 @@ public class SqliteDateTimeType implements UserType {
     final String dateStr = rs.getString(names[0]);
     final Date date;
     try {
-      date = new SimpleDateFormat(sqliteTextTimeStamp).parse(dateStr);
+      date = new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).parse(dateStr);
     } catch (final ParseException | NullPointerException exception) {
       exception.printStackTrace();
       throw new HibernateException(exception.getMessage());
@@ -57,7 +58,7 @@ public class SqliteDateTimeType implements UserType {
                           final SharedSessionContractImplementor session)
       throws SQLException {
     try {
-      st.setString(index, new SimpleDateFormat(sqliteTextTimeStamp).format(value));
+      st.setString(index, new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).format(value));
     } catch (final IllegalArgumentException exception) {
       exception.printStackTrace();
       throw new HibernateException(exception.getMessage());
