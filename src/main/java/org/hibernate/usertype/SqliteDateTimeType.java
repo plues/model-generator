@@ -12,10 +12,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SqliteDateTimeType implements UserType {
   // e.g. 2016-04-27 15:40:18
   private static final String SQLITE_TEXT_TIME_STAMP = "yyyy-MM-dd kk:mm:ss";
+
+  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
   @Override
   public int[] sqlTypes() {
@@ -47,7 +51,7 @@ public class SqliteDateTimeType implements UserType {
     try {
       date = new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).parse(dateStr);
     } catch (final ParseException | NullPointerException exception) {
-      exception.printStackTrace();
+      logger.log(Level.SEVERE, "Exception was thrown", exception);
       throw new HibernateException(exception.getMessage());
     }
     return date;
@@ -60,7 +64,7 @@ public class SqliteDateTimeType implements UserType {
     try {
       st.setString(index, new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).format(value));
     } catch (final IllegalArgumentException exception) {
-      exception.printStackTrace();
+      logger.log(Level.SEVERE, "Exception was thrown", exception);
       throw new HibernateException(exception.getMessage());
     }
   }
