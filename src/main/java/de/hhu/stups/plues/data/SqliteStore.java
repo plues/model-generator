@@ -40,7 +40,8 @@ public class SqliteStore extends Store {
     this.init(dbPath);
   }
 
-  public SqliteStore() {
+  private void logException(final Exception exception) {
+    logger.log(java.util.logging.Level.SEVERE, "an exception was thrown", exception);
   }
 
   @Override
@@ -49,12 +50,13 @@ public class SqliteStore extends Store {
     try {
       openDataBase(dbPath);
       checkSchemaVersion();
-    } catch (final ClassNotFoundException | IOException exception) {
-      exception.printStackTrace();
+    } catch (final ClassNotFoundException exception) {
+      logException(exception);
       throw new StoreException(exception);
     }
   }
-
+  
+  @Override
   public synchronized void init(final String dbpath)
       throws IncompatibleSchemaError, StoreException {
     this.dbPath = dbpath;
@@ -93,14 +95,17 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized String getInfoByKey(final String key) {
     return getByKey(key, Info.class).getValue();
   }
 
+  @Override
   public synchronized Course getCourseByKey(final String key) {
     return getByKey(key, Course.class);
   }
 
+  @Override
   public synchronized List<Info> getInfo() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -112,6 +117,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<AbstractUnit> getAbstractUnits() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -123,18 +129,22 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized AbstractUnit getAbstractUnitById(final Integer key) {
     return getById(key, AbstractUnit.class);
   }
 
+  @Override
   public synchronized Group getGroupById(final Integer gid) {
     return getById(gid, Group.class);
   }
 
+  @Override
   public synchronized Module getModuleById(final Integer mid) {
     return getById(mid, Module.class);
   }
 
+  @Override
   public synchronized List<Course> getCourses() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -144,6 +154,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<Group> getGroups() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -155,6 +166,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<Level> getLevels() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -166,6 +178,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<Module> getModules() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -177,6 +190,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -188,6 +202,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<ModuleAbstractUnitType> getModuleAbstractUnitType() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -199,6 +214,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<Session> getSessions() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -216,6 +232,7 @@ public class SqliteStore extends Store {
     return result;
   }
 
+  @Override
   public synchronized List<Unit> getUnits() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -260,32 +277,36 @@ public class SqliteStore extends Store {
       if (tx != null) {
         tx.rollback();
       }
-      exception.printStackTrace();
+      logException(exception);
     } finally {
       s.flush();
     }
 
   }
 
-  public synchronized void checkSchemaVersion() throws IncompatibleSchemaError, IOException {
+  private synchronized void checkSchemaVersion() throws IncompatibleSchemaError {
     final Properties properties = new Properties();
-    properties.load(Thread.currentThread()
-        .getContextClassLoader()
-        .getResourceAsStream("schema.properties"));
+    try {
+      properties.load(Thread.currentThread()
+          .getContextClassLoader()
+          .getResourceAsStream("schema.properties"));
+    } catch (final IOException exception) {
+      logException(exception);
+    }
 
-    final String version_str = this.getInfoByKey("schema_version");
+    final String versionStr = this.getInfoByKey("schema_version");
 
-    final String[] schema_version = version_str.split("\\.");
-    final String[] required_version
-      = properties.getProperty("schema_version").split("\\.");
+    final String[] schemaVersion = versionStr.split("\\.");
+    final String[] requiredVersion
+      = properties.getProperty("schema_version", "0.0").split("\\.");
 
     // Major versions must match
     // minor version may be higher in database
-    if ((!schema_version[0].equals(required_version[0])) || (
-        Integer.parseInt(schema_version[1]) < Integer.parseInt(required_version[1]))) {
+    if ((!schemaVersion[0].equals(requiredVersion[0])) || (
+        Integer.parseInt(schemaVersion[1]) < Integer.parseInt(requiredVersion[1]))) {
       throw new IncompatibleSchemaError("Expected database schema "
-        + "version " + required_version[0] + "." + required_version[1]
-        + " but was " + schema_version[0] + "." + required_version[1]);
+        + "version " + requiredVersion[0] + "." + requiredVersion[1]
+        + " but was " + schemaVersion[0] + "." + requiredVersion[1]);
     }
 
   }
@@ -314,11 +335,13 @@ public class SqliteStore extends Store {
     this.sessionFactory = conf.buildSessionFactory();
   }
 
+  @Override
   public synchronized void close() {
     sessionFactory.close();
   }
 
   @SuppressFBWarnings("DM_GC")
+  @Override
   public final synchronized void clear() {
     System.gc();
   }
