@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Renderer {
@@ -92,7 +93,7 @@ public class Renderer {
         template.render(model, bos);
       }
     } catch (final IOException exception) {
-      exception.printStackTrace();
+      logger.log(Level.SEVERE, "Exception writing template", exception);
     }
   }
 

@@ -82,9 +82,6 @@ public class Course implements Serializable {
   @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
   private Set<ModuleCombination> moduleCombinations;
 
-  public Course() {
-  }
-
   @Override
   public boolean equals(final Object other) {
     if (this == other) {
@@ -117,8 +114,7 @@ public class Course implements Serializable {
   }
 
   public String getFullName() {
-    return this.longName + " (" + this.degree + " " + this.kzfa + ") PO:"
-        + String.valueOf(this.po);
+    return this.longName + " (" + this.degree + " " + this.kzfa + ") PO:" + this.po;
   }
 
   /**
@@ -140,15 +136,15 @@ public class Course implements Serializable {
   }
 
   public boolean isMajor() {
-    return this.kzfa.equals("H");
+    return "H".equals(this.kzfa);
   }
 
   public boolean isMinor() {
-    return this.kzfa.equals("N");
+    return "N".equals(this.kzfa);
   }
 
   public boolean isCombinable() {
-    return this.degree.equals("bk");// bk is combinable ba is not
+    return "bk".equals(this.degree);// bk is combinable ba is not
   }
 
   public Set<ModuleCombination> getModuleCombinations() {
@@ -248,6 +244,7 @@ public class Course implements Serializable {
       && !this.getShortName().equals(other.getShortName());
   }
 
+  @Override
   public String toString() {
     return this.getFullName();
   }

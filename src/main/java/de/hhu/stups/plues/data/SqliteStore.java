@@ -55,7 +55,7 @@ public class SqliteStore extends Store {
       throw new StoreException(exception);
     }
   }
-  
+
   @Override
   public synchronized void init(final String dbpath)
       throws IncompatibleSchemaError, StoreException {
