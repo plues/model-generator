@@ -4,6 +4,7 @@ import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.Course;
 import de.hhu.stups.plues.data.entities.Group;
 import de.hhu.stups.plues.data.entities.Level;
+import de.hhu.stups.plues.data.entities.Log;
 import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
@@ -51,4 +52,5 @@ public interface Store {
 
   Module getModuleById(Integer mid);
 
+  List<Log> getLog();
 }

@@ -20,6 +20,7 @@ import org.hibernate.query.Query;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -222,6 +223,12 @@ public class SqliteStore implements Store {
     final List<Session> result = query.setCacheable(true).list();
     tx.commit();
     return result;
+  }
+
+  // TODO: Need to be filled correctly
+  @Override
+  public synchronized List<Log> getLog() {
+    return new ArrayList<>();
   }
 
   public synchronized Session getSessionById(final int id) {
