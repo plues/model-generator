@@ -37,6 +37,8 @@ public class Session implements Serializable {
   private Integer rhythm;
   private Integer duration;
 
+  private boolean tentative;
+
   @CreationTimestamp
   @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "created_at")
@@ -144,6 +146,12 @@ public class Session implements Serializable {
   public void setGroup(final Group group) {
     this.group = group;
   }
+
+  @SuppressWarnings("unused")
+  private boolean isTentative() {
+    return tentative;
+  }
+
 
   @Override
   public boolean equals(final Object other) {
