@@ -52,8 +52,12 @@ public class SqliteStore implements Store {
       openDataBase(dbPath);
       checkSchemaVersion();
     } catch (final ClassNotFoundException exception) {
+      this.close();
       logException(exception);
       throw new StoreException(exception);
+    } catch (final IncompatibleSchemaError exception) {
+      this.close();
+      throw exception;
     }
   }
 
@@ -344,7 +348,9 @@ public class SqliteStore implements Store {
 
   @Override
   public synchronized void close() {
-    sessionFactory.close();
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }
   }
 
   @SuppressFBWarnings("DM_GC")
