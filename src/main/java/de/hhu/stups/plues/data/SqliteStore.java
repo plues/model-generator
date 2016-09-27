@@ -313,7 +313,7 @@ public class SqliteStore implements Store {
         Integer.parseInt(schemaVersion[1]) < Integer.parseInt(requiredVersion[1]))) {
       throw new IncompatibleSchemaError("Expected database schema "
         + "version " + requiredVersion[0] + "." + requiredVersion[1]
-        + " but was " + schemaVersion[0] + "." + requiredVersion[1]);
+        + " but was " + schemaVersion[0] + "." + schemaVersion[1]);
     }
 
   }
