@@ -52,5 +52,5 @@ public interface Store {
 
   Module getModuleById(Integer mid);
 
-  List<Log> getLog();
+  List<Log> getLogEntries();
 }

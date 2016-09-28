@@ -225,12 +225,11 @@ public class SqliteStore implements Store {
     return result;
   }
 
-  // TODO: Need to be filled correctly
-  @Override
-  public synchronized List<Log> getLog() {
-    return new ArrayList<>();
-  }
-
+  /**
+   * Find a session using a given Id. Return this found session.
+   * @param id Id of the session
+   * @return Found session
+   */
   public synchronized Session getSessionById(final int id) {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -251,6 +250,7 @@ public class SqliteStore implements Store {
     return result;
   }
 
+  @Override
   public synchronized List<Log> getLogEntries() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
