@@ -136,15 +136,15 @@ public class Course implements Serializable {
   }
 
   public boolean isMajor() {
-    return "H".equals(this.kzfa);
+    return "H".equalsIgnoreCase(this.kzfa);
   }
 
   public boolean isMinor() {
-    return "N".equals(this.kzfa);
+    return "N".equalsIgnoreCase(this.kzfa);
   }
 
   public boolean isCombinable() {
-    return "bk".equals(this.degree);// bk is combinable ba is not
+    return "bk".equalsIgnoreCase(this.degree);// bk is combinable ba is not
   }
 
   public Set<ModuleCombination> getModuleCombinations() {
