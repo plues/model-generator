@@ -79,6 +79,7 @@ public class Course implements Serializable {
           referencedColumnName = "id"))
   private Set<Level> levels;
 
+  @SuppressWarnings("unused")
   @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
   private Set<ModuleCombination> moduleCombinations;
 
@@ -147,6 +148,7 @@ public class Course implements Serializable {
     return "bk".equalsIgnoreCase(this.degree);// bk is combinable ba is not
   }
 
+  @SuppressWarnings("unused")
   public Set<ModuleCombination> getModuleCombinations() {
     return this.moduleCombinations;
   }
