@@ -52,8 +52,12 @@ public class SqliteStore implements Store {
       openDataBase(dbPath);
       checkSchemaVersion();
     } catch (final ClassNotFoundException exception) {
+      this.close();
       logException(exception);
       throw new StoreException(exception);
+    } catch (final IncompatibleSchemaError exception) {
+      this.close();
+      throw exception;
     }
   }
 
@@ -313,7 +317,7 @@ public class SqliteStore implements Store {
         Integer.parseInt(schemaVersion[1]) < Integer.parseInt(requiredVersion[1]))) {
       throw new IncompatibleSchemaError("Expected database schema "
         + "version " + requiredVersion[0] + "." + requiredVersion[1]
-        + " but was " + schemaVersion[0] + "." + requiredVersion[1]);
+        + " but was " + schemaVersion[0] + "." + schemaVersion[1]);
     }
 
   }
@@ -344,7 +348,9 @@ public class SqliteStore implements Store {
 
   @Override
   public synchronized void close() {
-    sessionFactory.close();
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }
   }
 
   @SuppressFBWarnings("DM_GC")
