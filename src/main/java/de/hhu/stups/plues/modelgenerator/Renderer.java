@@ -47,9 +47,9 @@ public class Renderer {
 
   @SuppressWarnings("WeakerAccess")
   protected JtwigTemplate loadTemplate(final FileType tp) {
-    final String template = "data." + tp.extension + ".twig";
+    final String template = tp.template;
     logger.info("Using template: " + template);
-    return this.loadTemplateFromResource("/" + template);
+    return this.loadTemplateFromResource(template);
   }
 
   @SuppressWarnings("WeakerAccess")
