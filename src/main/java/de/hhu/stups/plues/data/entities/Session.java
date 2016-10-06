@@ -37,6 +37,7 @@ public class Session implements Serializable {
   private Integer rhythm;
   private Integer duration;
 
+  @SuppressWarnings("unused")
   private boolean tentative;
 
   @CreationTimestamp
@@ -148,7 +149,7 @@ public class Session implements Serializable {
   }
 
   @SuppressWarnings("unused")
-  private boolean isTentative() {
+  public boolean isTentative() {
     return tentative;
   }
 
