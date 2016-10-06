@@ -184,7 +184,7 @@ public class Session implements Serializable {
   }
 
   @Transient
-  private transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
   public ObjectProperty<Slot> slotProperty() {
     return slotObjectProperty;
@@ -195,16 +195,16 @@ public class Session implements Serializable {
   }
 
   public static class Slot {
-    public DayOfWeek day;
-    public Integer time;
+    public final DayOfWeek day;
+    public final Integer time;
 
-    public Slot(DayOfWeek day, Integer time) {
+    public Slot(final DayOfWeek day, final Integer time) {
       this.day = day;
       this.time = time;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (obj == null || !(obj instanceof Slot)) {
         return false;
       }
@@ -212,7 +212,7 @@ public class Session implements Serializable {
         return true;
       }
 
-      Slot slot = (Slot) obj;
+      final Slot slot = (Slot) obj;
 
       return slot.day.equals(day) && slot.time.equals(time);
     }
