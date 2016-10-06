@@ -32,9 +32,6 @@ public class ModuleAbstractUnitSemester implements Serializable {
   @Id
   private Integer semester;
 
-  public ModuleAbstractUnitSemester() {
-  }
-
   @Override
   public boolean equals(final Object other) {
     if (this == other) {
