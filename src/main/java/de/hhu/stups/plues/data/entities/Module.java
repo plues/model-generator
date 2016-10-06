@@ -183,6 +183,19 @@ public class Module implements Serializable {
     this.moduleAbstractUnitSemesters = moduleAbstractUnitSemesters;
   }
 
+  /**
+   * Returns the set of semesters in which the abstract unit au is associated to this module.
+   *
+   * @param au AbstractUnit
+   * @return Set of semester numbers.
+   */
+  public Set<Integer> getSemestersForAbstractUnit(final AbstractUnit au) {
+    return this.moduleAbstractUnitSemesters.stream()
+      .filter(maus -> maus.getAbstractUnit().equals(au))
+      .map(ModuleAbstractUnitSemester::getSemester)
+      .collect(Collectors.toSet());
+  }
+
   public Set<ModuleAbstractUnitType> getModuleAbstractUnitTypes() {
     return moduleAbstractUnitTypes;
   }
