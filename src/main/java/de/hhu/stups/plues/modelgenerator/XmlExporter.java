@@ -12,9 +12,7 @@ import java.util.zip.ZipOutputStream;
 @SuppressWarnings("unused")
 public class XmlExporter {
 
-  private static final String DATA_TEMPLATE = "/xml/data.xml.twig";
   private static final String DATA_FILE = "Moduldaten.xml";
-  private static final String TREE_TEMPLATE = "/xml/tree.xml.twig";
   private static final String TREE_FILE = "Modulbaum.xml";
   private final Logger logger = Logger.getLogger(getClass().getSimpleName());
   private final Renderer renderer;
@@ -39,7 +37,7 @@ public class XmlExporter {
 
   private ByteArrayOutputStream buildZipFile(final ByteArrayOutputStream tree,
                                              final ByteArrayOutputStream data)
-    throws IOException {
+      throws IOException {
 
     final byte[] treeBytes = getBytesForRenderer(tree);
     final byte[] dataBytes = getBytesForRenderer(data);
