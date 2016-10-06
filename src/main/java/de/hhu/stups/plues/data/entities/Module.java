@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -73,12 +74,10 @@ public class Module implements Serializable {
   @OneToMany(mappedBy = "module")
   private Set<ModuleAbstractUnitType> moduleAbstractUnitTypes;
 
-  public Module() {
-  }
-
   /**
    * Get the maximum of credit points required for module. Returns -1 if the module
    * is not credit point based.
+   *
    * @return int the maximum number of credit points for module.
    */
 
@@ -90,7 +89,7 @@ public class Module implements Serializable {
     return creditPoints;
   }
 
-  public void setCreditPoints(Integer creditPoints) {
+  public void setCreditPoints(final Integer creditPoints) {
     this.creditPoints = creditPoints;
   }
 
@@ -98,7 +97,7 @@ public class Module implements Serializable {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(final int id) {
     this.id = id;
   }
 
@@ -106,7 +105,7 @@ public class Module implements Serializable {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -114,7 +113,7 @@ public class Module implements Serializable {
     return title;
   }
 
-  public void setTitle(String title) {
+  public void setTitle(final String title) {
     this.title = title;
   }
 
@@ -122,7 +121,7 @@ public class Module implements Serializable {
     return pordnr;
   }
 
-  public void setPordnr(Integer pordnr) {
+  public void setPordnr(final Integer pordnr) {
     this.pordnr = pordnr;
   }
 
@@ -130,7 +129,7 @@ public class Module implements Serializable {
     return mandatory;
   }
 
-  public void setMandatory(Boolean mandatory) {
+  public void setMandatory(final Boolean mandatory) {
     this.mandatory = mandatory;
   }
 
@@ -138,7 +137,7 @@ public class Module implements Serializable {
     return electiveUnits;
   }
 
-  public void setElectiveUnits(Integer electiveUnits) {
+  public void setElectiveUnits(final Integer electiveUnits) {
     this.electiveUnits = electiveUnits;
   }
 
@@ -146,7 +145,7 @@ public class Module implements Serializable {
     return (Date) updatedAt.clone();
   }
 
-  public void setUpdatedAt(Date updatedAt) {
+  public void setUpdatedAt(final Date updatedAt) {
     this.updatedAt = (Date) updatedAt.clone();
   }
 
@@ -154,7 +153,7 @@ public class Module implements Serializable {
     return (Date) createdAt.clone();
   }
 
-  public void setCreatedAt(Date createdAt) {
+  public void setCreatedAt(final Date createdAt) {
     this.createdAt = (Date) createdAt.clone();
   }
 
@@ -162,7 +161,7 @@ public class Module implements Serializable {
     return courses;
   }
 
-  public void setCourses(Set<Course> courses) {
+  public void setCourses(final Set<Course> courses) {
     this.courses = courses;
   }
 
@@ -170,7 +169,7 @@ public class Module implements Serializable {
     return abstractUnits;
   }
 
-  public void setAbstractUnits(Set<AbstractUnit> abstractUnits) {
+  public void setAbstractUnits(final Set<AbstractUnit> abstractUnits) {
     this.abstractUnits = abstractUnits;
   }
 
@@ -215,20 +214,20 @@ public class Module implements Serializable {
     }
     final Module module = (Module) other;
     return id == module.id
-        && Objects.equals(key, module.key)
-        && Objects.equals(name, module.name)
-        && Objects.equals(title, module.title)
-        && Objects.equals(pordnr, module.pordnr)
-        && Objects.equals(mandatory, module.mandatory)
-        && Objects.equals(electiveUnits, module.electiveUnits)
-        && Objects.equals(creditPoints, module.creditPoints)
-        && Objects.equals(updatedAt, module.updatedAt)
-        && Objects.equals(createdAt, module.createdAt);
+      && Objects.equals(key, module.key)
+      && Objects.equals(name, module.name)
+      && Objects.equals(title, module.title)
+      && Objects.equals(pordnr, module.pordnr)
+      && Objects.equals(mandatory, module.mandatory)
+      && Objects.equals(electiveUnits, module.electiveUnits)
+      && Objects.equals(creditPoints, module.creditPoints)
+      && Objects.equals(updatedAt, module.updatedAt)
+      && Objects.equals(createdAt, module.createdAt);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, key, name, title, pordnr, mandatory, electiveUnits,
-        creditPoints, updatedAt, createdAt);
+      creditPoints, updatedAt, createdAt);
   }
 }
