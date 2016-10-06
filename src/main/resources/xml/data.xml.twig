@@ -9,7 +9,7 @@
             <abstract-unit id="{{ aut.abstractUnit.key }}"
                 title="{{ aut.abstractUnit.title }}"
                 type="{{ aut.type }}"
-                semester="semester goes here {% for mau in module.moduleAbstractUnitSemester %}{% if ((mau.abstractUnit == aut.abstractUnit) and mau .module == module) %}{% for s in mau.semester %}{{s}}{% if not (loop.last) %},{% endif %}{% endfor %}{# mau.semester #}{% endif %}{% endfor %}{# module .moduleAbstractUnitsSemester #}" />{% endfor %}{# module.moduleAbstractUnitsTypes #}
+                semester="{{  join(module.semestersForAbstractUnit(aut.abstractUnit), ',') }}" />{% endfor %}{# module.moduleAbstractUnitsTypes #}
         </module>{% endfor %}{# modules #}
     </modules>
     <units>{% for unit in units %}
