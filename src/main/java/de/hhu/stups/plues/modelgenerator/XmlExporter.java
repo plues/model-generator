@@ -4,38 +4,42 @@ import de.hhu.stups.plues.data.Store;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @SuppressWarnings("unused")
-public class XmlExporter extends Renderer {
+public class XmlExporter {
 
   private static final String DATA_TEMPLATE = "/xml/data.xml.twig";
   private static final String DATA_FILE = "Moduldaten.xml";
   private static final String TREE_TEMPLATE = "/xml/tree.xml.twig";
   private static final String TREE_FILE = "Modulbaum.xml";
+  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+  private final Renderer renderer;
 
   public XmlExporter(final Store db) {
-    super(db);
+    this.renderer = new Renderer(db);
   }
 
   /**
    * Export data to a zip file containting an xml file for the module tree and an xml file for
    * the module data.
+   *
    * @return ByteArrayOutputStream representing the generated ZIP file
    * @throws IOException in case there is an error creating the ZIP file
    */
   public ByteArrayOutputStream export() throws IOException {
-    final ByteArrayOutputStream renderedData = exportFile(DATA_TEMPLATE);
-    final ByteArrayOutputStream renderedTree = exportFile(TREE_TEMPLATE);
+    final ByteArrayOutputStream renderedData = renderer.renderFor(FileType.MODULE_DATA);
+    final ByteArrayOutputStream renderedTree = renderer.renderFor(FileType.MODULE_TREE);
     //
-    final ByteArrayOutputStream zipFile = buildZipFile(renderedTree, renderedData);
-    return zipFile;
+    return buildZipFile(renderedTree, renderedData);
   }
 
   private ByteArrayOutputStream buildZipFile(final ByteArrayOutputStream tree,
                                              final ByteArrayOutputStream data)
-      throws IOException {
+    throws IOException {
 
     final byte[] treeBytes = getBytesForRenderer(tree);
     final byte[] dataBytes = getBytesForRenderer(data);
@@ -54,7 +58,7 @@ public class XmlExporter extends Renderer {
       zos.closeEntry();
 
     } catch (final IOException ioe) {
-      ioe.printStackTrace();
+      logger.log(Level.SEVERE, "Exception creating ZIP file for xml data", ioe);
       throw ioe;
     }
 
@@ -64,9 +68,4 @@ public class XmlExporter extends Renderer {
   private byte[] getBytesForRenderer(final ByteArrayOutputStream stream) {
     return stream.toByteArray();
   }
-
-  private ByteArrayOutputStream exportFile(String path) {
-    return this.render(this.loadTemplateFromResource(path));
-  }
-
 }
