@@ -134,6 +134,25 @@ public class SqliteStore implements Store {
   }
 
   @Override
+  public synchronized List<AbstractUnit> getAbstractUnitsWithoutUnits() {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+
+    final CriteriaBuilder cb = session.getCriteriaBuilder();
+    final CriteriaQuery<AbstractUnit> query =
+        cb.createQuery(AbstractUnit.class);
+
+    final Root<AbstractUnit> root = query.from(AbstractUnit.class);
+    query.where(cb.isEmpty(root.get("units")));
+
+    final List<AbstractUnit> result = session.createQuery(query)
+        .setCacheable(true).list();
+    tx.commit();
+
+    return result;
+  }
+
+  @Override
   public synchronized AbstractUnit getAbstractUnitById(final Integer key) {
     return getById(key, AbstractUnit.class);
   }
@@ -146,6 +165,11 @@ public class SqliteStore implements Store {
   @Override
   public synchronized Module getModuleById(final Integer mid) {
     return getById(mid, Module.class);
+  }
+
+  @Override
+  public synchronized Unit getUnitById(final Integer uid) {
+    return getById(uid, Unit.class);
   }
 
   @Override

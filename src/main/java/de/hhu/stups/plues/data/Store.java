@@ -26,6 +26,8 @@ public interface Store {
 
   List<AbstractUnit> getAbstractUnits();
 
+  List<AbstractUnit> getAbstractUnitsWithoutUnits();
+
   List<Course> getCourses();
 
   Course getCourseByKey(String key);
@@ -43,6 +45,8 @@ public interface Store {
   List<Session> getSessions();
 
   List<Unit> getUnits();
+
+  Unit getUnitById(Integer uid);
 
   AbstractUnit getAbstractUnitById(Integer key);
 
