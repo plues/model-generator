@@ -32,6 +32,8 @@ public interface Store {
 
   Course getCourseByKey(String key);
 
+  Course getCourseByName(String name);
+
   List<Group> getGroups();
 
   List<Level> getLevels();
