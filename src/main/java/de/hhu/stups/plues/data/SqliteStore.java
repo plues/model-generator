@@ -110,24 +110,6 @@ public class SqliteStore implements Store {
   }
 
   @Override
-  public synchronized Course getCourseByName(final String courseName) {
-    final org.hibernate.Session session = sessionFactory.getCurrentSession();
-    final Transaction tx = session.beginTransaction();
-
-    final CriteriaBuilder cb = session.getCriteriaBuilder();
-    final CriteriaQuery<Course> query =
-        cb.createQuery(Course.class);
-
-    final Root<Course> root = query.from(Course.class);
-    query.where(cb.equal(root.get("name"),courseName));
-
-    final Course result = session.createQuery(query)
-        .setCacheable(true).getSingleResult();
-    tx.commit();
-    return result;
-  }
-
-  @Override
   public synchronized List<Info> getInfo() {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
