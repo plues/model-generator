@@ -11,6 +11,8 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
+import de.hhu.stups.plues.data.sessions.SessionFacade;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -257,6 +259,7 @@ public class SqliteStore implements Store {
    * @param id Id of the session
    * @return Found session
    */
+  @Override
   public synchronized Session getSessionById(final int id) {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -286,36 +289,39 @@ public class SqliteStore implements Store {
     return result;
   }
 
-  public synchronized void moveSession(final Session session, final String targetDay,
-                                       final String targetTime) {
-    final String srcDay = session.getDay();
-    final String srcTime = session.getTime().toString();
+  @Override
+  public synchronized void moveSession(final SessionFacade sessionFacade, final SessionFacade.Slot slot) {
+    final String srcDay = sessionFacade.getSlot().getDayString();
+    final String srcTime = sessionFacade.getSlot().time.toString();
+    final String targetDay = slot.getDayString();
+    final String targetTime = slot.time.toString();
 
-    session.setDay(targetDay);
-    session.setTime(Integer.parseInt(targetTime));
+    sessionFacade.setSlot(slot);
 
     final Log log = new Log();
     // TODO day and time should each be a field in the log table
     log.setSrc(srcDay + srcTime);
     log.setTarget(targetDay + targetTime);
-    log.setSession(session);
+    log.setSession(sessionFacade.getSession());
 
     final org.hibernate.Session s = sessionFactory.getCurrentSession();
 
     final Transaction tx = s.beginTransaction();
     try {
-      s.persist(session);
+      Query query = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
+      query.setParameter("time", Integer.valueOf(targetTime));
+      query.setParameter("day", targetDay);
+      query.setParameter("session_id", sessionFacade.getSession().getId());
+      query.executeUpdate();
       s.persist(log);
+      // TODO: ensure hibernate caches to be uptodate
       tx.commit();
     } catch (final HibernateException exception) {
       if (tx != null) {
         tx.rollback();
       }
       logException(exception);
-    } finally {
-      s.flush();
     }
-
   }
 
   private synchronized void checkSchemaVersion() throws IncompatibleSchemaError {
