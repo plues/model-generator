@@ -246,6 +246,14 @@ public class Course implements Serializable {
       && !this.getShortName().equals(other.getShortName());
   }
 
+  public boolean isBachelor() {
+    return "ba".equals(degree) || "bk".equals(degree);
+  }
+
+  public boolean isMaster() {
+    return !isBachelor();
+  }
+
   @Override
   public String toString() {
     return this.getFullName();
