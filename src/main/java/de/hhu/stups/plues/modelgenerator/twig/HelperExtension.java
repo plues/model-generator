@@ -7,6 +7,7 @@ public class HelperExtension implements Extension {
   @Override
   public void configure(final EnvironmentConfigurationBuilder configurationBuilder) {
     configurationBuilder.functions()
+        .add(new AbstractUnitUnitPairsFunction())
         .add(new TreeMapperFunction())
         .add(new CourseCreditPointsFunction());
   }

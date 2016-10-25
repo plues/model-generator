@@ -138,8 +138,8 @@ PROPERTIES
     &
     abstract_unit_unit : POW(ABSTRACT_UNITS * UNITS)
     &
-    abstract_unit_unit = { {% for it in abstract_units %}{% if (it.units.size () > 0) %}
-        {% for u in it.units %}(au{{ it.id }}, unit{{ u.id }}){% if not (loop.last) %},{% endif %}{% endfor %}{% if not (loop.last) %},{% endif %}{% endif %}{% endfor %}
+    abstract_unit_unit = { {% for it in abstract_unit_unit_pairs(abstract_units) %}
+     (au{{  it.abstractUnit.id }}, unit{{ it.unit.id }}){% if not (loop.last) %},{% endif %}{% endfor %}
     }
     &
     course_modules : course_names --> POW(MODULES)
