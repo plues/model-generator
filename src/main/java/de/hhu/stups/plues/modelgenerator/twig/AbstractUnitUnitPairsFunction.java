@@ -30,7 +30,7 @@ public class AbstractUnitUnitPairsFunction extends SimpleJtwigFunction {
     return pairs;
   }
 
-  private class Pair {
+  private static class Pair {
     private final Unit unit;
     private final AbstractUnit abstractUnit;
 
