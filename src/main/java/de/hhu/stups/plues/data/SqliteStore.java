@@ -292,9 +292,9 @@ public class SqliteStore implements Store {
   @Override
   public synchronized void moveSession(final SessionFacade sessionFacade, final SessionFacade.Slot slot) {
     final String srcDay = sessionFacade.getSlot().getDayString();
-    final String srcTime = sessionFacade.getSlot().time.toString();
+    final String srcTime = sessionFacade.getSlot().getTime().toString();
     final String targetDay = slot.getDayString();
-    final String targetTime = slot.time.toString();
+    final String targetTime = slot.getTime().toString();
 
     sessionFacade.setSlot(slot);
 

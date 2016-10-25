@@ -8,6 +8,9 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,33 +19,43 @@ import javax.persistence.Transient;
 public class SessionFacade implements Serializable {
   private final Session session;
 
+  private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
+  private static final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
+
+  static {
+    initMaps();
+  }
+
   @Transient
-  public final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
   public SessionFacade(Session session) {
     this.session = session;
     initSlotProperty();
   }
 
-  public DayOfWeek getDayOfWeek() {
-    if (session.getDay() == null) {
+  private static void initMaps() {
+    dayOfWeekMap.put("mon", DayOfWeek.MONDAY);
+    dayOfWeekMap.put("tue", DayOfWeek.TUESDAY);
+    dayOfWeekMap.put("wed", DayOfWeek.WEDNESDAY);
+    dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
+    dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
+
+    dayMap.put(DayOfWeek.MONDAY, "mon");
+    dayMap.put(DayOfWeek.TUESDAY, "tue");
+    dayMap.put(DayOfWeek.WEDNESDAY, "wed");
+    dayMap.put(DayOfWeek.THURSDAY, "thu");
+    dayMap.put(DayOfWeek.FRIDAY, "fri");
+  }
+
+  private DayOfWeek getDayOfWeek() {
+    DayOfWeek day = dayOfWeekMap.get(session.getDay());
+
+    if (day == null) {
       return DayOfWeek.SUNDAY;
     }
 
-    switch (session.getDay()) {
-      case "mon":
-        return DayOfWeek.MONDAY;
-      case "tue":
-        return DayOfWeek.TUESDAY;
-      case "wed":
-        return DayOfWeek.WEDNESDAY;
-      case "thu":
-        return DayOfWeek.THURSDAY;
-      case "fri":
-        return DayOfWeek.FRIDAY;
-      default:
-        return DayOfWeek.SUNDAY;
-    }
+    return day;
   }
 
   public void initSlotProperty() {
@@ -57,6 +70,11 @@ public class SessionFacade implements Serializable {
     return slotObjectProperty.get();
   }
 
+  /**
+   * Set slot of session.
+   *
+   * @param slot the slot to set
+   */
   public void setSlot(Slot slot) {
     session.setDay(slot.getDayString());
     session.setTime(slot.time);
@@ -68,8 +86,8 @@ public class SessionFacade implements Serializable {
   }
 
   public static class Slot {
-    public DayOfWeek day;
-    public Integer time;
+    private DayOfWeek day;
+    private Integer time;
 
     public Slot(DayOfWeek day, Integer time) {
       this.day = day;
@@ -95,21 +113,28 @@ public class SessionFacade implements Serializable {
       return Objects.hash(day, time);
     }
 
+    /**
+     * Returns the string representation of the day of this slot.
+     *
+     * @return String representation of the day
+     */
     public String getDayString() {
-      switch (day) {
-        case MONDAY:
-          return "mon";
-        case TUESDAY:
-          return "tue";
-        case WEDNESDAY:
-          return "wed";
-        case THURSDAY:
-          return "thu";
-        case FRIDAY:
-          return "fri";
-        default:
-          return "sun";
+      String dayString = dayMap.get(day);
+
+      if (dayString == null) {
+        return "sun";
       }
+
+      return dayString;
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s: %d", day.toString(), time);
+    }
+
+    public Integer getTime() {
+      return time;
     }
   }
 
