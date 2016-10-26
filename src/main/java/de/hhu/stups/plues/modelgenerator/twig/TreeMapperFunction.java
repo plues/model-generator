@@ -39,7 +39,7 @@ class TreeMapperFunction extends SimpleJtwigFunction {
         .append("\" ").append(formatCreditPoints(level)).append(" ")
         .append(formatRequirements(level)).append(">\n");
 
-    if (level.getChildren() != null && level.getChildren().size() > 0) {
+    if (level.getChildren() != null && !level.getChildren().isEmpty()) {
       level.getChildren().forEach(l -> traverse(l, newDepth, sb));
     } else {
       level.getModules().forEach(m -> traverse(m, newDepth, sb));
