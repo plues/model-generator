@@ -17,6 +17,8 @@ import java.util.Set;
 import javax.persistence.Transient;
 
 public class SessionFacade implements Serializable {
+  private static final long serialVersionUID = 6459045002667850077L;
+
   private final Session session;
 
   private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
