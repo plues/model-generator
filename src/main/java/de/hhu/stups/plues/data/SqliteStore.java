@@ -290,7 +290,8 @@ public class SqliteStore implements Store {
   }
 
   @Override
-  public synchronized void moveSession(final SessionFacade sessionFacade, final SessionFacade.Slot slot) {
+  public synchronized void moveSession(final SessionFacade sessionFacade,
+      final SessionFacade.Slot slot) {
     final String srcDay = sessionFacade.getSlot().getDayString();
     final String srcTime = sessionFacade.getSlot().getTime().toString();
     final String targetDay = slot.getDayString();
@@ -308,13 +309,14 @@ public class SqliteStore implements Store {
 
     final Transaction tx = s.beginTransaction();
     try {
-      Query query = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
+      final Query query
+          = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
       query.setParameter("time", Integer.valueOf(targetTime));
       query.setParameter("day", targetDay);
       query.setParameter("session_id", sessionFacade.getSession().getId());
       query.executeUpdate();
       s.persist(log);
-      // TODO: ensure hibernate caches to be uptodate
+      // TODO: ensure hibernate caches to be up to date
       tx.commit();
     } catch (final HibernateException exception) {
       if (tx != null) {

@@ -31,7 +31,7 @@ public class SessionFacade implements Serializable {
   @Transient
   private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
-  public SessionFacade(Session session) {
+  public SessionFacade(final Session session) {
     this.session = session;
     initSlotProperty();
   }
@@ -51,7 +51,7 @@ public class SessionFacade implements Serializable {
   }
 
   private DayOfWeek getDayOfWeek() {
-    DayOfWeek day = dayOfWeekMap.get(session.getDay());
+    final DayOfWeek day = dayOfWeekMap.get(session.getDay());
 
     if (day == null) {
       return DayOfWeek.SUNDAY;
@@ -77,7 +77,7 @@ public class SessionFacade implements Serializable {
    *
    * @param slot the slot to set
    */
-  public void setSlot(Slot slot) {
+  public void setSlot(final Slot slot) {
     session.setDay(slot.getDayString());
     session.setTime(slot.time);
     Platform.runLater(() -> slotObjectProperty.set(new Slot(getDayOfWeek(), session.getTime())));
@@ -88,16 +88,16 @@ public class SessionFacade implements Serializable {
   }
 
   public static class Slot {
-    private DayOfWeek day;
-    private Integer time;
+    private final DayOfWeek day;
+    private final Integer time;
 
-    public Slot(DayOfWeek day, Integer time) {
+    public Slot(final DayOfWeek day, final Integer time) {
       this.day = day;
       this.time = time;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (obj == null || !(obj instanceof Slot)) {
         return false;
       }
@@ -105,7 +105,7 @@ public class SessionFacade implements Serializable {
         return true;
       }
 
-      Slot slot = (Slot) obj;
+      final Slot slot = (Slot) obj;
 
       return slot.day.equals(day) && slot.time.equals(time);
     }
@@ -121,7 +121,7 @@ public class SessionFacade implements Serializable {
      * @return String representation of the day
      */
     public String getDayString() {
-      String dayString = dayMap.get(day);
+      final String dayString = dayMap.get(day);
 
       if (dayString == null) {
         return "sun";
