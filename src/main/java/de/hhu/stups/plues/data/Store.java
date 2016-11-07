@@ -4,51 +4,62 @@ import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.Course;
 import de.hhu.stups.plues.data.entities.Group;
 import de.hhu.stups.plues.data.entities.Level;
+import de.hhu.stups.plues.data.entities.Log;
 import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
+import de.hhu.stups.plues.data.sessions.SessionFacade;
 
 import java.util.List;
 
-public abstract class Store {
-    public abstract void init() throws IncompatibleSchemaError, StoreExeception;
+public interface Store {
+  void init() throws IncompatibleSchemaError, StoreException;
 
-    public abstract void init(String dbpath) throws IncompatibleSchemaError, StoreExeception;
+  void init(String dbpath) throws IncompatibleSchemaError, StoreException;
 
-    public abstract void close();
+  void moveSession(SessionFacade sessionFacade, SessionFacade.Slot slot);
 
-    public abstract void clear();
+  void close();
 
-    public abstract List getInfo();
+  void clear();
 
-    public abstract List<AbstractUnit> getAbstractUnits();
+  List getInfo();
 
-    public abstract List<Course> getCourses();
+  List<AbstractUnit> getAbstractUnits();
 
-    public abstract Course getCourseByKey(String key);
+  List<AbstractUnit> getAbstractUnitsWithoutUnits();
 
-    public abstract List<Group> getGroups();
+  List<Course> getCourses();
 
-    public abstract List<Level> getLevels();
+  Course getCourseByKey(String key);
 
-    public abstract List<Module> getModules();
+  List<Group> getGroups();
 
-    public abstract List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
+  List<Level> getLevels();
 
-    public abstract List<ModuleAbstractUnitType> getModuleAbstractUnitType();
+  List<Module> getModules();
 
-    public abstract List<Session> getSessions();
+  List<ModuleAbstractUnitSemester> getModuleAbstractUnitSemester();
 
-    public abstract List<Unit> getUnits();
+  List<ModuleAbstractUnitType> getModuleAbstractUnitType();
 
-    public abstract AbstractUnit getAbstractUnitByID(Integer key);
+  List<Session> getSessions();
 
-    public abstract Group getGroupByID(Integer integer);
+  List<Unit> getUnits();
 
-    public abstract String getInfoByKey(String key);
+  Unit getUnitById(Integer uid);
 
-    public abstract Module getModuleByID(Integer mid);
+  AbstractUnit getAbstractUnitById(Integer key);
 
+  Group getGroupById(Integer integer);
+
+  String getInfoByKey(String key);
+
+  Module getModuleById(Integer mid);
+
+  List<Log> getLogEntries();
+
+  Session getSessionById(final int id);
 }

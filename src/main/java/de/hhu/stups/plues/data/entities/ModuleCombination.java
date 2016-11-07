@@ -2,74 +2,72 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Immutable;
 
-import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Iterator;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "course_modules_combinations")
 @Immutable
-public class ModuleCombination implements Serializable {
-    private static final long serialVersionUID = 571230335150242610L;
-    @Id
-    @GeneratedValue
-    private int id;
+public class ModuleCombination implements Serializable, Iterable<Integer> {
+  private static final long serialVersionUID = 768471461766386796L;
+  @Id
+  @GeneratedValue
+  private int id;
 
-    @Column(name = "combination_id")
-    private int combinationId;
+  @Column(columnDefinition = "BLOB NOT NULL")
+  @SuppressWarnings("unused")
+  private byte[] combination;
 
-    @Column(name = "module_id")
-    private int moduleId;
+  @ManyToOne
+  private Course course;
 
-    @ManyToOne
-    private Course course;
+  public int getId() {
+    return id;
+  }
 
-    public int getId() {
-        return id;
+  public void setId(final int id) {
+    this.id = id;
+  }
+
+  public Course getCourse() {
+    return course;
+  }
+
+  public void setCourse(final Course course) {
+    this.course = course;
+  }
+
+
+  @Override
+  public boolean equals(final Object other) {
+    if (this == other) {
+      return true;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    if (other == null || this.getClass() != other.getClass()) {
+      return false;
     }
+    final ModuleCombination integers = (ModuleCombination) other;
+    return this.id == integers.id
+        && Arrays.equals(this.combination, integers.combination);
+  }
 
-    public int getCombinationId() {
-        return combinationId;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.id, this.combination);
+  }
 
-    public void setCombinationId(int combinationId) {
-        this.combinationId = combinationId;
-    }
-
-    public int getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(int moduleId) {
-        this.moduleId = moduleId;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ModuleCombination that = (ModuleCombination) o;
-        return id == that.id &&
-                combinationId == that.combinationId &&
-                moduleId == that.moduleId &&
-                Objects.equals(course, that.course);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, combinationId, moduleId, course);
-    }
+  @Override
+  public Iterator<Integer> iterator() {
+    return BitSet.valueOf(this.combination).stream().iterator();
+  }
 }

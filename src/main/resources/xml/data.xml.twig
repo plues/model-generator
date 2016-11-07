@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Machine generated: {{ date }} -->
+<!-- Model generator version: 4.0.0 -->
+<!-- Database information: --> {% for it in info %}
+<!-- {{ it.key }}: {{it.value}} --> {% endfor %}
 <data>
     <modules>{% for module in modules %}
         <module id="{{ module.key }}" title="{{ module.title }}" pordnr="{{ module.pordnr }}" elective-units="{{ module.electiveUnits }}">{% for aut in module.moduleAbstractUnitTypes %}
             <abstract-unit id="{{ aut.abstractUnit.key }}"
                 title="{{ aut.abstractUnit.title }}"
                 type="{{ aut.type }}"
-                semester="semester goes here {% for mau in module.moduleAbstractUnitSemester %}{% if ((mau.abstractUnit == aut.abstractUnit) and mau .module == module) %}{% for s in mau.semester %}{{s}}{% if not (loop.last) %},{% endif %}{% endfor %}{# mau.semester #}{% endif %}{% endfor %}{# module .moduleAbstractUnitsSemester #}" />{% endfor %}{# module.moduleAbstractUnitsTypes #}
+                semester="{{  join(module.semestersForAbstractUnit(aut.abstractUnit), ',') }}" />{% endfor %}{# module.moduleAbstractUnitsTypes #}
         </module>{% endfor %}{# modules #}
     </modules>
     <units>{% for unit in units %}
         <unit id="{{ unit.key }}" title="{{ unit.title }}" semester="{% for s in unit.semesters %}{{ s }}{% if not (loop.last) %},{% endif %}{% endfor %}" > <!-- {{ unit.id }} -->
         {% for group in unit.groups %}
-            <group {% if(group.halfSemester > 0) %}half-semester="{{ group.halfSemesterWord() }}"{% endif %}>{% for session in group.sessions %}
-                <session day="{{ session.day }}" time="{{ session.time }}" duration="{{ session.duration }}" rhythm="{{ session.rhythm }}" />{% endfor %}{# end group.sessions #}
+            <group{% if(group.halfSemester > 0) %} half-semester="{{ group.halfSemesterWord() }}"{% endif %}>{% for session in group.sessions %}
+                <session day="{{ session.day }}" time="{{ session.time }}" duration="{{ session.duration }}" rhythm="{{ session.rhythm }}"{% if(session.isTentative()) %} tentative="true"{% endif %}/>{% endfor %}{# end group.sessions #}
             </group>
         {% endfor %}{# unit.groups #}
         {% for au in unit.abstractUnits %}

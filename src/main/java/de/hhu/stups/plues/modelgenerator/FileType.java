@@ -1,18 +1,22 @@
 package de.hhu.stups.plues.modelgenerator;
 
 public enum FileType {
-    BMachine("b", "mch"), ModuleCombination("mc", "xml"), Unknown("?", "?");
+  B_MACHINE("b", "/data.mch.twig"),
+  MODULE_COMBINATION("mc", "/data.xml.twig"),
+  MODULE_TREE("Modulbaum", "/xml/tree.xml.twig"),
+  MODULE_DATA("Moduldaten", "/xml/data.xml.twig"),
+  UNKNOWN("?", "?");
 
-    private FileType(String name, String extension) {
-        this.name = name;
-        this.extension = extension;
-    }
+  public final String typeName;
+  public final String template;
 
-    @Override
-    public String toString() {
-        return ((String) (this.name));
-    }
+  FileType(final String typeName, final String template) {
+    this.typeName = typeName;
+    this.template = template;
+  }
 
-    public final String name;
-    public final String extension;
+  @Override
+  public String toString() {
+    return this.typeName;
+  }
 }

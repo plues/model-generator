@@ -1,0 +1,96 @@
+package org.hibernate.usertype;
+
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+
+import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class SqliteDateTimeType implements UserType {
+  // e.g. 2016-04-27 15:40:18
+  private static final String SQLITE_TEXT_TIME_STAMP = "yyyy-MM-dd kk:mm:ss";
+
+  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+
+  @Override
+  public int[] sqlTypes() {
+    return new int[]{Types.TIMESTAMP};
+  }
+
+  @Override
+  public Class returnedClass() {
+    return java.util.Date.class;
+  }
+
+  @Override
+  public boolean equals(final Object object, final Object other) {
+    return Objects.equals(object, other);
+  }
+
+  @Override
+  public int hashCode(final Object object) {
+    return Objects.hashCode(object);
+  }
+
+  @Override
+  public Object nullSafeGet(final ResultSet rs, final String[] names,
+                            final SharedSessionContractImplementor session, final Object owner)
+      throws SQLException {
+    assert names.length == 1;
+    final String dateStr = rs.getString(names[0]);
+    final Date date;
+    try {
+      date = new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).parse(dateStr);
+    } catch (final ParseException | NullPointerException exception) {
+      logger.log(Level.SEVERE, "Exception was thrown", exception);
+      throw new HibernateException(exception.getMessage());
+    }
+    return date;
+  }
+
+  @Override
+  public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
+                          final SharedSessionContractImplementor session)
+      throws SQLException {
+    try {
+      st.setString(index, new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).format(value));
+    } catch (final IllegalArgumentException exception) {
+      logger.log(Level.SEVERE, "Exception was thrown", exception);
+      throw new HibernateException(exception.getMessage());
+    }
+  }
+
+  @Override
+  public Object deepCopy(final Object value) {
+    return value;
+  }
+
+  @Override
+  public boolean isMutable() {
+    return false;
+  }
+
+  @Override
+  public Serializable disassemble(final Object value) {
+    return ((Date) value).getTime();
+  }
+
+  @Override
+  public Object assemble(final Serializable cached, final Object owner) {
+    return new Date((Long) cached);
+  }
+
+  @Override
+  public Object replace(final Object original, final Object target, final Object owner) {
+    throw new HibernateException("Currently not supported");
+  }
+}
