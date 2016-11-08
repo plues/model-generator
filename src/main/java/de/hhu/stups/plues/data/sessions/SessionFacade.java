@@ -67,6 +67,11 @@ public class SessionFacade implements Serializable {
     private final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
 
 
+    /**
+     * Create a new Slot object.
+     * @param day DyaofWeek for the slot
+     * @param time integer representing the time slot
+     */
     public Slot(final DayOfWeek day, final Integer time) {
       this.day = day;
       this.time = time;
