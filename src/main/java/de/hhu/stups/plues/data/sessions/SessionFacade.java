@@ -21,13 +21,6 @@ public class SessionFacade implements Serializable {
 
   private final Session session;
 
-  private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
-  private static final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
-
-  static {
-    initMaps();
-  }
-
   @Transient
   private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
@@ -36,28 +29,8 @@ public class SessionFacade implements Serializable {
     initSlotProperty();
   }
 
-  private static void initMaps() {
-    dayOfWeekMap.put("mon", DayOfWeek.MONDAY);
-    dayOfWeekMap.put("tue", DayOfWeek.TUESDAY);
-    dayOfWeekMap.put("wed", DayOfWeek.WEDNESDAY);
-    dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
-    dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
-
-    dayMap.put(DayOfWeek.MONDAY, "mon");
-    dayMap.put(DayOfWeek.TUESDAY, "tue");
-    dayMap.put(DayOfWeek.WEDNESDAY, "wed");
-    dayMap.put(DayOfWeek.THURSDAY, "thu");
-    dayMap.put(DayOfWeek.FRIDAY, "fri");
-  }
-
   private DayOfWeek getDayOfWeek() {
-    final DayOfWeek day = dayOfWeekMap.get(session.getDay());
-
-    if (day == null) {
-      return DayOfWeek.SUNDAY;
-    }
-
-    return day;
+    return session.getDayOfWeek();
   }
 
   public void initSlotProperty() {
@@ -91,9 +64,18 @@ public class SessionFacade implements Serializable {
     private final DayOfWeek day;
     private final Integer time;
 
+    private final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
+
+
     public Slot(final DayOfWeek day, final Integer time) {
       this.day = day;
       this.time = time;
+
+      dayMap.put(DayOfWeek.MONDAY, "mon");
+      dayMap.put(DayOfWeek.TUESDAY, "tue");
+      dayMap.put(DayOfWeek.WEDNESDAY, "wed");
+      dayMap.put(DayOfWeek.THURSDAY, "thu");
+      dayMap.put(DayOfWeek.FRIDAY, "fri");
     }
 
     @Override

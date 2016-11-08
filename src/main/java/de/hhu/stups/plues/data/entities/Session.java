@@ -7,7 +7,11 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.util.Date;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -24,6 +28,13 @@ import javax.persistence.Table;
 public class Session implements Serializable {
 
   private static final long serialVersionUID = 7760428839071975511L;
+
+  private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
+  private static final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
+
+  static {
+    initMaps();
+  }
 
   @Id
   @GeneratedValue
@@ -122,6 +133,33 @@ public class Session implements Serializable {
     return tentative;
   }
 
+
+  private static void initMaps() {
+    dayOfWeekMap.put("mon", DayOfWeek.MONDAY);
+    dayOfWeekMap.put("tue", DayOfWeek.TUESDAY);
+    dayOfWeekMap.put("wed", DayOfWeek.WEDNESDAY);
+    dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
+    dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
+
+    dayMap.put(DayOfWeek.MONDAY, "mon");
+    dayMap.put(DayOfWeek.TUESDAY, "tue");
+    dayMap.put(DayOfWeek.WEDNESDAY, "wed");
+    dayMap.put(DayOfWeek.THURSDAY, "thu");
+    dayMap.put(DayOfWeek.FRIDAY, "fri");
+  }
+
+  public Map<DayOfWeek, String> getDayMap() {
+    return dayMap;
+  }
+
+  public Map<String, DayOfWeek> getDayOfWeekMap() {
+    return dayOfWeekMap;
+  }
+
+  public DayOfWeek getDayOfWeek() {
+    final DayOfWeek dayOfWeek = dayOfWeekMap.get(getDay());
+    return (dayOfWeek == null) ? DayOfWeek.SUNDAY : dayOfWeek;
+  }
 
   @Override
   public boolean equals(final Object other) {
