@@ -319,7 +319,7 @@ public class SqliteStore implements Store {
       query.setParameter("day", targetDay);
       query.setParameter("session_id", sessionFacade.getSession().getId());
       query.executeUpdate();
-      s.persist(log);
+      s.save(log);
       // TODO: ensure hibernate caches to be up to date
       tx.commit();
     } catch (final HibernateException exception) {
