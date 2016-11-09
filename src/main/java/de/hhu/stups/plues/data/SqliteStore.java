@@ -323,9 +323,7 @@ public class SqliteStore implements Store {
       // TODO: ensure hibernate caches to be up to date
       tx.commit();
     } catch (final HibernateException exception) {
-      if (tx != null) {
-        tx.rollback();
-      }
+      tx.rollback();
       logException(exception);
     }
   }
