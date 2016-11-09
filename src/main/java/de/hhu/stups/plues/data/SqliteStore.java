@@ -308,6 +308,10 @@ public class SqliteStore implements Store {
     final org.hibernate.Session s = sessionFactory.getCurrentSession();
 
     final Transaction tx = s.beginTransaction();
+
+    if (!tx.isActive()) {
+      tx.begin();
+    }
     try {
       final Query query
           = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
