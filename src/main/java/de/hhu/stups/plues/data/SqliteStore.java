@@ -291,8 +291,13 @@ public class SqliteStore implements Store {
 
   @Override
   public Log getLastLogEntry() {
-    List<Log> logEntries = getLogEntries();
-    return logEntries.get(logEntries.size() - 1);
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final Query query = session.createQuery("from Log order by createdAt desc", Log.class);
+    query.setMaxResults(1);
+    final Log result = (Log) query.uniqueResult();
+    tx.commit();
+    return result;
   }
 
   @Override
