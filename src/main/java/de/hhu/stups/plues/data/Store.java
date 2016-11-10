@@ -61,5 +61,7 @@ public interface Store {
 
   List<Log> getLogEntries();
 
+  Log getLastLogEntry();
+
   Session getSessionById(final int id);
 }

@@ -290,6 +290,12 @@ public class SqliteStore implements Store {
   }
 
   @Override
+  public Log getLastLogEntry() {
+    List<Log> logEntries = getLogEntries();
+    return logEntries.get(logEntries.size() - 1);
+  }
+
+  @Override
   public synchronized void moveSession(final SessionFacade sessionFacade,
       final SessionFacade.Slot slot) {
     final String srcDay = sessionFacade.getSlot().getDayString();
