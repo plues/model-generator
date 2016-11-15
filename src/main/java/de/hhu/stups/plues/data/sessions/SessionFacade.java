@@ -60,6 +60,14 @@ public class SessionFacade implements Serializable {
     return session;
   }
 
+  public String getUnitKey() {
+    return session.getGroup().getUnit().getKey();
+  }
+
+  public Integer getGroupId() {
+    return session.getGroup().getId();
+  }
+
   public static class Slot {
     private final DayOfWeek day;
     private final Integer time;
