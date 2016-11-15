@@ -328,7 +328,7 @@ public class SqliteStore implements Store {
           = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
       query.setParameter("time", Integer.valueOf(targetTime));
       query.setParameter("day", targetDay);
-      query.setParameter("session_id", sessionFacade.getSession().getId());
+      query.setParameter("session_id", sessionFacade.getId());
       query.executeUpdate();
       s.save(log);
       // TODO: ensure hibernate caches to be up to date

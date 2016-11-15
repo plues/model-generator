@@ -60,6 +60,10 @@ public class SessionFacade implements Serializable {
     return session;
   }
 
+  public int getId() {
+    return session.getId();
+  }
+
   public String getUnitKey() {
     return session.getGroup().getUnit().getKey();
   }
