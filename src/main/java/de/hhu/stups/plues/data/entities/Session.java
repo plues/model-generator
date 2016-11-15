@@ -186,7 +186,7 @@ public class Session implements Serializable {
 
   @Override
   public String toString() {
-    return String.format("%s (%d/%d)",
-        group.getUnit().getTitle(), group.getId(), group.getUnit().getId());
+    return String.format("%s (%s/%d)",
+        group.getUnit().getTitle(), group.getUnit().getKey(), group.getId());
   }
 }
