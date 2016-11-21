@@ -1,5 +1,6 @@
 package de.hhu.stups.plues.data.sessions;
 
+import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.Session;
 
 import javafx.application.Platform;
@@ -9,10 +10,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Transient;
 
