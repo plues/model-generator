@@ -290,6 +290,17 @@ public class SqliteStore implements Store {
   }
 
   @Override
+  public Log getLastLogEntry() {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final Query query = session.createQuery("from Log order by createdAt desc", Log.class);
+    query.setMaxResults(1);
+    final Log result = (Log) query.uniqueResult();
+    tx.commit();
+    return result;
+  }
+
+  @Override
   public synchronized void moveSession(final SessionFacade sessionFacade,
       final SessionFacade.Slot slot) {
     final String srcDay = sessionFacade.getSlot().getDayString();
@@ -308,20 +319,22 @@ public class SqliteStore implements Store {
     final org.hibernate.Session s = sessionFactory.getCurrentSession();
 
     final Transaction tx = s.beginTransaction();
+
+    if (!tx.isActive()) {
+      tx.begin();
+    }
     try {
       final Query query
           = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
       query.setParameter("time", Integer.valueOf(targetTime));
       query.setParameter("day", targetDay);
-      query.setParameter("session_id", sessionFacade.getSession().getId());
+      query.setParameter("session_id", sessionFacade.getId());
       query.executeUpdate();
-      s.persist(log);
+      s.save(log);
       // TODO: ensure hibernate caches to be up to date
       tx.commit();
     } catch (final HibernateException exception) {
-      if (tx != null) {
-        tx.rollback();
-      }
+      tx.rollback();
       logException(exception);
     }
   }

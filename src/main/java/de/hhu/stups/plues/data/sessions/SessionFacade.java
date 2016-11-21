@@ -1,5 +1,6 @@
 package de.hhu.stups.plues.data.sessions;
 
+import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.Session;
 
 import javafx.application.Platform;
@@ -9,10 +10,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Transient;
 
@@ -20,13 +22,6 @@ public class SessionFacade implements Serializable {
   private static final long serialVersionUID = 6459045002667850077L;
 
   private final Session session;
-
-  private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
-  private static final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
-
-  static {
-    initMaps();
-  }
 
   @Transient
   private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
@@ -36,28 +31,8 @@ public class SessionFacade implements Serializable {
     initSlotProperty();
   }
 
-  private static void initMaps() {
-    dayOfWeekMap.put("mon", DayOfWeek.MONDAY);
-    dayOfWeekMap.put("tue", DayOfWeek.TUESDAY);
-    dayOfWeekMap.put("wed", DayOfWeek.WEDNESDAY);
-    dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
-    dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
-
-    dayMap.put(DayOfWeek.MONDAY, "mon");
-    dayMap.put(DayOfWeek.TUESDAY, "tue");
-    dayMap.put(DayOfWeek.WEDNESDAY, "wed");
-    dayMap.put(DayOfWeek.THURSDAY, "thu");
-    dayMap.put(DayOfWeek.FRIDAY, "fri");
-  }
-
   private DayOfWeek getDayOfWeek() {
-    final DayOfWeek day = dayOfWeekMap.get(session.getDay());
-
-    if (day == null) {
-      return DayOfWeek.SUNDAY;
-    }
-
-    return day;
+    return session.getDayOfWeek();
   }
 
   public void initSlotProperty() {
@@ -70,6 +45,11 @@ public class SessionFacade implements Serializable {
 
   public Slot getSlot() {
     return slotObjectProperty.get();
+  }
+
+  public List<String> getAbstractUnitKeys() {
+    return session.getGroup().getUnit().getAbstractUnits().stream().map(AbstractUnit::getKey)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -87,13 +67,39 @@ public class SessionFacade implements Serializable {
     return session;
   }
 
+  public int getId() {
+    return session.getId();
+  }
+
+  public String getUnitKey() {
+    return session.getGroup().getUnit().getKey();
+  }
+
+  public Integer getGroupId() {
+    return session.getGroup().getId();
+  }
+
   public static class Slot {
     private final DayOfWeek day;
     private final Integer time;
 
+    private final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
+
+
+    /**
+     * Create a new Slot object.
+     * @param day DyaofWeek for the slot
+     * @param time integer representing the time slot
+     */
     public Slot(final DayOfWeek day, final Integer time) {
       this.day = day;
       this.time = time;
+
+      dayMap.put(DayOfWeek.MONDAY, "mon");
+      dayMap.put(DayOfWeek.TUESDAY, "tue");
+      dayMap.put(DayOfWeek.WEDNESDAY, "wed");
+      dayMap.put(DayOfWeek.THURSDAY, "thu");
+      dayMap.put(DayOfWeek.FRIDAY, "fri");
     }
 
     @Override
