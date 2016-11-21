@@ -45,6 +45,11 @@ public class SessionFacade implements Serializable {
     return slotObjectProperty.get();
   }
 
+  public List<String> getAbstractUnitKeys() {
+    return session.getGroup().getUnit().getAbstractUnits().stream().map(AbstractUnit::getKey)
+        .collect(Collectors.toList());
+  }
+
   /**
    * Set slot of session.
    *
