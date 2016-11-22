@@ -1,6 +1,7 @@
 package de.hhu.stups.plues.data.sessions;
 
 import de.hhu.stups.plues.data.entities.AbstractUnit;
+import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.Session;
 
 import javafx.application.Platform;
@@ -151,7 +152,23 @@ public class SessionFacade implements Serializable {
     return session.toString();
   }
 
-  public Set<Integer> getSemesters() {
+  public Set<Integer> getUnitSemesters() {
     return session.getGroup().getUnit().getSemesters();
+  }
+
+  /**
+   * <p>Calculates all semesters that this session is intended to be heard in. This is not
+   * necessarily the same set of semesters as this session is provided in.</p>
+   *
+   * <p>Usually this is a subset of the provided semesters but it is in fact possible that those
+   * sets are disjunctive. This can happen due to bad planning.</p>
+   *
+   * @return A set of semesters where this session should be heard in
+   */
+  public Set<Integer> getIntendedSemesters() {
+    return session.getGroup().getUnit().getAbstractUnits().stream()
+        .flatMap(abstractUnit -> abstractUnit.getModuleAbstractUnitSemesters().stream()
+            .map(ModuleAbstractUnitSemester::getSemester))
+        .collect(Collectors.toSet());
   }
 }
