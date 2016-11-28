@@ -5,7 +5,9 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.Session;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.io.Serializable;
@@ -27,8 +29,18 @@ public class SessionFacade implements Serializable {
   @Transient
   private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
+  private final BooleanProperty tentative = new SimpleBooleanProperty();
+
+  /**
+   * A class that facades a session for ui representation.
+   *
+   * @param session the session to facade
+   */
   public SessionFacade(final Session session) {
     this.session = session;
+
+    setTentative(this.session.isTentative());
+
     initSlotProperty();
   }
 
@@ -146,6 +158,19 @@ public class SessionFacade implements Serializable {
       return time;
     }
   }
+
+  public boolean isTentative() {
+    return tentative.get();
+  }
+
+  public BooleanProperty tentativeProperty() {
+    return tentative;
+  }
+
+  private void setTentative(boolean tentative) {
+    this.tentative.set(tentative);
+  }
+
 
   @Override
   public String toString() {
