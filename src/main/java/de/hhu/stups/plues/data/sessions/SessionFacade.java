@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class SessionFacade {
   private final Session session;
 
-  private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private final ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
   private final BooleanProperty tentative = new SimpleBooleanProperty();
 
