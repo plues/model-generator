@@ -3,14 +3,12 @@ package de.hhu.stups.plues.data.sessions;
 import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.Session;
-
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.util.EnumMap;
 import java.util.List;
@@ -19,14 +17,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.Transient;
-
-public class SessionFacade implements Serializable {
-  private static final long serialVersionUID = 6459045002667850077L;
-
+public class SessionFacade {
   private final Session session;
 
-  @Transient
   private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
   private final BooleanProperty tentative = new SimpleBooleanProperty();
