@@ -94,7 +94,7 @@ public class SessionFacade {
 
     /**
      * Create a new Slot object.
-     * @param day DyaofWeek for the slot
+     * @param day DayOfWeek for the slot
      * @param time integer representing the time slot
      */
     public Slot(final DayOfWeek day, final Integer time) {
