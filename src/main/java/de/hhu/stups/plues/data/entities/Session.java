@@ -9,8 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.util.Date;
-import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,7 +30,8 @@ public class Session implements Serializable {
   private static final long serialVersionUID = 7760428839071975511L;
 
   private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
-  private static final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
+  private static final Map<String, String> dayMap = new HashMap<>();
+  private static final Map<Integer, String> timeMap = new HashMap<>();
 
   static {
     initMaps();
@@ -141,14 +142,26 @@ public class Session implements Serializable {
     dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
     dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
 
-    dayMap.put(DayOfWeek.MONDAY, "mon");
-    dayMap.put(DayOfWeek.TUESDAY, "tue");
-    dayMap.put(DayOfWeek.WEDNESDAY, "wed");
-    dayMap.put(DayOfWeek.THURSDAY, "thu");
-    dayMap.put(DayOfWeek.FRIDAY, "fri");
+    if (Locale.getDefault().equals(Locale.GERMANY)) {
+      dayMap.put("mon", "Montag");
+      dayMap.put("tue", "Dienstag");
+      dayMap.put("wed", "Mittwoch");
+      dayMap.put("thu", "Donnerstag");
+      dayMap.put("fri", "Freitag");
+    } else {
+      dayMap.put("mon", "Monday");
+      dayMap.put("tue", "Tuesday");
+      dayMap.put("wed", "Wednesday");
+      dayMap.put("thu", "Thursday");
+      dayMap.put("fri", "Friday");
+    }
+
+    for (int i = 1 ; i <= 7; i++) {
+      timeMap.put(i, String.valueOf(6 + i * 2) + ":30");
+    }
   }
 
-  public Map<DayOfWeek, String> getDayMap() {
+  public Map<String, String> getDayMap() {
     return dayMap;
   }
 
@@ -159,6 +172,30 @@ public class Session implements Serializable {
   public DayOfWeek getDayOfWeek() {
     final DayOfWeek dayOfWeek = dayOfWeekMap.get(getDay());
     return (dayOfWeek == null) ? DayOfWeek.SUNDAY : dayOfWeek;
+  }
+
+  /**
+   * Create string representation for day.
+   * @return String representing day
+   */
+  public String getDayString() {
+    if (!dayMap.containsKey(day)) {
+      return Locale.getDefault().equals(Locale.GERMANY) ? "Sonntag" : "Sunday";
+    }
+
+    return dayMap.get(day);
+  }
+
+  /**
+   * Create string representation for time.
+   * @return String representing time
+   */
+  public String getTimeString() {
+    if (!timeMap.containsKey(time)) {
+      return "00:00";
+    }
+
+    return timeMap.get(time);
   }
 
   @Override
