@@ -3,32 +3,35 @@ package de.hhu.stups.plues.data.sessions;
 import de.hhu.stups.plues.data.entities.AbstractUnit;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.Session;
-
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.Transient;
-
-public class SessionFacade implements Serializable {
-  private static final long serialVersionUID = 6459045002667850077L;
-
+public class SessionFacade {
   private final Session session;
 
-  @Transient
-  private final transient ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private final ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
+  /**
+   * A class that facades a session for ui representation.
+   *
+   * @param session the session to facade
+   */
   public SessionFacade(final Session session) {
     this.session = session;
+
     initSlotProperty();
   }
 
@@ -86,10 +89,9 @@ public class SessionFacade implements Serializable {
 
     private final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
 
-
     /**
      * Create a new Slot object.
-     * @param day DyaofWeek for the slot
+     * @param day DayOfWeek for the slot
      * @param time integer representing the time slot
      */
     public Slot(final DayOfWeek day, final Integer time) {
@@ -139,12 +141,17 @@ public class SessionFacade implements Serializable {
 
     @Override
     public String toString() {
-      return String.format("%s: %d", day.toString(), time);
+      String timeString = String.valueOf(6 + time * 2) + ":30";
+      return String.format("%s, %s", getDayString(), timeString);
     }
 
     public Integer getTime() {
       return time;
     }
+  }
+
+  public boolean isTentative() {
+    return session.isTentative();
   }
 
   @Override
