@@ -92,7 +92,6 @@ public class SessionFacade {
     private final Integer time;
 
     private final Map<DayOfWeek, String> dayMap = new EnumMap<>(DayOfWeek.class);
-    private final Map<Integer, String> timeMap = new HashMap<>();
 
     /**
      * Create a new Slot object.
@@ -103,23 +102,11 @@ public class SessionFacade {
       this.day = day;
       this.time = time;
 
-      if (Locale.getDefault().equals(Locale.GERMANY)) {
-        dayMap.put(DayOfWeek.MONDAY, "Montag");
-        dayMap.put(DayOfWeek.TUESDAY, "Dienstag");
-        dayMap.put(DayOfWeek.WEDNESDAY, "Mittwoch");
-        dayMap.put(DayOfWeek.THURSDAY, "Donnerstag");
-        dayMap.put(DayOfWeek.FRIDAY, "Freitag");
-      } else {
-        dayMap.put(DayOfWeek.MONDAY, "Monday");
-        dayMap.put(DayOfWeek.TUESDAY, "Tuesday");
-        dayMap.put(DayOfWeek.WEDNESDAY, "Wednesday");
-        dayMap.put(DayOfWeek.THURSDAY, "Thursday");
-        dayMap.put(DayOfWeek.FRIDAY, "Friday");
-      }
-
-      for (int i = 1 ; i <= 7; i++) {
-        timeMap.put(i, String.valueOf(6 + i * 2) + ":30");
-      }
+      dayMap.put(DayOfWeek.MONDAY, "mon");
+      dayMap.put(DayOfWeek.TUESDAY, "tue");
+      dayMap.put(DayOfWeek.WEDNESDAY, "wed");
+      dayMap.put(DayOfWeek.THURSDAY, "thu");
+      dayMap.put(DayOfWeek.FRIDAY, "fri");
     }
 
     @Override
@@ -156,17 +143,10 @@ public class SessionFacade {
       return dayString;
     }
 
-    private String getTimeString() {
-      if (!timeMap.containsKey(time)) {
-        return "00:00";
-      }
-
-      return timeMap.get(time);
-    }
-
     @Override
     public String toString() {
-      return String.format("%s, %s", getDayString(), getTimeString());
+      String timeString = String.valueOf(6 + time * 2) + ":30";
+      return String.format("%s, %s", getDayString(), timeString);
     }
 
     public Integer getTime() {
