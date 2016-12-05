@@ -127,7 +127,7 @@ public class Session implements Serializable {
   }
 
   @SuppressWarnings("unused")
-  public boolean getTentative() {
+  public boolean isTentative() {
     return tentative;
   }
 
