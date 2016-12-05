@@ -24,8 +24,6 @@ public class SessionFacade {
 
   private final ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
 
-  private final BooleanProperty tentative = new SimpleBooleanProperty();
-
   /**
    * A class that facades a session for ui representation.
    *
@@ -33,8 +31,6 @@ public class SessionFacade {
    */
   public SessionFacade(final Session session) {
     this.session = session;
-
-    setTentative(this.session.isTentative());
 
     initSlotProperty();
   }
@@ -155,17 +151,8 @@ public class SessionFacade {
   }
 
   public boolean isTentative() {
-    return tentative.get();
+    return session.isTentative();
   }
-
-  public BooleanProperty tentativeProperty() {
-    return tentative;
-  }
-
-  private void setTentative(boolean tentative) {
-    this.tentative.set(tentative);
-  }
-
 
   @Override
   public String toString() {
