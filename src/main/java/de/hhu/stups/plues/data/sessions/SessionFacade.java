@@ -34,7 +34,7 @@ public class SessionFacade {
   public SessionFacade(final Session session) {
     this.session = session;
 
-    setTentative(this.session.isTentative());
+    setTentative(this.session.getTentative());
 
     initSlotProperty();
   }
