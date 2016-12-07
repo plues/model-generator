@@ -17,14 +17,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.jboss.logging.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,7 +35,7 @@ import javax.persistence.criteria.Root;
  * Database based storage for timetable data.
  */
 public class SqliteStore implements Store {
-  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+  private final Logger logger = LoggerFactory.logger(getClass());
   private String dbPath;
   private SessionFactory sessionFactory;
 
@@ -43,7 +44,7 @@ public class SqliteStore implements Store {
   }
 
   private void logException(final Exception exception) {
-    logger.log(java.util.logging.Level.SEVERE, "an exception was thrown", exception);
+    logger.error("an exception was thrown", exception);
   }
 
   @Override

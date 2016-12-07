@@ -1,11 +1,11 @@
 package de.hhu.stups.plues.modelgenerator;
 
 import de.hhu.stups.plues.data.Store;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -14,7 +14,7 @@ public class XmlExporter {
 
   private static final String DATA_FILE = "Moduldaten.xml";
   private static final String TREE_FILE = "Modulbaum.xml";
-  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+  private final Logger logger = LoggerFactory.logger(getClass());
   private final Renderer renderer;
 
   public XmlExporter(final Store db) {
@@ -56,7 +56,7 @@ public class XmlExporter {
       zos.closeEntry();
 
     } catch (final IOException ioe) {
-      logger.log(Level.SEVERE, "Exception creating ZIP file for xml data", ioe);
+      logger.error("Exception creating ZIP file for xml data", ioe);
       throw ioe;
     }
 

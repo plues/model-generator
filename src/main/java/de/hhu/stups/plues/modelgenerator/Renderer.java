@@ -3,6 +3,8 @@ package de.hhu.stups.plues.modelgenerator;
 import de.hhu.stups.plues.data.Store;
 import de.hhu.stups.plues.modelgenerator.twig.HelperExtension;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
@@ -16,12 +18,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Renderer {
 
-  private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+  private final Logger logger = LoggerFactory.logger(getClass());
 
 
   private static final EnvironmentConfiguration config = EnvironmentConfigurationBuilder
@@ -93,7 +93,7 @@ public class Renderer {
         template.render(model, bos);
       }
     } catch (final IOException exception) {
-      logger.log(Level.SEVERE, "Exception writing template", exception);
+      logger.error("Exception writing template", exception);
     }
   }
 
