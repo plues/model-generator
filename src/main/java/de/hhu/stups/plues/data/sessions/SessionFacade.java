@@ -1,6 +1,8 @@
 package de.hhu.stups.plues.data.sessions;
 
 import de.hhu.stups.plues.data.entities.AbstractUnit;
+import de.hhu.stups.plues.data.entities.Course;
+import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.Session;
 import javafx.application.Platform;
@@ -176,6 +178,20 @@ public class SessionFacade {
     return session.getGroup().getUnit().getAbstractUnits().stream()
         .flatMap(abstractUnit -> abstractUnit.getModuleAbstractUnitSemesters().stream()
             .map(ModuleAbstractUnitSemester::getSemester))
+        .collect(Collectors.toSet());
+  }
+
+  /**
+   * Calculates all courses that this session is part of.
+   *
+   * @return A set of courses that this session is part of
+   */
+  public Set<Course> getIntendedCourses() {
+    return session.getGroup().getUnit().getAbstractUnits().parallelStream()
+        .map(AbstractUnit::getModules)
+        .flatMap(Set::parallelStream)
+        .map(Module::getCourses)
+        .flatMap(Set::parallelStream)
         .collect(Collectors.toSet());
   }
 }
