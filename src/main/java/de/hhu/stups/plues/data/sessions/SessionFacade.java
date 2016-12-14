@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -189,5 +190,9 @@ public class SessionFacade {
         .map(Module::getCourses)
         .flatMap(Set::parallelStream)
         .collect(Collectors.toSet());
+  }
+
+  public Set<AbstractUnit> getIntendedAbstractUnits() {
+    return new HashSet<>(session.getGroup().getUnit().getAbstractUnits());
   }
 }
