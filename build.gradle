@@ -10,7 +10,7 @@ checkstyle {
 }
 
 sourceCompatibility = 8
-version = '4.3.0'
+version = '4.4.0-SNAPSHOT'
 group = "de.stups.slottool"
 
 mainClassName = "de.hhu.stups.plues.modelgenerator.Main"
