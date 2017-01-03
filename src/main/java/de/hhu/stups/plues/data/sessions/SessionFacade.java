@@ -1,19 +1,18 @@
 package de.hhu.stups.plues.data.sessions;
 
 import de.hhu.stups.plues.data.entities.AbstractUnit;
+import de.hhu.stups.plues.data.entities.Course;
+import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.Session;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.time.DayOfWeek;
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -177,5 +176,23 @@ public class SessionFacade {
         .flatMap(abstractUnit -> abstractUnit.getModuleAbstractUnitSemesters().stream()
             .map(ModuleAbstractUnitSemester::getSemester))
         .collect(Collectors.toSet());
+  }
+
+  /**
+   * Calculates all courses that this session is part of.
+   *
+   * @return A set of courses that this session is part of
+   */
+  public Set<Course> getIntendedCourses() {
+    return session.getGroup().getUnit().getAbstractUnits().parallelStream()
+        .map(AbstractUnit::getModules)
+        .flatMap(Set::parallelStream)
+        .map(Module::getCourses)
+        .flatMap(Set::parallelStream)
+        .collect(Collectors.toSet());
+  }
+
+  public Set<AbstractUnit> getIntendedAbstractUnits() {
+    return new HashSet<>(session.getGroup().getUnit().getAbstractUnits());
   }
 }
