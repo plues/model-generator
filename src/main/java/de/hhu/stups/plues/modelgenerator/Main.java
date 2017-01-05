@@ -50,8 +50,14 @@ public class Main {
 
     final File out = new File(output);
     if (ft == FileType.UNKNOWN) {
+
+      if (template == null) {
+        throw new IllegalArgumentException("template was null with an unknown file type.");
+      }
+
       final String tmpl = template.replaceFirst("^~", System.getProperty("user.home"));
       renderer.renderWith(tmpl, out);
+
     } else {
       renderer.renderFor(ft, out);
     }
