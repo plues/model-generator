@@ -167,7 +167,7 @@ public class SessionFacade {
    * necessarily the same set of semesters as this session is provided in.</p>
    *
    * <p>Usually this is a subset of the provided semesters but it is in fact possible that those
-   * sets are disjunctive. This can happen due to bad planning.</p>
+   * sets are disjunct. This can happen due to bad planning.</p>
    *
    * @return A set of semesters where this session should be heard in
    */
