@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class Main {
   private static final String OUTPUT = "output";
-  private static final String VERSION = "4.3.0";
+  private static final String VERSION = "4.4.0";
 
   private Main() {}
 
@@ -50,8 +50,14 @@ public class Main {
 
     final File out = new File(output);
     if (ft == FileType.UNKNOWN) {
+
+      if (template == null) {
+        throw new IllegalArgumentException("template was null with an unknown file type.");
+      }
+
       final String tmpl = template.replaceFirst("^~", System.getProperty("user.home"));
       renderer.renderWith(tmpl, out);
+
     } else {
       renderer.renderFor(ft, out);
     }
