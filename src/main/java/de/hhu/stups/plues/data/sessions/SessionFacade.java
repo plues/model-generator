@@ -22,6 +22,7 @@ public class SessionFacade {
   private final Session session;
 
   private final ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private final Set<Course> courses;
 
   /**
    * A class that facades a session for ui representation.
@@ -30,6 +31,12 @@ public class SessionFacade {
    */
   public SessionFacade(final Session session) {
     this.session = session;
+    courses = session.getGroup().getUnit().getAbstractUnits().parallelStream()
+      .map(AbstractUnit::getModules)
+      .flatMap(Set::parallelStream)
+      .map(Module::getCourses)
+      .flatMap(Set::parallelStream)
+      .collect(Collectors.toSet());
 
     initSlotProperty();
   }
@@ -184,12 +191,7 @@ public class SessionFacade {
    * @return A set of courses that this session is part of
    */
   public Set<Course> getIntendedCourses() {
-    return session.getGroup().getUnit().getAbstractUnits().parallelStream()
-        .map(AbstractUnit::getModules)
-        .flatMap(Set::parallelStream)
-        .map(Module::getCourses)
-        .flatMap(Set::parallelStream)
-        .collect(Collectors.toSet());
+    return courses;
   }
 
   public Set<AbstractUnit> getIntendedAbstractUnits() {
