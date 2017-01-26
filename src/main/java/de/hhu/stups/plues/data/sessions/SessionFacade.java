@@ -152,7 +152,7 @@ public class SessionFacade {
 
     @Override
     public String toString() {
-      String timeString = String.valueOf(6 + time * 2) + ":30";
+      final String timeString = String.valueOf(6 + time * 2) + ":30";
       return String.format("%s, %s", getDayString(), timeString);
     }
 
