@@ -94,6 +94,10 @@ public class SessionFacade {
     return session.getGroup().getId();
   }
 
+  public String getTitle() {
+    return session.getGroup().getUnit().getTitle();
+  }
+
   public static class Slot {
     private final DayOfWeek day;
     private final Integer time;
