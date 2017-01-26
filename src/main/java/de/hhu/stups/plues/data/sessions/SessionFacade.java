@@ -23,6 +23,7 @@ public class SessionFacade {
 
   private final ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
   private final Set<Course> courses;
+  private final List<String> abstractUnitKeys;
 
   /**
    * A class that facades a session for ui representation.
@@ -37,6 +38,11 @@ public class SessionFacade {
       .map(Module::getCourses)
       .flatMap(Set::parallelStream)
       .collect(Collectors.toSet());
+
+    this.abstractUnitKeys = session.getGroup().getUnit().getAbstractUnits().stream()
+      .map(AbstractUnit::getKey)
+      .sorted(String::compareTo)
+      .collect(Collectors.toList());
 
     initSlotProperty();
   }
@@ -58,8 +64,7 @@ public class SessionFacade {
   }
 
   public List<String> getAbstractUnitKeys() {
-    return session.getGroup().getUnit().getAbstractUnits().stream().map(AbstractUnit::getKey)
-        .collect(Collectors.toList());
+    return this.abstractUnitKeys;
   }
 
   /**
