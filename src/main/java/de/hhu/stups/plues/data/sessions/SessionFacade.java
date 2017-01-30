@@ -22,6 +22,8 @@ public class SessionFacade {
   private final Session session;
 
   private final ObjectProperty<Slot> slotObjectProperty = new SimpleObjectProperty<>();
+  private final Set<Course> courses;
+  private final List<String> abstractUnitKeys;
 
   /**
    * A class that facades a session for ui representation.
@@ -30,6 +32,17 @@ public class SessionFacade {
    */
   public SessionFacade(final Session session) {
     this.session = session;
+    courses = session.getGroup().getUnit().getAbstractUnits().parallelStream()
+      .map(AbstractUnit::getModules)
+      .flatMap(Set::parallelStream)
+      .map(Module::getCourses)
+      .flatMap(Set::parallelStream)
+      .collect(Collectors.toSet());
+
+    this.abstractUnitKeys = session.getGroup().getUnit().getAbstractUnits().stream()
+      .map(AbstractUnit::getKey)
+      .sorted(String::compareTo)
+      .collect(Collectors.toList());
 
     initSlotProperty();
   }
@@ -51,8 +64,7 @@ public class SessionFacade {
   }
 
   public List<String> getAbstractUnitKeys() {
-    return session.getGroup().getUnit().getAbstractUnits().stream().map(AbstractUnit::getKey)
-        .collect(Collectors.toList());
+    return this.abstractUnitKeys;
   }
 
   /**
@@ -80,6 +92,10 @@ public class SessionFacade {
 
   public Integer getGroupId() {
     return session.getGroup().getId();
+  }
+
+  public String getTitle() {
+    return session.getGroup().getUnit().getTitle();
   }
 
   public static class Slot {
@@ -140,7 +156,7 @@ public class SessionFacade {
 
     @Override
     public String toString() {
-      String timeString = String.valueOf(6 + time * 2) + ":30";
+      final String timeString = String.valueOf(6 + time * 2) + ":30";
       return String.format("%s, %s", getDayString(), timeString);
     }
 
@@ -184,12 +200,7 @@ public class SessionFacade {
    * @return A set of courses that this session is part of
    */
   public Set<Course> getIntendedCourses() {
-    return session.getGroup().getUnit().getAbstractUnits().parallelStream()
-        .map(AbstractUnit::getModules)
-        .flatMap(Set::parallelStream)
-        .map(Module::getCourses)
-        .flatMap(Set::parallelStream)
-        .collect(Collectors.toSet());
+    return courses;
   }
 
   public Set<AbstractUnit> getIntendedAbstractUnits() {
