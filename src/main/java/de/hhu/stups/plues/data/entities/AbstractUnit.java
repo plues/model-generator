@@ -103,7 +103,7 @@ public class AbstractUnit implements Serializable {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(final Integer id) {
     this.id = id;
   }
 
@@ -111,7 +111,7 @@ public class AbstractUnit implements Serializable {
     return key;
   }
 
-  public void setKey(String key) {
+  public void setKey(final String key) {
     this.key = key;
   }
 
@@ -119,7 +119,7 @@ public class AbstractUnit implements Serializable {
     return title;
   }
 
-  public void setTitle(String title) {
+  public void setTitle(final String title) {
     this.title = title;
   }
 
@@ -127,7 +127,7 @@ public class AbstractUnit implements Serializable {
     return (Date) createdAt.clone();
   }
 
-  public void setCreatedAt(Date createdAt) {
+  public void setCreatedAt(final Date createdAt) {
     this.createdAt = (Date) createdAt.clone();
   }
 
@@ -135,7 +135,7 @@ public class AbstractUnit implements Serializable {
     return (Date) updatedAt.clone();
   }
 
-  public void setUpdatedAt(Date updatedAt) {
+  public void setUpdatedAt(final Date updatedAt) {
     this.updatedAt = (Date) updatedAt.clone();
   }
 
@@ -143,7 +143,7 @@ public class AbstractUnit implements Serializable {
     return units;
   }
 
-  public void setUnits(Set<Unit> units) {
+  public void setUnits(final Set<Unit> units) {
     this.units = units;
   }
 
@@ -152,7 +152,7 @@ public class AbstractUnit implements Serializable {
   }
 
   public void setModuleAbstractUnitSemesters(
-      Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters) {
+      final Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters) {
     this.moduleAbstractUnitSemesters = moduleAbstractUnitSemesters;
   }
 
@@ -160,7 +160,8 @@ public class AbstractUnit implements Serializable {
     return moduleAbstractUnitTypes;
   }
 
-  public void setModuleAbstractUnitTypes(Set<ModuleAbstractUnitType> moduleAbstractUnitTypes) {
+  public void setModuleAbstractUnitTypes(
+      final Set<ModuleAbstractUnitType> moduleAbstractUnitTypes) {
     this.moduleAbstractUnitTypes = moduleAbstractUnitTypes;
   }
 
@@ -168,7 +169,7 @@ public class AbstractUnit implements Serializable {
     return modules;
   }
 
-  public void setModules(Set<Module> modules) {
+  public void setModules(final Set<Module> modules) {
     this.modules = modules;
   }
 

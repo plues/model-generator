@@ -40,7 +40,7 @@ public class ModuleAbstractUnitType implements Serializable {
     return module;
   }
 
-  public void setModule(Module module) {
+  public void setModule(final Module module) {
     this.module = module;
   }
 
@@ -48,7 +48,7 @@ public class ModuleAbstractUnitType implements Serializable {
     return abstractUnit;
   }
 
-  public void setAbstractUnit(AbstractUnit abstractUnit) {
+  public void setAbstractUnit(final AbstractUnit abstractUnit) {
     this.abstractUnit = abstractUnit;
   }
 
