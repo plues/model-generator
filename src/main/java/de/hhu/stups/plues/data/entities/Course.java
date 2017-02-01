@@ -123,8 +123,8 @@ public class Course implements Serializable {
   }
 
   /**
-   * Number of credit points required to comple the course.
-   * Return valeu is < 0 if the course is not credit point based.
+   * Number of credit points required to complete the course.
+   * Return value is < 0 if the course is not credit point based.
    *
    * @return int points, negative if course is not credit point based
    */
