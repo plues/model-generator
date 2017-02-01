@@ -53,6 +53,7 @@ public class Group implements Serializable {
 
 
   public Group() {
+    // Default constructor is required by hibernate
   }
 
   public String getHalfSemesterWord() {

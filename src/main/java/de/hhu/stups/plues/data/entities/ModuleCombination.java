@@ -31,6 +31,10 @@ public class ModuleCombination implements Serializable, Iterable<Integer> {
   @ManyToOne
   private Course course;
 
+  private ModuleCombination() {
+    // Default constructor is required by hibernate
+  }
+
   public int getId() {
     return id;
   }

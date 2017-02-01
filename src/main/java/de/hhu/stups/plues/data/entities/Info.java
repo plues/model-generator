@@ -23,6 +23,10 @@ public class Info implements Serializable {
 
   private String value;
 
+  private Info() {
+    // Default constructor is required by hibernate
+  }
+
   public String getKey() {
     return this.key;
   }

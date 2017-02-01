@@ -39,6 +39,7 @@ public class Log implements Serializable {
   private Date createdAt;
 
   public Log() {
+    // Default constructor is required by hibernate
   }
 
   public Session getSession() {

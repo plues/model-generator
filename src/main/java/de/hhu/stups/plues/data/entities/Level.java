@@ -84,6 +84,7 @@ public class Level implements Serializable {
   private Course course;
 
   public Level() {
+    // Default constructor is required by hibernate
   }
 
   /**

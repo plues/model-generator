@@ -74,6 +74,10 @@ public class Module implements Serializable {
   @OneToMany(mappedBy = "module")
   private Set<ModuleAbstractUnitType> moduleAbstractUnitTypes;
 
+  private Module() {
+    // Default constructor is required by hibernate
+  }
+
   /**
    * Get the maximum of credit points required for module. Returns -1 if the module
    * is not credit point based.

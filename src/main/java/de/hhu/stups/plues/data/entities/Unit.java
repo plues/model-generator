@@ -66,6 +66,7 @@ public class Unit implements Serializable {
   private Set<Group> groups;
 
   public Unit() {
+    // Default constructor is required by hibernate
   }
 
   public int getId() {

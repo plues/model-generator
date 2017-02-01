@@ -83,6 +83,10 @@ public class Course implements Serializable {
   @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
   private Set<ModuleCombination> moduleCombinations;
 
+  public Course() {
+    // Default constructor is required by hibernate
+  }
+
   @Override
   public boolean equals(final Object other) {
     if (this == other) {

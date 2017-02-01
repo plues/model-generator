@@ -32,6 +32,10 @@ public class ModuleAbstractUnitSemester implements Serializable {
   @Id
   private Integer semester;
 
+  private ModuleAbstractUnitSemester() {
+    // Default constructor is required by hibernate
+  }
+
   @Override
   public boolean equals(final Object other) {
     if (this == other) {

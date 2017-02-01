@@ -69,6 +69,7 @@ public class AbstractUnit implements Serializable {
   private Set<Module> modules;
 
   public AbstractUnit() {
+    // Default constructor is required by hibernate
   }
 
   @Override

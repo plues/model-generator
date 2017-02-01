@@ -60,6 +60,8 @@ public class Session implements Serializable {
   private Group group;
 
   public Session() {
+    // Default constructor is required by hibernate
+  }
   }
 
   public int getId() {
