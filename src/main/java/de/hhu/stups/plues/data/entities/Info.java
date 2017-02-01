@@ -23,7 +23,7 @@ public class Info implements Serializable {
 
   private String value;
 
-  private Info() {
+  public Info() {
     // Default constructor is required by hibernate
   }
 

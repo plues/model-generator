@@ -32,7 +32,7 @@ public class ModuleAbstractUnitSemester implements Serializable {
   @Id
   private Integer semester;
 
-  private ModuleAbstractUnitSemester() {
+  public ModuleAbstractUnitSemester() {
     // Default constructor is required by hibernate
   }
 

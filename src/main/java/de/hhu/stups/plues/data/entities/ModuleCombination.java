@@ -31,7 +31,7 @@ public class ModuleCombination implements Serializable, Iterable<Integer> {
   @ManyToOne
   private Course course;
 
-  private ModuleCombination() {
+  public ModuleCombination() {
     // Default constructor is required by hibernate
   }
 

@@ -74,7 +74,7 @@ public class Module implements Serializable {
   @OneToMany(mappedBy = "module")
   private Set<ModuleAbstractUnitType> moduleAbstractUnitTypes;
 
-  private Module() {
+  public Module() {
     // Default constructor is required by hibernate
   }
 

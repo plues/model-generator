@@ -32,7 +32,7 @@ public class ModuleAbstractUnitType implements Serializable {
   @Id
   private Character type;
 
-  private ModuleAbstractUnitType() {
+  public ModuleAbstractUnitType() {
     // Default constructor is required by hibernate
   }
 
