@@ -62,6 +62,13 @@ public class Session implements Serializable {
   public Session() {
     // Default constructor is required by hibernate
   }
+
+  private static void initMaps() {
+    dayOfWeekMap.put("mon", DayOfWeek.MONDAY);
+    dayOfWeekMap.put("tue", DayOfWeek.TUESDAY);
+    dayOfWeekMap.put("wed", DayOfWeek.WEDNESDAY);
+    dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
+    dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
   }
 
   public int getId() {
@@ -131,15 +138,6 @@ public class Session implements Serializable {
   @SuppressWarnings("unused")
   public boolean isTentative() {
     return tentative;
-  }
-
-
-  private static void initMaps() {
-    dayOfWeekMap.put("mon", DayOfWeek.MONDAY);
-    dayOfWeekMap.put("tue", DayOfWeek.TUESDAY);
-    dayOfWeekMap.put("wed", DayOfWeek.WEDNESDAY);
-    dayOfWeekMap.put("thu", DayOfWeek.THURSDAY);
-    dayOfWeekMap.put("fri", DayOfWeek.FRIDAY);
   }
 
   public Map<String, DayOfWeek> getDayOfWeekMap() {
