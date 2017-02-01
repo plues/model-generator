@@ -73,19 +73,25 @@ public class AbstractUnit implements Serializable {
   }
 
   @Override
-  public boolean equals(Object other) {
+  public boolean equals(final Object other) {
     if (this == other) {
       return true;
     }
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
-    AbstractUnit that = (AbstractUnit) other;
-    return Objects.equals(id, that.id)
-        && Objects.equals(key, that.key)
-        && Objects.equals(title, that.title)
-        && Objects.equals(createdAt, that.createdAt)
-        && Objects.equals(updatedAt, that.updatedAt);
+    final AbstractUnit that = (AbstractUnit) other;
+    return equalIdentifiers(that)
+      && Objects.equals(title, that.title)
+      && equalTimestamps(that);
+  }
+
+  private boolean equalIdentifiers(final AbstractUnit that) {
+    return Objects.equals(id, that.id) && Objects.equals(key, that.key);
+  }
+
+  private boolean equalTimestamps(final AbstractUnit that) {
+    return Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
   }
 
   @Override
