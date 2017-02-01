@@ -96,15 +96,31 @@ public class Course implements Serializable {
       return false;
     }
     final Course course = (Course) other;
-    return this.id == course.id && Objects.equals(this.key, course.key)
-        && Objects.equals(this.po, course.po)
-        && Objects.equals(this.creditPoints, course.creditPoints)
-        && Objects.equals(this.shortName, course.shortName)
-        && Objects.equals(this.longName, course.longName)
-        && Objects.equals(this.degree, course.degree)
-        && Objects.equals(this.kzfa, course.kzfa)
-        && Objects.equals(this.createdAt, course.createdAt)
-        && Objects.equals(this.updatedAt, course.updatedAt);
+    return equalIdentifiers(course)
+      && equalNames(course)
+      && equalCourseAttributes(course)
+      && equalTimestamps(course);
+  }
+
+  private boolean equalCourseAttributes(final Course course) {
+    return Objects.equals(this.po, course.po)
+      && Objects.equals(this.creditPoints, course.creditPoints)
+      && Objects.equals(this.degree, course.degree)
+      && Objects.equals(this.kzfa, course.kzfa);
+  }
+
+  private boolean equalNames(final Course course) {
+    return Objects.equals(this.shortName, course.shortName)
+      && Objects.equals(this.longName, course.longName);
+  }
+
+  private boolean equalTimestamps(final Course course) {
+    return Objects.equals(this.createdAt, course.createdAt)
+      && Objects.equals(this.updatedAt, course.updatedAt);
+  }
+
+  private boolean equalIdentifiers(final Course course) {
+    return this.id == course.id && Objects.equals(this.key, course.key);
   }
 
   @Override
