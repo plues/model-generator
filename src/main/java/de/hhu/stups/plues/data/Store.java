@@ -33,6 +33,10 @@ public interface Store {
 
   List<Course> getCourses();
 
+  List<Course> getMajors();
+
+  List<Course> getMinors();
+
   Course getCourseByKey(String key);
 
   List<Group> getGroups();

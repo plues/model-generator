@@ -12,7 +12,6 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
 import de.hhu.stups.plues.data.sessions.SessionFacade;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -183,6 +182,34 @@ public class SqliteStore implements Store {
     final List<Course> result = query.setCacheable(true).list();
     tx.commit();
     return result;
+  }
+
+  private List<Course> getCoursesFilteredByKzfa(final String kzfa) {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+
+    final Transaction tx = session.beginTransaction();
+
+    final CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+    final CriteriaQuery<Course> criteriaQuery = criteriaBuilder.createQuery(Course.class);
+
+    criteriaQuery.where(
+        criteriaBuilder.equal(
+            criteriaBuilder.lower(criteriaQuery.from(Course.class).get("kzfa")), kzfa));
+    final List<Course> result = session.createQuery(criteriaQuery).setCacheable(true).list();
+
+    tx.commit();
+    return result;
+  }
+  
+  @Override
+  public synchronized List<Course> getMinors() {
+    return this.getCoursesFilteredByKzfa("n");
+  }
+
+
+  @Override
+  public synchronized List<Course> getMajors() {
+    return this.getCoursesFilteredByKzfa("h");
   }
 
   @Override
