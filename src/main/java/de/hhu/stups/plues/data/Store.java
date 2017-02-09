@@ -10,7 +10,6 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
-import de.hhu.stups.plues.data.sessions.SessionFacade;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface Store {
 
   void init(String dbpath) throws IncompatibleSchemaError, StoreException;
 
-  void moveSession(SessionFacade sessionFacade, SessionFacade.Slot slot);
+  void moveSession(int sessionId, String targetDay, Integer targetTime);
 
   void close();
 

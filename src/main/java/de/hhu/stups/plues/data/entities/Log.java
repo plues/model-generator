@@ -28,10 +28,16 @@ public class Log implements Serializable {
   private Session session;
 
   @Id
-  private String src;
+  private String srcDay;
 
   @Id
-  private String target;
+  private Integer srcTime;
+
+  @Id
+  private String targetDay;
+
+  @Id
+  private Integer targetTime;
 
   @CreationTimestamp
   @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
@@ -50,20 +56,30 @@ public class Log implements Serializable {
     this.session = session;
   }
 
-  public String getSrc() {
-    return src;
+  public String getSrcDay() {
+    return srcDay;
   }
 
-  public void setSrc(final String src) {
-    this.src = src;
+  public Integer getSrcTime() {
+    return srcTime;
   }
 
-  public String getTarget() {
-    return target;
+  public void setSource(final String srcDay, final Integer srcTime) {
+    this.srcDay = srcDay;
+    this.srcTime = srcTime;
   }
 
-  public void setTarget(final String target) {
-    this.target = target;
+  public String getTargetDay() {
+    return targetDay;
+  }
+
+  public Integer getTargetTime() {
+    return targetTime;
+  }
+
+  public void setTarget(final String targetDay, final Integer targetTime) {
+    this.targetDay = targetDay;
+    this.targetTime = targetTime;
   }
 
   @Override
@@ -76,14 +92,22 @@ public class Log implements Serializable {
     }
     final Log log = (Log) other;
     return Objects.equals(session, log.session)
-        && Objects.equals(src, log.src)
-        && Objects.equals(target, log.target)
-        && Objects.equals(createdAt, log.createdAt);
+        && Objects.equals(createdAt, log.createdAt)
+        && equalsSource(log)
+        && equalsTarget(log);
+  }
+
+  private boolean equalsSource(final Log log) {
+    return Objects.equals(srcDay, log.srcDay) && Objects.equals(srcTime, log.srcTime);
+  }
+
+  private boolean equalsTarget(final Log log) {
+    return Objects.equals(targetDay, log.targetDay) && Objects.equals(targetTime, log.targetTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(session, src, target, createdAt);
+    return Objects.hash(session, srcDay, srcTime, targetDay, targetTime, createdAt);
   }
 
   public Date getCreatedAt() {
