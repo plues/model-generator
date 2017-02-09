@@ -11,7 +11,6 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
-import de.hhu.stups.plues.data.sessions.SessionFacade;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -329,20 +328,13 @@ public class SqliteStore implements Store {
   }
 
   @Override
-  public synchronized void moveSession(final SessionFacade sessionFacade,
-      final SessionFacade.Slot slot) {
-    final String srcDay = sessionFacade.getSlot().getDayString();
-    final String srcTime = sessionFacade.getSlot().getTime().toString();
-    final String targetDay = slot.getDayString();
-    final String targetTime = slot.getTime().toString();
-
-    sessionFacade.setSlot(slot);
-
+  public synchronized void moveSession(final int sessionId, final String targetDay,
+                                       final String targetTime) {
     final Log log = new Log();
-    // TODO day and time should each be a field in the log table
-    log.setSrc(srcDay + srcTime);
-    log.setTarget(targetDay + targetTime);
-    log.setSession(sessionFacade.getSession());
+    final Session session = getSessionById(sessionId);
+    log.setSource(session.getDay(),session.getTime().toString());
+    log.setTarget(targetDay,targetTime);
+    log.setSession(session);
 
     final org.hibernate.Session s = sessionFactory.getCurrentSession();
 
@@ -356,7 +348,7 @@ public class SqliteStore implements Store {
           = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
       query.setParameter("time", Integer.valueOf(targetTime));
       query.setParameter("day", targetDay);
-      query.setParameter("session_id", sessionFacade.getId());
+      query.setParameter("session_id", session.getId());
       query.executeUpdate();
       s.save(log);
       // TODO: ensure hibernate caches to be up to date
