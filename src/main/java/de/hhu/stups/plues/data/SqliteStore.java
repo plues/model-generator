@@ -11,7 +11,9 @@ import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -68,6 +70,7 @@ public class SqliteStore implements Store {
     this.init();
   }
 
+  @SuppressWarnings("unused")
   private synchronized <T> T getById(final Integer key, final Class<T> type) {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -83,6 +86,7 @@ public class SqliteStore implements Store {
     return result;
   }
 
+  @SuppressWarnings("unused")
   private synchronized <T> T getByKey(final String key, final Class<T> type) {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
@@ -199,7 +203,7 @@ public class SqliteStore implements Store {
     tx.commit();
     return result;
   }
-  
+
   @Override
   public synchronized List<Course> getMinors() {
     return this.getCoursesFilteredByKzfa("n");
@@ -283,6 +287,7 @@ public class SqliteStore implements Store {
 
   /**
    * Find a session using a given Id. Return this found session.
+   *
    * @param id Id of the session
    * @return Found session
    */
@@ -329,11 +334,11 @@ public class SqliteStore implements Store {
 
   @Override
   public synchronized void moveSession(final int sessionId, final String targetDay,
-                                       final String targetTime) {
+                                       final Integer targetTime) {
     final Log log = new Log();
     final Session session = getSessionById(sessionId);
-    log.setSource(session.getDay(),session.getTime().toString());
-    log.setTarget(targetDay,targetTime);
+    log.setSource(session.getDay(), session.getTime());
+    log.setTarget(targetDay, targetTime);
     log.setSession(session);
 
     final org.hibernate.Session s = sessionFactory.getCurrentSession();
@@ -346,7 +351,7 @@ public class SqliteStore implements Store {
     try {
       final Query query
           = s.createQuery("UPDATE Session SET time = :time, day = :day WHERE id = :session_id");
-      query.setParameter("time", Integer.valueOf(targetTime));
+      query.setParameter("time", targetTime);
       query.setParameter("day", targetDay);
       query.setParameter("session_id", session.getId());
       query.executeUpdate();
@@ -373,15 +378,15 @@ public class SqliteStore implements Store {
 
     final String[] schemaVersion = versionStr.split("\\.");
     final String[] requiredVersion
-      = properties.getProperty("schema_version", "0.0").split("\\.");
+        = properties.getProperty("schema_version", "0.0").split("\\.");
 
     // Major versions must match
     // minor version may be higher in database
     if ((!schemaVersion[0].equals(requiredVersion[0])) || (
         Integer.parseInt(schemaVersion[1]) < Integer.parseInt(requiredVersion[1]))) {
       throw new IncompatibleSchemaError("Expected database schema "
-        + "version " + requiredVersion[0] + "." + requiredVersion[1]
-        + " but was " + schemaVersion[0] + "." + schemaVersion[1]);
+          + "version " + requiredVersion[0] + "." + requiredVersion[1]
+          + " but was " + schemaVersion[0] + "." + schemaVersion[1]);
     }
 
   }
@@ -396,7 +401,7 @@ public class SqliteStore implements Store {
 
     if (!(db.exists() && db.isFile())) {
       throw new IllegalArgumentException(
-        path + " does not exist or is not a file.");
+          path + " does not exist or is not a file.");
     }
 
 

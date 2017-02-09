@@ -31,13 +31,13 @@ public class Log implements Serializable {
   private String srcDay;
 
   @Id
-  private String srcTime;
+  private Integer srcTime;
 
   @Id
   private String targetDay;
 
   @Id
-  private String targetTime;
+  private Integer targetTime;
 
   @CreationTimestamp
   @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
@@ -60,11 +60,11 @@ public class Log implements Serializable {
     return srcDay;
   }
 
-  public String getSrcTime() {
+  public Integer getSrcTime() {
     return srcTime;
   }
 
-  public void setSource(final String srcDay, final String srcTime) {
+  public void setSource(final String srcDay, final Integer srcTime) {
     this.srcDay = srcDay;
     this.srcTime = srcTime;
   }
@@ -73,11 +73,11 @@ public class Log implements Serializable {
     return targetDay;
   }
 
-  public String getTargetTime() {
+  public Integer getTargetTime() {
     return targetTime;
   }
 
-  public void setTarget(final String targetDay, final String targetTime) {
+  public void setTarget(final String targetDay, final Integer targetTime) {
     this.targetDay = targetDay;
     this.targetTime = targetTime;
   }

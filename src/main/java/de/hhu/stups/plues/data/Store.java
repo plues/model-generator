@@ -18,7 +18,7 @@ public interface Store {
 
   void init(String dbpath) throws IncompatibleSchemaError, StoreException;
 
-  void moveSession(int sessionId, String day, String time);
+  void moveSession(int sessionId, String targetDay, Integer targetTime);
 
   void close();
 
