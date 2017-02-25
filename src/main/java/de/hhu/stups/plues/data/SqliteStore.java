@@ -66,38 +66,34 @@ public class SqliteStore implements Store {
     this.init();
   }
 
-  @SuppressWarnings("unused")
-  private synchronized <T> T getById(final Integer key, final Class<T> type) {
+
+
+  private synchronized <T> T getBy(final String field, final Object key, final Class<T> type) {
     final org.hibernate.Session session = sessionFactory.getCurrentSession();
     final Transaction tx = session.beginTransaction();
+
     final CriteriaBuilder cb = session.getCriteriaBuilder();
 
     final CriteriaQuery<T> query = cb.createQuery(type);
 
     final Root<T> root = query.from(type);
-    query.where(cb.equal(root.get("id"), key));
+    query.where(cb.equal(root.get(field), key));
 
     final T result = session.createQuery(query).setCacheable(true).getSingleResult();
     tx.commit();
+
     return result;
+
   }
 
   @SuppressWarnings("unused")
-  private synchronized <T> T getByKey(final String key, final Class<T> type) {
-    final org.hibernate.Session session = sessionFactory.getCurrentSession();
-    final Transaction tx = session.beginTransaction();
+  private <T> T getById(final Integer key, final Class<T> type) {
+    return getBy("id", key, type);
+  }
 
-    final CriteriaBuilder cb = session.getCriteriaBuilder();
-
-    final CriteriaQuery<T> query = cb.createQuery(type);
-
-    final Root<T> root = query.from(type);
-    query.where(cb.equal(root.get("key"), key));
-
-    final T result = session.createQuery(query).setCacheable(true).getSingleResult();
-    tx.commit();
-
-    return result;
+  @SuppressWarnings("unused")
+  private <T> T getByKey(final String key, final Class<T> type) {
+    return getBy("key", key, type);
   }
 
   @Override
