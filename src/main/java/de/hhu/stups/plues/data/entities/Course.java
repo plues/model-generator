@@ -2,14 +2,10 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,13 +20,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "courses")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "courses")
 @Immutable
-public class Course implements Serializable {
+public class Course extends ModelEntity implements Serializable {
 
-  private static final long serialVersionUID = 4805589618641984556L;
+  private static final long serialVersionUID = 935565328177496460L;
 
   @Id
   @GeneratedValue
@@ -52,16 +49,6 @@ public class Course implements Serializable {
   private String degree;
 
   private String kzfa;
-
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @CreationTimestamp
-  @Column(name = "created_at")
-  private Date createdAt;
-
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @UpdateTimestamp
-  @Column(name = "updated_at")
-  private Date updatedAt;
 
   @ManyToMany
   @JoinTable(name = "course_modules",
@@ -99,7 +86,7 @@ public class Course implements Serializable {
     return equalIdentifiers(course)
       && equalNames(course)
       && equalCourseAttributes(course)
-      && equalTimestamps(course);
+      && super.equals(other);
   }
 
   private boolean equalCourseAttributes(final Course course) {
@@ -114,11 +101,6 @@ public class Course implements Serializable {
       && Objects.equals(this.longName, course.longName);
   }
 
-  private boolean equalTimestamps(final Course course) {
-    return Objects.equals(this.createdAt, course.createdAt)
-      && Objects.equals(this.updatedAt, course.updatedAt);
-  }
-
   private boolean equalIdentifiers(final Course course) {
     return this.id == course.id && Objects.equals(this.key, course.key);
   }
@@ -127,7 +109,7 @@ public class Course implements Serializable {
   public int hashCode() {
     return Objects.hash(this.id, this.key, this.po, this.creditPoints,
         this.shortName, this.longName, this.degree,
-        this.kzfa, this.createdAt, this.updatedAt);
+        this.kzfa, super.hashCode());
   }
 
   public String getName() {
@@ -227,22 +209,6 @@ public class Course implements Serializable {
 
   public void setKzfa(final String kzfa) {
     this.kzfa = kzfa;
-  }
-
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
-  }
-
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
-  }
-
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
-  }
-
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
   }
 
   public Set<Module> getModules() {

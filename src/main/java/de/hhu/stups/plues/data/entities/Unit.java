@@ -2,14 +2,10 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,9 +25,10 @@ import javax.persistence.Table;
 @Table(name = "units")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "units")
 @Immutable
-public class Unit implements Serializable {
+public class Unit extends ModelEntity implements Serializable {
 
-  private static final long serialVersionUID = 8613291209531976009L;
+  private static final long serialVersionUID = 7811943921513982554L;
+  
   @Id
   @GeneratedValue
   private int id;
@@ -41,16 +38,6 @@ public class Unit implements Serializable {
   private String key;
 
   private String title;
-
-  @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "created_at")
-  private Date createdAt;
-
-  @UpdateTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "updated_at")
-  private Date updatedAt;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
@@ -93,22 +80,6 @@ public class Unit implements Serializable {
     this.title = title;
   }
 
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
-  }
-
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
-  }
-
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
-  }
-
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
-  }
-
   public Set<Integer> getSemesters() {
     return semesters;
   }
@@ -145,13 +116,12 @@ public class Unit implements Serializable {
     return id == unit.id
         && Objects.equals(key, unit.key)
         && Objects.equals(title, unit.title)
-        && Objects.equals(createdAt, unit.createdAt)
-        && Objects.equals(updatedAt, unit.updatedAt)
-        && Objects.equals(semesters, unit.semesters);
+        && Objects.equals(semesters, unit.semesters)
+        && super.equals(unit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, key, title, createdAt, updatedAt, semesters);
+    return Objects.hash(id, key, title, semesters, super.hashCode());
   }
 }

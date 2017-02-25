@@ -2,18 +2,12 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,13 +17,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "abstract_units")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "abstract_units")
 @Immutable
-public class AbstractUnit implements Serializable {
+public class AbstractUnit extends ModelEntity implements Serializable {
 
-  private static final long serialVersionUID = 6530093545778592625L;
+  private static final long serialVersionUID = 289898052527025134L;
 
   @Id
   @GeneratedValue
@@ -38,16 +33,6 @@ public class AbstractUnit implements Serializable {
   @NaturalId
   private String key;
   private String title;
-
-  @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "created_at")
-  private Date createdAt;
-
-  @UpdateTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "updated_at")
-  private Date updatedAt;
 
   @ManyToMany
   @JoinTable(name = "unit_abstract_unit",
@@ -83,20 +68,16 @@ public class AbstractUnit implements Serializable {
     final AbstractUnit that = (AbstractUnit) other;
     return equalIdentifiers(that)
       && Objects.equals(title, that.title)
-      && equalTimestamps(that);
+      && super.equals(that);
   }
 
   private boolean equalIdentifiers(final AbstractUnit that) {
     return Objects.equals(id, that.id) && Objects.equals(key, that.key);
   }
 
-  private boolean equalTimestamps(final AbstractUnit that) {
-    return Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
-  }
-
   @Override
   public int hashCode() {
-    return Objects.hash(id, key, title, createdAt, updatedAt);
+    return Objects.hash(super.hashCode(), id, key, title);
   }
 
   public Integer getId() {
@@ -121,22 +102,6 @@ public class AbstractUnit implements Serializable {
 
   public void setTitle(final String title) {
     this.title = title;
-  }
-
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
-  }
-
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
-  }
-
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
-  }
-
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
   }
 
   public Set<Unit> getUnits() {

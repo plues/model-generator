@@ -2,18 +2,13 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,12 +16,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "sessions")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "session")
-public class Session implements Serializable {
+public class Session extends ModelEntity implements Serializable {
 
-  private static final long serialVersionUID = 7760428839071975511L;
+  private static final long serialVersionUID = 3790646138346596774L;
 
   private static final Map<String, DayOfWeek> dayOfWeekMap = new HashMap<>();
 
@@ -45,16 +41,6 @@ public class Session implements Serializable {
 
   @SuppressWarnings("unused")
   private boolean tentative;
-
-  @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "created_at")
-  private Date createdAt;
-
-  @UpdateTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "updated_at")
-  private Date updatedAt;
 
   @ManyToOne(fetch = FetchType.EAGER)
   private Group group;
@@ -111,22 +97,6 @@ public class Session implements Serializable {
     this.duration = duration;
   }
 
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
-  }
-
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
-  }
-
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
-  }
-
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
-  }
-
   public Group getGroup() {
     return group;
   }
@@ -164,13 +134,12 @@ public class Session implements Serializable {
         && Objects.equals(time, session.time)
         && Objects.equals(rhythm, session.rhythm)
         && Objects.equals(duration, session.duration)
-        && Objects.equals(createdAt, session.createdAt)
-        && Objects.equals(updatedAt, session.updatedAt);
+        && super.equals(session);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, day, time, rhythm, duration, createdAt, updatedAt);
+    return Objects.hash(id, day, time, rhythm, duration, super.hashCode());
   }
 
   @Override

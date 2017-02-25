@@ -2,13 +2,9 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,13 +19,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "levels")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "leves")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "levels")
 @Immutable
-public class Level implements Serializable {
+public class Level extends ModelEntity implements Serializable {
 
-  private static final long serialVersionUID = -7800840594086486428L;
+  private static final long serialVersionUID = -2571508967373463723L;
 
   @Id
   private Integer id;
@@ -49,16 +46,6 @@ public class Level implements Serializable {
 
   @Column(name = "max_credit_points")
   private Integer maxCreditPoints;
-
-  @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "created_at")
-  private Date createdAt;
-
-  @UpdateTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "updated_at")
-  private Date updatedAt;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "module_levels",
@@ -172,22 +159,6 @@ public class Level implements Serializable {
     this.tm = tm;
   }
 
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
-  }
-
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
-  }
-
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
-  }
-
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
-  }
-
   public Set<Module> getModules() {
     return modules;
   }
@@ -234,13 +205,12 @@ public class Level implements Serializable {
         && Objects.equals(min, level.min)
         && Objects.equals(minCreditPoints, level.minCreditPoints)
         && Objects.equals(maxCreditPoints, level.maxCreditPoints)
-        && Objects.equals(createdAt, level.createdAt)
-        && Objects.equals(updatedAt, level.updatedAt);
+        && super.equals(level);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, art, name, tm, max, min, minCreditPoints,
-        maxCreditPoints, createdAt, updatedAt);
+        maxCreditPoints, super.hashCode());
   }
 }

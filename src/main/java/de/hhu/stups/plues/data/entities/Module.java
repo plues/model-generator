@@ -2,14 +2,10 @@ package de.hhu.stups.plues.data.entities;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,13 +19,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "modules")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "modules")
 @Immutable
-public class Module implements Serializable {
+public class Module extends ModelEntity implements Serializable {
 
-  private static final long serialVersionUID = -9153665188193235995L;
+  private static final long serialVersionUID = 7922130660874935173L;
 
   @Id
   @GeneratedValue
@@ -51,16 +48,6 @@ public class Module implements Serializable {
 
   @Column(name = "credit_points")
   private Integer creditPoints;
-
-  @UpdateTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "updated_at")
-  private Date updatedAt;
-
-  @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
-  @Column(name = "created_at")
-  private Date createdAt;
 
   @ManyToMany(mappedBy = "modules", fetch = FetchType.LAZY)
   private Set<Course> courses;
@@ -145,22 +132,6 @@ public class Module implements Serializable {
     this.electiveUnits = electiveUnits;
   }
 
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
-  }
-
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
-  }
-
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
-  }
-
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
-  }
-
   public Set<Course> getCourses() {
     return courses;
   }
@@ -225,13 +196,12 @@ public class Module implements Serializable {
       && Objects.equals(mandatory, module.mandatory)
       && Objects.equals(electiveUnits, module.electiveUnits)
       && Objects.equals(creditPoints, module.creditPoints)
-      && Objects.equals(updatedAt, module.updatedAt)
-      && Objects.equals(createdAt, module.createdAt);
+      && super.equals(other);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, key, name, title, pordnr, mandatory, electiveUnits,
-      creditPoints, updatedAt, createdAt);
+      creditPoints, super.hashCode());
   }
 }
