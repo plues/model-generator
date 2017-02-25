@@ -1,6 +1,5 @@
 package de.hhu.stups.plues.modelgenerator;
 
-import de.hhu.stups.plues.data.IncompatibleSchemaError;
 import de.hhu.stups.plues.data.SqliteStore;
 import de.hhu.stups.plues.data.Store;
 import de.hhu.stups.plues.data.StoreException;
@@ -25,13 +24,11 @@ public class Main {
    * CLI entry point.
    *
    * @param args command line arguments arguments
-   * @throws IncompatibleSchemaError if database is not compatible with current version.
    * @throws StoreException          if there is a problem opening the store.
    * @throws IOException             if there is an IO problem with the store or the generated
    *                                 files.
    */
-  public static void main(final String[] args) throws IncompatibleSchemaError,
-      StoreException, IOException {
+  public static void main(final String[] args) throws StoreException, IOException {
     printVersion();
     final CommandLine line = getCommandLine(args);
     if (line == null) {

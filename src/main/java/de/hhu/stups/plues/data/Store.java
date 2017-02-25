@@ -14,9 +14,9 @@ import de.hhu.stups.plues.data.entities.Unit;
 import java.util.List;
 
 public interface Store {
-  void init() throws IncompatibleSchemaError, StoreException;
+  void init() throws StoreException;
 
-  void init(String dbpath) throws IncompatibleSchemaError, StoreException;
+  void init(String dbpath) throws StoreException;
 
   void moveSession(int sessionId, String targetDay, Integer targetTime);
 

@@ -39,7 +39,7 @@ public class SqliteStore implements Store {
   private String dbPath;
   private SessionFactory sessionFactory;
 
-  public SqliteStore(final String dbPath) throws IncompatibleSchemaError, StoreException {
+  public SqliteStore(final String dbPath) throws StoreException {
     this.init(dbPath);
   }
 
@@ -48,24 +48,20 @@ public class SqliteStore implements Store {
   }
 
   @Override
-  public synchronized void init() throws IncompatibleSchemaError, StoreException {
+  public synchronized void init() throws StoreException {
     assert this.dbPath != null;
     try {
       openDataBase(dbPath);
       checkSchemaVersion();
-    } catch (final ClassNotFoundException exception) {
+    } catch (final ClassNotFoundException | IncompatibleSchemaError exception) {
       this.close();
       logException(exception);
       throw new StoreException(exception);
-    } catch (final IncompatibleSchemaError exception) {
-      this.close();
-      throw exception;
     }
   }
 
   @Override
-  public synchronized void init(final String dbpath)
-      throws IncompatibleSchemaError, StoreException {
+  public synchronized void init(final String dbpath) throws StoreException {
     this.dbPath = dbpath;
     this.init();
   }
