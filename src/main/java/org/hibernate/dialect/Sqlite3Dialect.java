@@ -3,7 +3,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *    May you do good and not evil.
  *    May you find forgiveness for yourself and forgive others.
  *    May you share freely, never taking more than you give.
@@ -14,6 +14,7 @@ package org.hibernate.dialect;
 
 import java.sql.Types;
 
+@SuppressWarnings("unused")
 public class Sqlite3Dialect extends Dialect {
 
   /**
@@ -39,43 +40,20 @@ public class Sqlite3Dialect extends Dialect {
     registerColumnType(Types.BINARY, "blob");
     registerColumnType(Types.VARBINARY, "blob");
     registerColumnType(Types.LONGVARBINARY, "blob");
-    // registerColumnType(Types.NULL, "null");
     registerColumnType(Types.BLOB, "blob");
     registerColumnType(Types.CLOB, "clob");
     registerColumnType(Types.BOOLEAN, "integer");
-
-
-    // registerFunction( "concat", new VarArgsSQLFunction(Hibernate.STRING, "", "||", "") );
-    // registerFunction( "mod", new SQLFunctionTemplate( Hibernate.INTEGER, "?1 % ?2" ) );
-    // registerFunction( "substr", new StandardSQLFunction("substr", Hibernate.STRING) );
-    // registerFunction( "substring", new StandardSQLFunction( "substr", Hibernate.STRING ) );
   }
 
   public boolean supportsIdentityColumns() {
     return true;
   }
 
-  /*
-  public boolean supportsInsertSelectIdentity() {
-    return true; // As specify in NHibernate dialect
-  }
-  */
-
   public boolean hasDataTypeInIdentityColumn() {
     return false; // As specify in NHibernate dialect
   }
 
-  /*
-  public String appendIdentitySelectToInsert(String insertString) {
-    return new StringBuffer(insertString.length()+30). // As specify in NHibernate dialect
-      append(insertString).
-      append("; ").append(getIdentitySelectString()).
-      toString();
-  }
-  */
-
   public String getIdentityColumnString() {
-    // return "integer primary key autoincrement";
     return "integer";
   }
 
