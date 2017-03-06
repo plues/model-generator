@@ -38,6 +38,7 @@
         <!-- Names the annotated entity class -->
         <mapping class="de.hhu.stups.plues.data.entities.AbstractUnit"/>
         <mapping class="de.hhu.stups.plues.data.entities.Course"/>
+        <mapping class="de.hhu.stups.plues.data.entities.ModuleLevel"/>
         <mapping class="de.hhu.stups.plues.data.entities.Group"/>
         <mapping class="de.hhu.stups.plues.data.entities.Info"/>
         <mapping class="de.hhu.stups.plues.data.entities.Level"/>
