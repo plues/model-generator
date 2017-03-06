@@ -7,6 +7,7 @@ import org.hibernate.annotations.Immutable;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +15,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -47,20 +47,16 @@ public class Level extends ModelEntity implements Serializable {
   @Column(name = "max_credit_points")
   private Integer maxCreditPoints;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "module_levels",
-      joinColumns = @JoinColumn(name = "level_id",
-          referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "module_id",
-          referencedColumnName = "id"))
-  private Set<Module> modules;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id")
   private Level parent;
 
   @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
   private Set<Level> children;
+
+  @OneToMany(mappedBy = "level", fetch = FetchType.EAGER)
+  private Set<ModuleLevel> moduleLevels;
+
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinTable(name = "course_levels",
@@ -159,14 +155,6 @@ public class Level extends ModelEntity implements Serializable {
     this.tm = tm;
   }
 
-  public Set<Module> getModules() {
-    return modules;
-  }
-
-  public void setModules(final Set<Module> modules) {
-    this.modules = modules;
-  }
-
   public Level getParent() {
     return parent;
   }
@@ -183,9 +171,16 @@ public class Level extends ModelEntity implements Serializable {
     this.course = course;
   }
 
-
   public Set<Level> getChildren() {
     return children;
+  }
+
+  public Set<ModuleLevel> getModuleLevels() {
+    return moduleLevels;
+  }
+
+  public Set<Module> getModules() {
+    return moduleLevels.stream().map(ModuleLevel::getModule).collect(Collectors.toSet());
   }
 
   @Override
