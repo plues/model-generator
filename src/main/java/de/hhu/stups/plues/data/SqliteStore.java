@@ -9,9 +9,9 @@ import de.hhu.stups.plues.data.entities.Log;
 import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
+import de.hhu.stups.plues.data.entities.ModuleLevel;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import org.hibernate.HibernateException;
@@ -175,6 +175,16 @@ public class SqliteStore implements Store {
     final Transaction tx = session.beginTransaction();
     final Query<Course> query = session.createQuery("from Course", Course.class);
     final List<Course> result = query.setCacheable(true).list();
+    tx.commit();
+    return result;
+  }
+
+  @Override
+  public List<ModuleLevel> getModuleLevels() {
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    final Query<ModuleLevel> query = session.createQuery("from ModuleLevel", ModuleLevel.class);
+    final List<ModuleLevel> result = query.setCacheable(true).list();
     tx.commit();
     return result;
   }
