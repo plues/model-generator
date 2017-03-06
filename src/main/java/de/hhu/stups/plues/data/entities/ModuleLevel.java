@@ -111,4 +111,8 @@ public class ModuleLevel extends ModelEntity implements Serializable {
   public int hashCode() {
     return Objects.hash(super.hashCode(), id, name, mandatory, creditPoints);
   }
+
+  public void setModule(final Module module) {
+    this.module = module;
+  }
 }

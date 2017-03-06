@@ -217,6 +217,15 @@ public class Course extends ModelEntity implements Serializable {
     return modules;
   }
 
+  public Set<ModuleLevel> getModuleLevels() {
+    return moduleLevels;
+  }
+
+  public void setModuleLevels(final Set<ModuleLevel> moduleLevels) {
+    this.moduleLevels = moduleLevels;
+  }
+
+
   public Set<Level> getLevels() {
     return levels;
   }
