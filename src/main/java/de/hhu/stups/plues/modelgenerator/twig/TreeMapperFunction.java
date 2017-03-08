@@ -3,7 +3,7 @@ package de.hhu.stups.plues.modelgenerator.twig;
 import com.google.common.base.Strings;
 
 import de.hhu.stups.plues.data.entities.Level;
-import de.hhu.stups.plues.data.entities.Module;
+import de.hhu.stups.plues.data.entities.ModuleLevel;
 
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
@@ -42,24 +42,24 @@ class TreeMapperFunction extends SimpleJtwigFunction {
     if (level.getChildren() != null && !level.getChildren().isEmpty()) {
       level.getChildren().forEach(l -> traverse(l, newDepth, sb));
     } else {
-      level.getModules().forEach(m -> traverse(m, newDepth, sb));
+      level.getModuleLevels().forEach(ml -> traverse(ml, newDepth, sb));
     }
 
     sb.append("\n").append(indent)
         .append("</l>\n");
   }
 
-  private void traverse(final Module module, final Integer depth,
+  private void traverse(final ModuleLevel moduleLevel, final Integer depth,
                         final StringBuilder sb) {
     final String indent = Strings.repeat(INDENTATION, depth);
     sb.append(indent).append("<m name=\"")
-        .append(module.getTitle())
+        .append(moduleLevel.getName())
         .append("\" ")
-        .append(formatMandatory(module))
+        .append(formatMandatory(moduleLevel))
         .append(" pordnr=\"")
-        .append(module.getPordnr())
+        .append(moduleLevel.getModule().getPordnr())
         .append("\" ")
-        .append(formatCreditPoints(module))
+        .append(formatCreditPoints(moduleLevel))
         .append(" />\n");
   }
 
@@ -78,14 +78,14 @@ class TreeMapperFunction extends SimpleJtwigFunction {
         + "max-cp=\"" + level.getMaxCreditPoints() + "\"";
   }
 
-  private String formatCreditPoints(final Module module) {
+  private String formatCreditPoints(final ModuleLevel module) {
     if (module.getCreditPoints() < 0) {
       return "";
     }
     return "cp=\"" + module.getCreditPoints() + "\"";
   }
 
-  private String formatMandatory(final Module mod) {
+  private String formatMandatory(final ModuleLevel mod) {
     if (!mod.getMandatory()) {
       return "";
     }

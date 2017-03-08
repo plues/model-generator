@@ -8,6 +8,7 @@ import de.hhu.stups.plues.data.entities.Log;
 import de.hhu.stups.plues.data.entities.Module;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitSemester;
 import de.hhu.stups.plues.data.entities.ModuleAbstractUnitType;
+import de.hhu.stups.plues.data.entities.ModuleLevel;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
 
@@ -37,6 +38,8 @@ public interface Store {
   List<Course> getMinors();
 
   Course getCourseByKey(String key);
+
+  List<ModuleLevel> getModuleLevels();
 
   List<Group> getGroups();
 

@@ -105,6 +105,7 @@ public class Renderer {
       .with("short_name", store.getInfoByKey("short-name"))
       .with("abstract_units", store.getAbstractUnits())
       .with("courses", store.getCourses())
+      .with("module_levels", store.getModuleLevels())
       .with("groups", store.getGroups())
       .with("levels", store.getLevels())
       .with("modules", store.getModules())
