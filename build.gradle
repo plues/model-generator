@@ -18,6 +18,7 @@ mainClassName = "de.hhu.stups.plues.modelgenerator.Main"
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 // https://simonharrer.wordpress.com/2013/09/17/building-command-line-apps-with-gradle/
@@ -29,11 +30,15 @@ run {
 
 dependencies {
     compile 'com.google.code.findbugs:annotations:3.0.1u2'
+
     compile 'org.hibernate:hibernate-core:5.2.9.Final'
     compile 'org.hibernate:hibernate-ehcache:5.2.9.Final'
+    compile 'com.github.gwenn:sqlite-dialect:24970986d0'
+
     compile 'org.jtwig:jtwig-core:5.58'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     runtime group: 'commons-cli', name: 'commons-cli', version: '1.4'
+
     // logging
     compile 'org.slf4j:slf4j-api:1.7.25' // MIT
     compile 'ch.qos.logback:logback-core:1.2.2' // EPL
