@@ -13,14 +13,13 @@ import de.hhu.stups.plues.data.entities.ModuleLevel;
 import de.hhu.stups.plues.data.entities.Session;
 import de.hhu.stups.plues.data.entities.Unit;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +34,7 @@ import javax.persistence.criteria.Root;
  * Database based storage for timetable data.
  */
 public class SqliteStore implements Store {
-  private final Logger logger = LoggerFactory.logger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
   private String dbPath;
   private SessionFactory sessionFactory;
 
