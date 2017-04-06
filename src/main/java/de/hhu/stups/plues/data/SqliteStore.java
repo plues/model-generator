@@ -333,6 +333,21 @@ public class SqliteStore implements Store {
     return result;
   }
 
+  /**
+   * Remove the last log entry from the database table 'Log'.
+   */
+  @Override
+  public void removeLastLogEntry() {
+    final Log lastLog = getLastLogEntry();
+    if (lastLog == null) {
+      return;
+    }
+    final org.hibernate.Session session = sessionFactory.getCurrentSession();
+    final Transaction tx = session.beginTransaction();
+    session.delete(lastLog);
+    tx.commit();
+  }
+
   @Override
   public synchronized void moveSession(final int sessionId, final String targetDay,
                                        final Integer targetTime) {
