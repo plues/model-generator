@@ -12,6 +12,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -23,20 +24,19 @@ public class Log implements Serializable {
 
   private static final long serialVersionUID = 8715213161059401044L;
 
-  @ManyToOne(fetch = FetchType.EAGER)
   @Id
+  @GeneratedValue
+  private int id;
+
+  @ManyToOne(fetch = FetchType.EAGER)
   private Session session;
 
-  @Id
   private String srcDay;
 
-  @Id
   private Integer srcTime;
 
-  @Id
   private String targetDay;
 
-  @Id
   private Integer targetTime;
 
   @CreationTimestamp
@@ -46,6 +46,10 @@ public class Log implements Serializable {
 
   public Log() {
     // Default constructor is required by hibernate
+  }
+
+  public int getId() {
+    return id;
   }
 
   public Session getSession() {
