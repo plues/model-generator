@@ -1,9 +1,9 @@
 package org.hibernate.usertype;
 
 import org.hibernate.HibernateException;
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -19,7 +19,7 @@ public class SqliteDateTimeType implements UserType {
   // e.g. 2016-04-27 15:40:18
   private static final String SQLITE_TEXT_TIME_STAMP = "yyyy-MM-dd kk:mm:ss";
 
-  private final Logger logger = LoggerFactory.logger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   @Override
   public int[] sqlTypes() {

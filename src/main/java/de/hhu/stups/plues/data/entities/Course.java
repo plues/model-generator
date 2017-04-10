@@ -51,12 +51,14 @@ public class Course extends ModelEntity implements Serializable {
   private String kzfa;
 
   @ManyToMany
-  @JoinTable(name = "course_modules",
-      joinColumns = @JoinColumn(name = "course_id",
-          referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "module_id",
-          referencedColumnName = "id"))
+  @JoinTable(name = "module_levels",
+        joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
+  @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "course_module_levels")
   private Set<Module> modules;
+
+  @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+  private Set<ModuleLevel> moduleLevels;
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "course_levels",
@@ -215,9 +217,14 @@ public class Course extends ModelEntity implements Serializable {
     return modules;
   }
 
-  public void setModules(final Set<Module> modules) {
-    this.modules = modules;
+  public Set<ModuleLevel> getModuleLevels() {
+    return moduleLevels;
   }
+
+  public void setModuleLevels(final Set<ModuleLevel> moduleLevels) {
+    this.moduleLevels = moduleLevels;
+  }
+
 
   public Set<Level> getLevels() {
     return levels;

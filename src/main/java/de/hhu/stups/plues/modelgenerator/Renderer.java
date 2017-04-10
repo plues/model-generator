@@ -2,13 +2,12 @@ package de.hhu.stups.plues.modelgenerator;
 
 import de.hhu.stups.plues.data.Store;
 import de.hhu.stups.plues.modelgenerator.twig.HelperExtension;
-
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.jboss.logging.Logger;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +20,7 @@ import java.util.Date;
 
 public class Renderer {
 
-  private final Logger logger = LoggerFactory.logger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
   private static final EnvironmentConfiguration config = EnvironmentConfigurationBuilder
@@ -105,6 +104,7 @@ public class Renderer {
       .with("short_name", store.getInfoByKey("short-name"))
       .with("abstract_units", store.getAbstractUnits())
       .with("courses", store.getCourses())
+      .with("module_levels", store.getModuleLevels())
       .with("groups", store.getGroups())
       .with("levels", store.getLevels())
       .with("modules", store.getModules())

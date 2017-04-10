@@ -1,8 +1,8 @@
 package de.hhu.stups.plues.modelgenerator;
 
 import de.hhu.stups.plues.data.Store;
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class XmlExporter {
 
   private static final String DATA_FILE = "Moduldaten.xml";
   private static final String TREE_FILE = "Modulbaum.xml";
-  private final Logger logger = LoggerFactory.logger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
   private final Renderer renderer;
 
   public XmlExporter(final Store db) {

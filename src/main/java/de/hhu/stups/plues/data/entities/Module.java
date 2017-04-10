@@ -35,25 +35,20 @@ public class Module extends ModelEntity implements Serializable {
   @NaturalId
   private String key;
 
-  private String name;
-
   private String title;
 
   private Integer pordnr;
-
-  private Boolean mandatory;
-
   @Column(name = "elective_units")
   private Integer electiveUnits;
 
-  @Column(name = "credit_points")
-  private Integer creditPoints;
+  @ManyToMany(mappedBy = "modules", fetch = FetchType.LAZY)
+  private Set<AbstractUnit> abstractUnits;
 
   @ManyToMany(mappedBy = "modules", fetch = FetchType.LAZY)
   private Set<Course> courses;
 
-  @ManyToMany(mappedBy = "modules", fetch = FetchType.LAZY)
-  private Set<AbstractUnit> abstractUnits;
+  @OneToMany(mappedBy = "module")
+  private Set<ModuleLevel> moduleLevels;
 
   @OneToMany(mappedBy = "module")
   private Set<ModuleAbstractUnitSemester> moduleAbstractUnitSemesters;
@@ -65,39 +60,12 @@ public class Module extends ModelEntity implements Serializable {
     // Default constructor is required by hibernate
   }
 
-  /**
-   * Get the maximum of credit points required for module. Returns -1 if the module
-   * is not credit point based.
-   *
-   * @return int the maximum number of credit points for module.
-   */
-
-  public int getCreditPoints() {
-    if (creditPoints == null) {
-      return -1;
-    }
-
-    return creditPoints;
-  }
-
-  public void setCreditPoints(final Integer creditPoints) {
-    this.creditPoints = creditPoints;
-  }
-
   public int getId() {
     return id;
   }
 
   public void setId(final int id) {
     this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(final String name) {
-    this.name = name;
   }
 
   public String getTitle() {
@@ -116,14 +84,6 @@ public class Module extends ModelEntity implements Serializable {
     this.pordnr = pordnr;
   }
 
-  public Boolean getMandatory() {
-    return mandatory;
-  }
-
-  public void setMandatory(final Boolean mandatory) {
-    this.mandatory = mandatory;
-  }
-
   public Integer getElectiveUnits() {
     return electiveUnits;
   }
@@ -132,12 +92,8 @@ public class Module extends ModelEntity implements Serializable {
     this.electiveUnits = electiveUnits;
   }
 
-  public Set<Course> getCourses() {
-    return courses;
-  }
-
-  public void setCourses(final Set<Course> courses) {
-    this.courses = courses;
+  public Set<ModuleLevel> getModuleLevels() {
+    return this.moduleLevels;
   }
 
   public Set<AbstractUnit> getAbstractUnits() {
@@ -190,18 +146,19 @@ public class Module extends ModelEntity implements Serializable {
     final Module module = (Module) other;
     return id == module.id
       && Objects.equals(key, module.key)
-      && Objects.equals(name, module.name)
       && Objects.equals(title, module.title)
       && Objects.equals(pordnr, module.pordnr)
-      && Objects.equals(mandatory, module.mandatory)
       && Objects.equals(electiveUnits, module.electiveUnits)
-      && Objects.equals(creditPoints, module.creditPoints)
       && super.equals(other);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, key, name, title, pordnr, mandatory, electiveUnits,
-      creditPoints, super.hashCode());
+    return Objects.hash(id, key, title, pordnr, electiveUnits, super.hashCode());
   }
+
+  public Set<Course> getCourses() {
+    return courses;
+  }
+
 }
