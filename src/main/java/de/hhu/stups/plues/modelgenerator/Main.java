@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public final class Main {
   private static final String OUTPUT = "output";
-  private static final String VERSION = "4.7.0";
+  private static final String VERSION = "4.8.0-SNAPSHOT";
 
   private Main() {}
 
