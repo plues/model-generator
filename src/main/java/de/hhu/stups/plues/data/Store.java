@@ -69,5 +69,7 @@ public interface Store {
 
   Log getLastLogEntry();
 
+  void removeLastLogEntry();
+
   Session getSessionById(final int id);
 }
