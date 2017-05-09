@@ -10,9 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 public class SqliteDateTimeType implements UserType {
@@ -20,6 +22,8 @@ public class SqliteDateTimeType implements UserType {
   private static final String SQLITE_TEXT_TIME_STAMP = "yyyy-MM-dd kk:mm:ss";
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
+  private final DateTimeFormatter dateTimeFormatter
+      = DateTimeFormatter.ofPattern(SQLITE_TEXT_TIME_STAMP);
 
   @Override
   public int[] sqlTypes() {
@@ -28,7 +32,7 @@ public class SqliteDateTimeType implements UserType {
 
   @Override
   public Class returnedClass() {
-    return java.util.Date.class;
+    return java.time.LocalDateTime.class;
   }
 
   @Override
@@ -47,22 +51,25 @@ public class SqliteDateTimeType implements UserType {
       throws SQLException {
     assert names.length == 1;
     final String dateStr = rs.getString(names[0]);
-    final Date date;
+
+    final DateTimeFormatter formatter = dateTimeFormatter.withZone(ZoneId.of("UTC"));
     try {
-      date = new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).parse(dateStr);
-    } catch (final ParseException | NullPointerException exception) {
+      final ZonedDateTime utcDate = ZonedDateTime.parse(dateStr, formatter);
+      return utcDate.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+    } catch (final DateTimeParseException | NullPointerException exception) {
       logger.error("Exception was thrown", exception);
       throw new HibernateException(exception.getMessage());
     }
-    return date;
   }
 
   @Override
   public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
                           final SharedSessionContractImplementor session)
       throws SQLException {
+    final ZonedDateTime local = ((LocalDateTime) value).atZone(ZoneId.systemDefault());
+    final ZonedDateTime dateTime = local.withZoneSameInstant(ZoneId.of("UTC"));
     try {
-      st.setString(index, new SimpleDateFormat(SQLITE_TEXT_TIME_STAMP).format(value));
+      st.setString(index, dateTimeFormatter.format(dateTime));
     } catch (final IllegalArgumentException exception) {
       logger.error("Exception was thrown", exception);
       throw new HibernateException(exception.getMessage());
@@ -81,12 +88,12 @@ public class SqliteDateTimeType implements UserType {
 
   @Override
   public Serializable disassemble(final Object value) {
-    return ((Date) value).getTime();
+    return (LocalDateTime) value;
   }
 
   @Override
   public Object assemble(final Serializable cached, final Object owner) {
-    return new Date((Long) cached);
+    return cached;
   }
 
   @Override
