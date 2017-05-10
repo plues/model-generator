@@ -10,7 +10,7 @@ used by different tools. `model-generator` is part of the `PlüS` project.
 It takes a SQLite database using schema version 2 as input plus an optional
 format or template use to generate the text represetation.
 
-Current version is `4.8.0`.
+Current version is `4.9.0-SNAPSHOT`.
 
 ## Usage
 
