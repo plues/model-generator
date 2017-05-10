@@ -31,8 +31,8 @@ run {
 dependencies {
     compile 'com.google.code.findbugs:annotations:3.0.1u2'
 
-    compile 'org.hibernate:hibernate-core:5.2.9.Final'
-    compile 'org.hibernate:hibernate-ehcache:5.2.9.Final'
+    compile 'org.hibernate:hibernate-core:5.2.10.Final'
+    compile 'org.hibernate:hibernate-ehcache:5.2.10.Final'
     compile 'com.github.gwenn:sqlite-dialect:24970986d0'
 
     compile 'org.jtwig:jtwig-core:5.58'
@@ -44,8 +44,8 @@ dependencies {
     compile 'ch.qos.logback:logback-core:1.2.3' // EPL
     compile 'ch.qos.logback:logback-classic:1.2.3' // EPL
 
-    runtime 'org.hibernate:hibernate-c3p0:5.2.9.Final'
-    runtime 'org.hibernate:hibernate-ehcache:5.2.9.Final'
+    runtime 'org.hibernate:hibernate-c3p0:5.2.10.Final'
+    runtime 'org.hibernate:hibernate-ehcache:5.2.10.Final'
     runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
 }
 
