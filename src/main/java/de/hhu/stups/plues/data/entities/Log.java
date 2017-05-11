@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -43,7 +43,7 @@ public class Log implements Serializable {
   @CreationTimestamp
   @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "created_at")
-  private Date createdAt;
+  private LocalDateTime createdAt;
 
   public Log() {
     // Default constructor is required by hibernate
@@ -115,11 +115,11 @@ public class Log implements Serializable {
     return Objects.hash(session, srcDay, srcTime, targetDay, targetTime, createdAt);
   }
 
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
+  public void setCreatedAt(final LocalDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 }
