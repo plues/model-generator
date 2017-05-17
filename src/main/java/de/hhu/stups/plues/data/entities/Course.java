@@ -52,10 +52,16 @@ public class Course extends ModelEntity implements Serializable {
 
   @ManyToMany
   @JoinTable(name = "module_levels",
-        joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
+      joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
   @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "course_module_levels")
   private Set<Module> modules;
+
+  @OneToMany
+  @JoinTable(name = "minors",
+      joinColumns = @JoinColumn(name = "course_id"),
+      inverseJoinColumns = @JoinColumn(name = "minor_course_id"))
+  private Set<Course> minorCourses;
 
   @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
   private Set<ModuleLevel> moduleLevels;
@@ -86,21 +92,21 @@ public class Course extends ModelEntity implements Serializable {
     }
     final Course course = (Course) other;
     return equalIdentifiers(course)
-      && equalNames(course)
-      && equalCourseAttributes(course)
-      && super.equals(other);
+        && equalNames(course)
+        && equalCourseAttributes(course)
+        && super.equals(other);
   }
 
   private boolean equalCourseAttributes(final Course course) {
     return Objects.equals(this.po, course.po)
-      && Objects.equals(this.creditPoints, course.creditPoints)
-      && Objects.equals(this.degree, course.degree)
-      && Objects.equals(this.kzfa, course.kzfa);
+        && Objects.equals(this.creditPoints, course.creditPoints)
+        && Objects.equals(this.degree, course.degree)
+        && Objects.equals(this.kzfa, course.kzfa);
   }
 
   private boolean equalNames(final Course course) {
     return Objects.equals(this.shortName, course.shortName)
-      && Objects.equals(this.longName, course.longName);
+        && Objects.equals(this.longName, course.longName);
   }
 
   private boolean equalIdentifiers(final Course course) {
@@ -225,6 +231,9 @@ public class Course extends ModelEntity implements Serializable {
     this.moduleLevels = moduleLevels;
   }
 
+  public Set<Course> getMinorCourses() {
+    return minorCourses;
+  }
 
   public Set<Level> getLevels() {
     return levels;
@@ -236,7 +245,7 @@ public class Course extends ModelEntity implements Serializable {
 
   public boolean isCombinableWith(final Course other) {
     return this.isCombinable() && other.isCombinable()
-      && !this.getShortName().equals(other.getShortName());
+        && !this.getShortName().equals(other.getShortName());
   }
 
   public boolean isBachelor() {
