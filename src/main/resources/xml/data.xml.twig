@@ -5,7 +5,7 @@
 <!-- {{ it.key }}: {{it.value}} --> {% endfor %}
 <data>
     <modules>{% for module in modules %}
-        <module id="{{ module.key }}" title="{{ module.title }}" pordnr="{{ module.pordnr }}" elective-units="{{ module.electiveUnits }}">{% for aut in module.moduleAbstractUnitTypes %}
+        <module id="{{ module.key }}" title="{{ module.title }}" pordnr="{{ module.pordnr }}" elective-units="{{ module.electiveUnits }}" {% if module.bundled %}bundled="true"{% endif %}>{% for aut in module.moduleAbstractUnitTypes %}
             <abstract-unit id="{{ aut.abstractUnit.key }}"
                 title="{{ aut.abstractUnit.title }}"
                 type="{{ aut.type }}"

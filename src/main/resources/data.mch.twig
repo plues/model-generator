@@ -57,7 +57,7 @@ PROPERTIES
     modules : POW(MODULES * struct(idx:NATURAL1, name:STRING, key:STRING, title:STRING, pordnr:NATURAL, elective_units:NATURAL))
     &
     modules = { {% for module in modules %}
-        (mod{{module.id}} |-> rec(idx:{{module.id}}, name:"{{module.title}}", key:"{{module.key}}", title:"{{module.title}}", pordnr:{{module.pordnr}}, elective_units:{{module.electiveUnits}})){% if not (loop.last) %},{% endif %}{% endfor %}
+        (mod{{module.id}} |-> rec(idx:{{module.id}}, name:"{{module.title}}", key:"{{module.key}}", title:"{{module.title}}", pordnr:{{module.pordnr}}, bundled:{% if module.bundled %}TRUE{% else %}FALSE {% endif %}, elective_units:{{module.electiveUnits}})){% if not (loop.last) %},{% endif %}{% endfor %}
     }
     &
     courses : POW(STRING * struct(idx:NATURAL1, name:STRING, long_name:STRING, degree:STRING, credit_points:NATURAL \/ {-1}, po:NATURAL1, kzfa:STRING))
