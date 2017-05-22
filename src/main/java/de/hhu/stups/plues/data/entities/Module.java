@@ -144,7 +144,7 @@ public class Module extends ModelEntity implements Serializable {
     this.moduleAbstractUnitTypes = moduleAbstractUnitTypes;
   }
 
-  private String getKey() {
+  public String getKey() {
     return key;
   }
 
