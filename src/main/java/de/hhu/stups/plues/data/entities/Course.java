@@ -203,6 +203,11 @@ public class Course extends ModelEntity implements Serializable {
     this.longName = longName;
   }
 
+  /* Used for testing */
+  public void setMinorCourses(final Set<Course> minorCourses) {
+    this.minorCourses = minorCourses;
+  }
+
   public String getDegree() {
     return degree;
   }
