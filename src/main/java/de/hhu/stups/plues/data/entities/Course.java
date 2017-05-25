@@ -248,19 +248,6 @@ public class Course extends ModelEntity implements Serializable {
     this.levels = levels;
   }
 
-  public boolean isCombinableWith(final Course other) {
-    return this.isCombinable() && isCombinableWithAux(other);
-  }
-
-  /**
-   * Check that only one of both courses is a major course and its associated list of minor courses
-   * contains the other course.
-   */
-  private boolean isCombinableWithAux(final Course other) {
-    return ((isMajor() && getMinorCourses().contains(other))
-        || other.isMajor() && other.getMinorCourses().contains(this));
-  }
-
   public boolean isBachelor() {
     return "ba".equals(degree) || "bk".equals(degree);
   }
