@@ -63,6 +63,12 @@ public class Course extends ModelEntity implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "minor_course_id"))
   private Set<Course> minorCourses;
 
+  @OneToMany
+  @JoinTable(name = "minors",
+      joinColumns = @JoinColumn(name = "minor_course_id"),
+      inverseJoinColumns = @JoinColumn(name = "course_id"))
+  private Set<Course> majorCourses;
+
   @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
   private Set<ModuleLevel> moduleLevels;
 
@@ -240,6 +246,10 @@ public class Course extends ModelEntity implements Serializable {
     return minorCourses;
   }
 
+  public Set<Course> getMajorCourses() {
+    return majorCourses;
+  }
+
   public Set<Level> getLevels() {
     return levels;
   }
@@ -260,4 +270,5 @@ public class Course extends ModelEntity implements Serializable {
   public String toString() {
     return this.getFullName();
   }
+
 }
