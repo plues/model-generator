@@ -391,20 +391,18 @@ public class SqliteStore implements Store {
     }
 
     final String versionStr = this.getInfoByKey("schema_version");
+    final String requiredVersionStr
+        = properties.getProperty("schema_version", "0");
 
-    final String[] schemaVersion = versionStr.split("\\.");
-    final String[] requiredVersion
-        = properties.getProperty("schema_version", "0.0").split("\\.");
+    // versions must be identical integer values
+    final Integer dbVersion = Integer.valueOf(versionStr);
+    final Integer requiredVersion = Integer.valueOf(requiredVersionStr);
 
-    // Major versions must match
-    // minor version may be higher in database
-    if ((!schemaVersion[0].equals(requiredVersion[0])) || (
-        Integer.parseInt(schemaVersion[1]) < Integer.parseInt(requiredVersion[1]))) {
-      throw new IncompatibleSchemaError("Expected database schema "
-          + "version " + requiredVersion[0] + "." + requiredVersion[1]
-          + " but was " + schemaVersion[0] + "." + schemaVersion[1]);
+    if (!dbVersion.equals(requiredVersion)) {
+      throw new IncompatibleSchemaError(
+          String.format("Expected database schema version '%d' but was '%d'.",
+            requiredVersion, dbVersion));
     }
-
   }
 
   private synchronized void openDataBase(final String dbPath)

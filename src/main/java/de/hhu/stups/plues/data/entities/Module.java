@@ -41,6 +41,7 @@ public class Module extends ModelEntity implements Serializable {
   @Column(name = "elective_units")
   private Integer electiveUnits;
 
+  private Boolean bundled;
   @ManyToMany(mappedBy = "modules", fetch = FetchType.LAZY)
   private Set<AbstractUnit> abstractUnits;
 
@@ -58,6 +59,14 @@ public class Module extends ModelEntity implements Serializable {
 
   public Module() {
     // Default constructor is required by hibernate
+  }
+
+  public Boolean getBundled() {
+    return bundled;
+  }
+
+  public void setBundled(final Boolean bundled) {
+    this.bundled = bundled;
   }
 
   public int getId() {
@@ -135,6 +144,10 @@ public class Module extends ModelEntity implements Serializable {
     this.moduleAbstractUnitTypes = moduleAbstractUnitTypes;
   }
 
+  public String getKey() {
+    return key;
+  }
+
   @Override
   public boolean equals(final Object other) {
     if (this == other) {
@@ -143,18 +156,22 @@ public class Module extends ModelEntity implements Serializable {
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
+    if (!super.equals(other)) {
+      return false;
+    }
     final Module module = (Module) other;
-    return id == module.id
-      && Objects.equals(key, module.key)
-      && Objects.equals(title, module.title)
-      && Objects.equals(pordnr, module.pordnr)
-      && Objects.equals(electiveUnits, module.electiveUnits)
-      && super.equals(other);
+    return getId() == module.getId()
+        && Objects.equals(key, module.key)
+        && Objects.equals(getTitle(), module.getTitle())
+        && Objects.equals(getPordnr(), module.getPordnr())
+        && Objects.equals(getElectiveUnits(), module.getElectiveUnits())
+        && Objects.equals(getBundled(), module.getBundled());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, key, title, pordnr, electiveUnits, super.hashCode());
+    return Objects.hash(super.hashCode(), getId(), key, getTitle(),
+                        getPordnr(), getElectiveUnits(), getBundled());
   }
 
   public Set<Course> getCourses() {

@@ -15,8 +15,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Renderer {
 
@@ -97,9 +97,12 @@ public class Renderer {
   }
 
   private JtwigModel geModel() {
+    final LocalDateTime date = LocalDateTime.now();
+    final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    final String formattedDate = date.format(formatter);
+
     return JtwigModel.newModel()
-      .with("date", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-        .format(new Date()))
+      .with("date", formattedDate)
       .with("info", store.getInfo())
       .with("short_name", store.getInfoByKey("short-name"))
       .with("abstract_units", store.getAbstractUnits())

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Machine generated: {{ date }} -->
-<!-- Model generator version: 4.8.0 -->
+<!-- Model generator version: 5.0.0 -->
 <!-- Database information: --> {% for it in info %}
 <!-- {{ it.key }}: {{it.value}} --> {% endfor %}
 <data>
     <modules>{% for module in modules %}
-        <module id="{{ module.key }}" title="{{ module.title }}" pordnr="{{ module.pordnr }}" elective-units="{{ module.electiveUnits }}">{% for aut in module.moduleAbstractUnitTypes %}
+        <module id="{{ module.key }}" title="{{ module.title }}" pordnr="{{ module.pordnr }}" elective-units="{{ module.electiveUnits }}" {% if module.bundled %}bundled="true"{% endif %}>{% for aut in module.moduleAbstractUnitTypes %}
             <abstract-unit id="{{ aut.abstractUnit.key }}"
                 title="{{ aut.abstractUnit.title }}"
                 type="{{ aut.type }}"

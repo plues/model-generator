@@ -4,8 +4,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
@@ -16,12 +17,12 @@ abstract class ModelEntity {
   @UpdateTimestamp
   @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "updated_at")
-  private Date updatedAt;
+  private LocalDateTime updatedAt;
 
   @CreationTimestamp
   @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "created_at")
-  private Date createdAt;
+  private LocalDateTime createdAt;
 
   @Override
   public boolean equals(final Object other) {
@@ -41,20 +42,20 @@ abstract class ModelEntity {
     return Objects.hash(updatedAt, createdAt);
   }
 
-  public Date getUpdatedAt() {
-    return (Date) updatedAt.clone();
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
   }
 
-  public void setUpdatedAt(final Date updatedAt) {
-    this.updatedAt = (Date) updatedAt.clone();
+  public void setUpdatedAt(final LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
-  public Date getCreatedAt() {
-    return (Date) createdAt.clone();
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedAt(final Date createdAt) {
-    this.createdAt = (Date) createdAt.clone();
+  public void setCreatedAt(final LocalDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 
 
