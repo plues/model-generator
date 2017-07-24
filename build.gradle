@@ -10,7 +10,7 @@ checkstyle {
 }
 
 sourceCompatibility = 8
-version = '5.0.0'
+version = '5.1.0'
 group = "de.stups.slottool"
 
 mainClassName = "de.hhu.stups.plues.modelgenerator.Main"
@@ -46,7 +46,7 @@ dependencies {
 
     runtime 'org.hibernate:hibernate-c3p0:5.2.10.Final'
     runtime 'org.hibernate:hibernate-ehcache:5.2.10.Final'
-    runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.18.0'
+    runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.19.3'
 }
 
 task wrapper(type: Wrapper) {
