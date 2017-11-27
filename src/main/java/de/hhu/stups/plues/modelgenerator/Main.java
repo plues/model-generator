@@ -104,7 +104,7 @@ public final class Main {
 
     final Option t = new Option("t", "template", true,
         "External template to be used for rendering");
-    final Option o = new Option("o", "output", true, "Target File");
+    final Option o = new Option("o", OUTPUT, true, "Target File");
     final Option d = new Option("d", "database", true, "SQLite 3 Database");
 
     o.setRequired(true);
