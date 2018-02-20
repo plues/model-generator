@@ -46,7 +46,7 @@ dependencies {
 
     runtime 'org.hibernate:hibernate-c3p0:5.2.12.Final'
     runtime 'org.hibernate:hibernate-ehcache:5.2.12.Final'
-    runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.20.1'
+    runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'
 }
 
 task wrapper(type: Wrapper) {
