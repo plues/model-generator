@@ -7,7 +7,7 @@ branches:
   - master
   - feature/ids
 before_install:
-  - rvm install 2.0.0
+  - rvm install 2.6.0
   - gem install travis-custom-deploy
 before_script:
   - ./gradlew clean
