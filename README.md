@@ -1,7 +1,6 @@
 # Model Generator
 
 [![Build Status](https://travis-ci.org/plues/model-generator.svg?branch=develop)](https://travis-ci.org/plues/model-generator)
-[![Dependency Status](https://www.versioneye.com/user/projects/57a33bea1dadcb004f08e56a/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57a33bea1dadcb004f08e56a)
 [![codebeat badge](https://codebeat.co/badges/515aa29f-75bb-4dfa-9a93-826ebb4fbecb)](https://codebeat.co/projects/github-com-plues-model-generator)
 
 This tool is used to generate text representations of timetable data to be
@@ -10,7 +9,7 @@ used by different tools. `model-generator` is part of the `PlüS` project.
 It takes a SQLite database using schema version 2 as input plus an optional
 format or template use to generate the text represetation.
 
-Current version is `5.3.0`.
+Current version is `5.4.0`.
 
 ## Usage
 
