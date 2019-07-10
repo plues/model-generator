@@ -49,10 +49,6 @@ dependencies {
     runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-}
-
 task buildStandaloneJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Model generator for timetable data',
