@@ -11,7 +11,7 @@ checkstyle {
     toolVersion = "7.1"
 }
 
-sourceCompatibility = 8
+sourceCompatibility = 11
 version = '5.5.0-SNAPSHOT'
 group = "de.stups.slottool"
 
