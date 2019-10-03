@@ -5,6 +5,7 @@ plugins {
     id 'idea'
     id 'java'
     id "com.github.ben-manes.versions" version "0.25.0"
+    id "com.github.johnrengelman.shadow" version "5.1.0"
 
 }
 checkstyle {
@@ -54,15 +55,15 @@ dependencies {
     compile "javax.activation:activation:1.1.1"
 }
 
-task buildStandaloneJar(type: Jar) {
+jar {
     manifest {
         attributes 'Implementation-Title': 'Model generator for timetable data',
                 'Implementation-Version': version,
                 'Main-Class': mainClassName
     }
+}
+
+shadowJar {
     baseName = project.name + '-standalone'
-    from {
-        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
+    classifier = null
 }
