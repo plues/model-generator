@@ -41,7 +41,7 @@ public class Log implements Serializable {
   private Integer targetTime;
 
   @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
+  @Type(type = "de.hhu.stups.plues.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 

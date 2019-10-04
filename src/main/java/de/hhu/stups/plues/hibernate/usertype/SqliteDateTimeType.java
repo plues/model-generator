@@ -1,7 +1,8 @@
-package org.hibernate.usertype;
+package de.hhu.stups.plues.hibernate.usertype;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.usertype.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

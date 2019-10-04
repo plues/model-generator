@@ -15,12 +15,12 @@ import javax.persistence.MappedSuperclass;
 abstract class ModelEntity {
 
   @UpdateTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
+  @Type(type = "de.hhu.stups.plues.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
   @CreationTimestamp
-  @Type(type = "org.hibernate.usertype.SqliteDateTimeType")
+  @Type(type = "de.hhu.stups.plues.hibernate.usertype.SqliteDateTimeType")
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
