@@ -1,8 +1,8 @@
 package de.hhu.stups.plues.data;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-@FindBugsSuppressWarnings("RANGE_ARRAY_INDEX")
+@SuppressFBWarnings("RANGE_ARRAY_INDEX")
 class IncompatibleSchemaError extends Exception {
   IncompatibleSchemaError(final String message) {
     super(message);
