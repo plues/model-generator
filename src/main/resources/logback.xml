@@ -8,7 +8,7 @@
     </appender>
 
     <logger name="org.hibernate" level="warn" />
-    <logger name="net.sf.ehcache" level="warn" />
+    <logger name="org.ehcache" level="warn" />
     <logger name="org.jtwig" level="warn" />
 
     <root level="info">

@@ -10,14 +10,14 @@ buildscript {
     }
 }
 plugins {
+    id 'application'
     id 'checkstyle'
     id 'idea'
     id 'java'
     id "com.github.johnrengelman.shadow" version "5.1.0"
 
-}
-checkstyle {
-    toolVersion = "7.1"
+    id 'org.beryx.jlink' version '2.16.0'
+    id "org.kordamp.gradle.jdeps" version "0.7.0"
 }
 
 apply plugin: "com.github.spotbugs"
@@ -38,15 +38,21 @@ repositories {
 // https://simonharrer.wordpress.com/2013/09/17/building-command-line-apps-with-gradle/
 run {
     if (project.hasProperty('args')) {
-        args project.args.split('\\s+')
+        //noinspection GroovyAssignabilityCheck
+        args project.args.split(/\s+/)
     }
 }
 
 dependencies {
-    compile 'com.google.code.findbugs:annotations:3.0.1'
+    compileOnly 'net.jcip:jcip-annotations:1.0'
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-beta4'
 
     compile 'org.hibernate:hibernate-core:5.4.6.Final'
-    compile 'org.hibernate:hibernate-ehcache:5.4.6.Final'
+    compile 'org.hibernate:hibernate-jcache:5.4.6.Final'
+    runtime 'org.hibernate:hibernate-c3p0:5.4.6.Final'
+
+    compile 'c3p0:c3p0:0.9.1.2'
+    compile 'org.ehcache:ehcache:3.3.1'
     compile 'com.github.gwenn:sqlite-dialect:0.1.0'
 
     compile 'org.jtwig:jtwig-core:5.87.0.RELEASE'
@@ -62,19 +68,29 @@ dependencies {
 
     compile "javax.xml.bind:jaxb-api:2.4.0-b180830.0359"
     compile "com.sun.xml.bind:jaxb-core:2.3.0.1"
-    compile "com.sun.xml.bind:jaxb-impl:2.3.0.1"
-    compile "javax.activation:activation:1.1.1"
+}
+ext.moduleName ="de.hhu.stups.modelgenerator"
+
+compileJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        final def nonModules = ["activation", "sqlite-dialect", "parboiled", "c3p0"]
+        options.compilerArgs = [
+            '--module-path', classpath.filter{ final cp -> !nonModules.any{cp.name.contains(it)} }.asPath,
+        ]
+        classpath = classpath.filter{ final cp -> nonModules.any { cp.name.contains(it)} }
+    }
 }
 
 jar {
     manifest {
         attributes 'Implementation-Title': 'Model generator for timetable data',
-                'Implementation-Version': version,
+                'Implementation-Version': archiveVersion,
                 'Main-Class': mainClassName
     }
 }
 
 shadowJar {
-    baseName = project.name + '-standalone'
-    classifier = null
+    archiveBaseName.set(project.name + '-standalone')
+    archiveClassifier.set(null)
 }
