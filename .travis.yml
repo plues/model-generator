@@ -13,7 +13,7 @@ before_script:
   - ./gradlew clean
 script:
   - ./gradlew --stacktrace check
-  - ./gradlew buildStandaloneJar
+  - ./gradlew shadowJar
 after_success:
   - travis-custom-deploy sftp build/libs/
 env:
